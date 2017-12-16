@@ -1,9 +1,22 @@
-\begin{thebibliography}{2}
+\begin{thebibliography}{5}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Charlesworth and Hughes(1996)]{Charlesworth1996}
+B.~Charlesworth and K.~A. Hughes.
+\newblock Age-specific inbreeding depression and components of genetic variance
+  in relation to the evolution of senescence.
+\newblock \emph{PNAS}, 93\penalty0 (12):\penalty0 6140--6145, 1996.
+
+\bibitem[Falconer(1989)]{Falconer1989}
+D.~S. Falconer.
+\newblock \emph{Introduction to quantitative genetics}.
+\newblock Longman, Scientific \& Technical ; Wiley, Burnt Mill, Harlow, Essex,
+  England; New York, 1989.
+\newblock ISBN 978-0-470-21162-5 978-0-582-44195-8 978-0-582-01642-2.
 
 \bibitem[Gibson et~al.(2002)Gibson, Chippindale, and Rice]{Gibson2002}
 J.~R. Gibson, A.~K. Chippindale, and W.~R. Rice.
@@ -17,5 +30,11 @@ J.~K. Kelly.
 \newblock An experimental method for evaluating the contribution of deleterious
   mutations to quantitative trait variation.
 \newblock \emph{Genetics Research}, 73\penalty0 (3):\penalty0 263--273, 1999.
+
+\bibitem[Mukai et~al.(1974)Mukai, Cardellino, Watanabe, and Crow]{Mukai1974}
+T.~Mukai, R.~A. Cardellino, T.~K. Watanabe, and J.~F. Crow.
+\newblock The {Genetic} {Variance} for {Viability} and {Its} {Components} in a
+  {Local} {Population} of \emph{Drosophila melanogaster}.
+\newblock \emph{Genetics}, 78\penalty0 (4):\penalty0 1195--1208, 1974.
 
 \end{thebibliography}

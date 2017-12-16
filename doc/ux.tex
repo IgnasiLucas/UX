@@ -27,9 +27,25 @@ Before getting there, I want to note that \citet{Charlesworth1996} assume freque
 
 \citet{Mukai1974} considers a locus affecting fitness, and therefore uses a different parameterization. The genotypic values (fitness) corresponding to genotypes A$_2$A$_2$, A$_1$A$_2$, and A$_1$A$_1$ (again in increasing order) are now $1-s$, $1-hs$, and 1, respectively. In this case, assuming Hardy-Weinberg equilibrium, the average genotypic value is $1-2pqhs-q^2s$. Note that in this case we could also assume that the population is at mutation-selection equilibrium. Then, according to classic theory, the frequency of A$_2$ should be something like $\mu/hs$.
 
-The total genetic variance due to one locus with two alleles can be easily derived for a population in Hardy-Weinberg equilibrium by finding the expected squared deviation from the mean of the genotypic values. Using Falconer's parameterization, $V_G = 2pq[a + d(q-p)]^2 + [2pqd]^2$ \citep[p. 136]{Falconer1989}. For a locus affecting fitness, and using Mukai's parameterization, $V_G = pqs^2[2(1-2pq)h^2 - 4q^{2}h + q(1+q)]$. Total genetic variance at one locus is decomposed in additive  and dominance components. 
+The total genetic variance due to one locus with two alleles can be easily derived for a population in Hardy-Weinberg equilibrium by finding the expected squared deviation from the mean of the genotypic values. Total genetic variance at one locus can be decomposed in additive, $V_A$, and dominance, $V_D$, components. Table~\ref{tau:variance} shows de expressions of genetic variance components found in both sources. \citet[p. 135]{Falconer1989} gives detais of how to derive those expressions.
 
+\begin{table}
+\begin{center}
+\caption{Genetic variance components at one autosomal locus, expressed according to either \citet{Falconer1989} or \citet{Mukai1974}.}\label{tau:variance}
+\vspace*{0.3cm}
+\begin{tabular}{lll}
+\toprule
+Component&Falconer&Mukai et al.\\
+\midrule
+Additive&$2pq[a+d(q-p)]^2$&$2pqs^2[(p-q)h+q]^2$\\
+Dominance&$(2pqd)^2$&$p^2q^2s^2(1-2h)^2$\\
+Tota&$2pq[a + d(q-p)]^2 + [2pqd]^2$&$pqs^2[2(1-2pq)h^2 - 4q^{2}h + q(1+q)]$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
 
+So far, the locus is assumed to be autosomal. What would the genetic variance of an X-linked locus be?
 
 \bibliographystyle{abbrvnat}
 \bibliography{ux}

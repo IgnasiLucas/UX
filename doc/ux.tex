@@ -48,23 +48,24 @@ Total&$2pq[a + d(q-p)]^2 + [2pqd]^2$&$pqs^2[2(1-2pq)h^2 - 4q^{2}h + q(1+q)]$\\
 So far, the locus is assumed to be autosomal. What would the genetic variance of an X-linked locus be?
 
 \section{Genetic variance of an X-linked locus}
-I assume for simplicity that sex-ratio is balanced, and that the heterogametic (male) genotypes have the same genotypic values as the corresponding homozygotes (see Table~\ref{tau:xlinked}). The average genotypic value of an X-linked gene is $a(p-q)+pqd$, which is slightly different from the mean genotypic value of an autosomal locus ($a(p-q)+2pqd$). The average gene effects also change. If my calculations are correct, the average effect of allele A$_1$ is $\alpha{}_1 = q(\frac{3}{2}a + d(\frac{1}{2}-p))$, and that of allele A$_2$ is $\alpha{}_2 = -p(\frac{3}{2}a + d(q-\frac{1}{2}))$. The average effect of substituting an A$_2$ allele for an A$_1$ is $\alpha = \frac{3}{2}a + \frac{1}{2}d(q-p)$. Note that the following relationships hold for both autosomal and X-linked genes: $\alpha = \alpha{}_1 - \alpha{}_2$; $\alpha{}_1 = q\alpha$; and $\alpha{}_2 = -p\alpha$.
+I assume for simplicity that sex-ratio is balanced, and that the heterogametic (male) genotypes have the same genotypic values as the corresponding homozygotes (see Table~\ref{tau:xlinked}). The average genotypic value of an X-linked gene is $a(p-q)+pqd$, which is slightly different from the mean genotypic value of an autosomal locus ($a(p-q)+2pqd$). The average gene effects also change. If my calculations are correct, the average effect of allele A$_1$ is $\alpha{}_1 = q(\frac{3}{2}a + d(\frac{1}{2}-p))$, and that of allele A$_2$ is $\alpha{}_2 = -p(\frac{3}{2}a + d(q-\frac{1}{2}))$. The average effect of substituting an A$_2$ allele for an A$_1$ is $\alpha = \frac{3}{2}a + \frac{1}{2}d(q-p)$. Note that the following relationships hold for both autosomal and X-linked genes: $\alpha = \alpha{}_1 - \alpha{}_2$; $\alpha{}_1 = q\alpha$; and $\alpha{}_2 = -p\alpha$. Perhaps a third, null allele should be considered in the Y chromosome, although it cannot be substituted. In any case, it's average effect would be $-pqd$.
 
-The breeding value of a genotype is twice the expected genotypic value of its progeny, expressed usually as deviation from the population average.
+The breeding value of a genotype is twice the expected genotypic value of its progeny, expressed usually as deviation from the population average. Note that for male genotypes, the breeding values do not coincide with the sum of the average effects of their alleles. Thus, their expressions in terms of $\alpha$ are not simpe.
 
 \begin{table}
 \begin{center}
-\caption{}\label{tau:xlinked}
+\caption{Genotype values in one X-linked locus with two alleles. The mean genotype value is $a(p-q)+pqd$.}\label{tau:xlinked}
 \vspace*{0.3cm}
-{\small
-\begin{tabular}{p{2.4cm}cccccc}
+{\footnotesize
+\begin{tabular}{p{2cm}ccccc}
 \toprule
-&A$_1$A$_1$&A$_1$A$_2$&A$_2$A$_2$&A$_1$0&A$_2$0&Mean\\
+&A$_1$A$_1$&A$_1$A$_2$&A$_2$A$_2$&A$_1$0&A$_2$0\\
 \midrule
-Frequency&$\frac{1}{2}q^2$&$pq$&$\frac{1}{2}q^2$&$\frac{1}{2}p$&$\frac{1}{2}q$&\\
-Gen. value&$a$&$d$&$-a$&$a$&$-a$&$a(p-q)+pqd$\\
-Deviance&$q(2a-pd)$&$a(q-p)+d(1-pq)$&$-p(2a+qd)$&$q(2a-pd)$&$-p(2a+qd)$&0\\
-Breed. val.&&&&&&\\
+Frequency&$\frac{1}{2}q^2$&$pq$&$\frac{1}{2}q^2$&$\frac{1}{2}p$&$\frac{1}{2}q$\\
+Gen. value&$a$&$d$&$-a$&$a$&$-a$\\
+Deviance&$q(2a-pd)$&$a(q-p)+d(1-pq)$&$-p(2a+qd)$&$q(2a-pd)$&$-p(2a+qd)$\\
+Breed. val.&$q(3a+d(1-2p))$&$\frac{3}{2}a(q-p)+d(\frac{1}{2}-2pq)$&$-p(3a-d(1-2q)$&$q(a+d(1-2p))$&$-p(a+d(1-2q))$\\
+Breed. val. ($\alpha$)&$2q\alpha$&$\alpha(q-p)$&$-2p\alpha$&&\\
 \bottomrule
 \end{tabular}
 }

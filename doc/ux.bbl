@@ -1,4 +1,4 @@
-\begin{thebibliography}{5}
+\begin{thebibliography}{8}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -10,6 +10,18 @@ B.~Charlesworth and K.~A. Hughes.
 \newblock Age-specific inbreeding depression and components of genetic variance
   in relation to the evolution of senescence.
 \newblock \emph{PNAS}, 93\penalty0 (12):\penalty0 6140--6145, 1996.
+
+\bibitem[Connallon and Knowles(2006)]{Connallon2006}
+T.~Connallon and L.~L. Knowles.
+\newblock Evidence for {Overdominant} {Selection} {Maintaining} {X}-{Linked}
+  {Fitness} {Variation} in {Drosophila} melanogaster.
+\newblock \emph{Evolution}, 60\penalty0 (7):\penalty0 1445--1453, 2006.
+
+\bibitem[Cowley et~al.(1986)Cowley, Atchley, and Rutledge]{Cowley1986}
+D.~E. Cowley, W.~R. Atchley, and J.~J. Rutledge.
+\newblock Quantitative {Genetics} of {Drosophila} {Melanogaster}. {I}. {Sexual}
+  {Dimorphism} in {Genetic} {Parameters} for {Wing} {Traits}.
+\newblock \emph{Genetics}, 114\penalty0 (2):\penalty0 549--566, 1986.
 
 \bibitem[Falconer(1989)]{Falconer1989}
 D.~S. Falconer.
@@ -24,6 +36,12 @@ J.~R. Gibson, A.~K. Chippindale, and W.~R. Rice.
   variation.
 \newblock \emph{Proceedings of the Royal Society of London B: Biological
   Sciences}, 269\penalty0 (1490):\penalty0 499--505, 2002.
+
+\bibitem[James(1973)]{James1973}
+J.~W. James.
+\newblock 353. {Note}: {Covariances} {Between} {Relatives} due to
+  {Sex}-{Linked} {Genes}.
+\newblock \emph{Biometrics}, 29\penalty0 (3):\penalty0 584--588, 1973.
 
 \bibitem[Kelly(1999)]{Kelly1999}
 J.~K. Kelly.

@@ -16,7 +16,7 @@ The unguarded X (UX) hypothesis states that one reason for females to live longe
 
 The alternative hypothesis is that a different kind of mutations is required to account for the difference in longevity between males and females. Namely, sexually antagonistic mutations, which are maintained at relatively high frequencies in the population by a selection balance. Sexually antagonistic mutations could happen in any chromosome. However, there are theoretical reasons and evidence to belive that they are especially frequent in the X chromosome \citep{Gibson2002}.
 
-\citet{Kelly1999} suggested an experiment to determine if low-frequency, deleterious mutations can explain the observed genetic variance in a character that is correlated with fitness. The alternative is that high-frequency mutations maintained by a selection balance are required to explain the observed variance. The experiment is relatively easy and it involves a short selection experiment and a short inbreeding experiment. If most genetic variance in the character is due to a mutation-selection balance, the response to selection, small as it may be, will be comparable to the effect of inbreeding. However, in the case of any selection balance (antagonistic pleiotropy or overdominance), the response to selection is expected to be very low, while the effect of inbreeding relatively high. Needless to say that the conclusion would only apply to the population used in the experiment.
+\citet{Kelly1999} suggested an experiment to determine if low-frequency, deleterious mutations can explain the observed genetic variance in a character that is correlated with fitness. The alternative is that high-frequency mutations maintained by a selection balance are required to explain the observed variance. The experiment is relatively easy and it involves a short selection experiment and two short inbreeding experiments. If most genetic variance in the character is due to a mutation-selection balance, the response to selection, small as it may be, will be comparable to the effect of inbreeding. However, in the case of any selection balance (antagonistic pleiotropy or overdominance), the response to selection is expected to be very low, while the effect of inbreeding relatively high. Needless to say that the conclusion would only apply to the population used in the experiment.
 
 Kelly probably did not have in mind a sex-specific character when he suggested such an experiment. And he did not attempt to guess on what chromosome the relevant variants were located. Thus, we need to make sure if the UX hypothesis can be tested with a similar experiment, and exactly how it should be performed. The right thing to do would be to derive the expectations of the relevant quantities (covariance of additive effects and homozygous dominance effects, $C_{ad}$, and additive variance, $V_a$) of a dimorphic character taking into account that at least some loci must be in the X chromosome. This may have been done, but I have not found it yet in the literature.
 
@@ -57,20 +57,27 @@ The breeding value of a genotype is twice the expected genotypic value of its pr
 \caption{Genotype values in one X-linked locus with two alleles. The mean genotype value is $a(p-q)+pqd$.}\label{tau:xlinked}
 \vspace*{0.3cm}
 {\footnotesize
-\begin{tabular}{p{2cm}ccccc}
+\begin{tabular}{p{2.4cm}ccccc}
 \toprule
 &A$_1$A$_1$&A$_1$A$_2$&A$_2$A$_2$&A$_1$0&A$_2$0\\
 \midrule
 Frequency&$\frac{1}{2}q^2$&$pq$&$\frac{1}{2}q^2$&$\frac{1}{2}p$&$\frac{1}{2}q$\\
 Gen. value&$a$&$d$&$-a$&$a$&$-a$\\
 Deviance&$q(2a-pd)$&$a(q-p)+d(1-pq)$&$-p(2a+qd)$&$q(2a-pd)$&$-p(2a+qd)$\\
-Breed. val.&$q(3a+d(1-2p))$&$\frac{3}{2}a(q-p)+d(\frac{1}{2}-2pq)$&$-p(3a-d(1-2q)$&$q(a+d(1-2p))$&$-p(a+d(1-2q))$\\
-Breed. val. ($\alpha$)&$2q\alpha$&$\alpha(q-p)$&$-2p\alpha$&&\\
+Breed. val.&$q(3a+d(q-p))$&$\frac{3}{2}a(q-p)+d(\frac{1}{2}-2pq)$&$-p(3a+d(q-p)$&$q(a+d(q-p))$&$-p(a-d(q-p))$\\
+Breed. val. ($\alpha$)&$2q\alpha$&$\alpha(q-p)$&$-2p\alpha$&$\frac{2}{3}q(\alpha + d(q-p))$&$-\frac{2}{3}p(\alpha -2d(q-p)$\\
 \bottomrule
 \end{tabular}
 }
 \end{center}
 \end{table}
+
+I did find some references about the genetic variance in sex-linked loci \cite{James1973,Cowley1986,Connallon2006}. Formulas depend on the model details and the parameterization of effects. But my intuition that two subpopulations need to be treated separately (males and females) is confirmed. There seems to be much classic theory to extrapolate to the case of X-linked loci. I have not found sex-linked loci mentioned in \citet{Falconer1989}. But I need to focus on the application of \citet{Kelly1999} to X-linked loci.
+
+\section{The selection experiment}
+In Kelly's terms, $M$ is the mean phenotype in the population. The directional dominance, $B$, is the difference in mean phenotype between an outbred population and a completely inbred population with the same allele frequencies. $V_a$ is the additive genetic variance, and $V_p$, the total phenotypic variance. $C_{ad}$ is the covariance between the additive effects and the homozygous dominant effects. "The `homozygous dominant effect' is the dominance deviation associated with a particular allele when that allele is in homozygous form.'
+
+Citing \citet{Kelly1999}, who refers to a character (mostly) affected by autosomal loci: "In the short term, the expected change in the mean phenotype ($M$) equals the product of the cumulative selection differential and the narrow sense heritability \citep{Falconer1989}. The latter is $V_a$ divided by $V_p$, the phenotypic variance. The expected change in the directional dominance ($B$) is the product of the cumulative selection differential and $C_{ad} / V_p$ [...]. Thus, the ratio of the cumulative change in $B$ to the cumulative change in $M$ provides an estimate of the ratio of $C_{ad}$ to $V_a$." And the estimate of $C_{ad}/V_a$ is known to be sensitive to the frequency of partially recessive alleles
 
 \section{Apendix}
 

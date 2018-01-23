@@ -1,4 +1,4 @@
-\begin{thebibliography}{8}
+\begin{thebibliography}{9}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -48,6 +48,14 @@ J.~K. Kelly.
 \newblock An experimental method for evaluating the contribution of deleterious
   mutations to quantitative trait variation.
 \newblock \emph{Genetics Research}, 73\penalty0 (3):\penalty0 263--273, 1999.
+
+\bibitem[Lund-Hansen(2017)]{Lund-Hansen2017}
+K.~K. Lund-Hansen.
+\newblock \emph{Experimental manipulation of sexual antagonism in {Drosophila}
+  melanogaster}.
+\newblock {PhD}, University of Sussex, Sussex, UK, Jan. 2017.
+\newblock URL
+  \url{http://sro.sussex.ac.uk/70184/1/Lund-Hansen%2C%20Katrine%20Koch.pdf}.
 
 \bibitem[Mukai et~al.(1974)Mukai, Cardellino, Watanabe, and Crow]{Mukai1974}
 T.~Mukai, R.~A. Cardellino, T.~K. Watanabe, and J.~F. Crow.

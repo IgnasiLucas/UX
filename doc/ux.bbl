@@ -1,4 +1,4 @@
-\begin{thebibliography}{9}
+\begin{thebibliography}{10}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -10,6 +10,12 @@ B.~Charlesworth and K.~A. Hughes.
 \newblock Age-specific inbreeding depression and components of genetic variance
   in relation to the evolution of senescence.
 \newblock \emph{PNAS}, 93\penalty0 (12):\penalty0 6140--6145, 1996.
+
+\bibitem[Cockerham and Weir(1984)]{Cockerham1984}
+C.~C. Cockerham and B.~S. Weir.
+\newblock Covariances of {Relatives} {Stemming} from a {Population}
+  {Undergoing} {Mixed} {Self} and {Random} {Mating}.
+\newblock \emph{Biometrics}, 40\penalty0 (1):\penalty0 157--164, 1984.
 
 \bibitem[Connallon and Knowles(2006)]{Connallon2006}
 T.~Connallon and L.~L. Knowles.

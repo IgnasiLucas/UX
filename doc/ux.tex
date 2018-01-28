@@ -4,6 +4,7 @@
 \usepackage{booktabs}
 \usepackage{natbib}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage[colorlinks=true]{hyperref}
 \usepackage[left=2cm]{geometry}
 
@@ -14,68 +15,77 @@
 \section{Introduction}
 The unguarded X (UX) hypothesis states that one reason for females to live longer than males is that they are usually the homogametic sex. This implies that either somatic or inherited (partially) recessive deleterious mutations in the X chromosome are always exposed in males, but concealed in heterozygous females. This hypothesis requires recessive mutations, maintained by mutation-selection balance, that negatively affect longevity both in males and in females. This scenario is hardly controversial. The main uncertainty is whether this kind of mutations can fully explain the difference in longevity between sexes.
 
-The alternative hypothesis is that a different kind of mutations is required to account for the difference in longevity between males and females. Namely, sexually antagonistic mutations, which are maintained at relatively high frequencies in the population by a selection balance. Sexually antagonistic mutations could happen in any chromosome. However, there are theoretical reasons and evidence to belive that they are especially frequent in the X chromosome \citep{Gibson2002}.
+The alternative hypothesis is that a different kind of mutations is required to account for the difference in longevity between males and females. Namely, sexually antagonistic mutations, which are maintained at intermediate frequencies in the population by a selection balance. Sexually antagonistic mutations could happen in any chromosome. However, there are theoretical reasons and evidence to belive that they are especially frequent in the X chromosome \citep{Gibson2002}.
 
-\citet{Kelly1999} suggested an experiment to determine if low-frequency, deleterious mutations can explain the observed genetic variance in a character that is correlated with fitness. The alternative is that high-frequency mutations maintained by a selection balance are required to explain the observed variance. The experiment is relatively easy and it involves a short selection experiment and two short inbreeding experiments. If most genetic variance in the character is due to a mutation-selection balance, the response to selection, small as it may be, will be comparable to the effect of inbreeding. However, in the case of any selection balance (antagonistic pleiotropy or overdominance), the response to selection is expected to be very low, while the effect of inbreeding relatively high. Needless to say that the conclusion would only apply to the population used in the experiment.
+\citet{Kelly1999} suggested an experiment to determine if low-frequency, deleterious mutations can explain the observed genetic variance in a character that is correlated with fitness. The alternative is that high-frequency mutations maintained by a selection balance are required to explain the observed variance. It is a qualitative test, rather than a quantitative measure of the contribution of each frequency class. The experiment is relatively easy and it involves a short selection experiment and two short inbreeding experiments. Needless to say that the conclusion would only apply to the population used in the experiment.
 
-Kelly probably did not have in mind a sex-specific character when he suggested such an experiment. And he did not attempt to guess on what chromosome the relevant variants were located. Thus, we need to make sure if the UX hypothesis can be tested with a similar experiment, and exactly how it should be performed. The right thing to do would be to derive the expectations of the relevant quantities (covariance of additive effects and homozygous dominance effects, $C_{ad}$, and additive variance, $V_a$) of a dimorphic character taking into account that at least some loci must be in the X chromosome. This may have been done, but I have not found it yet in the literature.
+The method is based on a simple model. In every locus (assumed to be autosomic) affecting a trait correlated with fitness, there are a high allele (A$_{1i}$), and a low allele (A$_{0i}$). The three genotypes in one locus, from low to high, have genotypic values $-a_i$, $d_i$, and $a_i$, where $-a_i \leqslant d_i \leqslant a_i$. The frequency of A$_{1i}$ is $p_i$, and that of A$_{0i}$, $q_i$. For simplicity, I drop the $i$ subscript. Under this parameterization, the additive genetic variance contributed by one locus in a population in Hardy-Weinberg equilibrium is $V_a=2pq[a+d(q-p)]^2$ \citet[p. 126]{Falconer1989}.
 
-Before getting there, I want to note that \citet{Charlesworth1996} assume frequencies of mutant alleles are low, even though they may affect survival only late in life. This is also an assumption we need to justify the application of Kelly's method to test the UX hypothesis. It could be questioned, because a low selection coefficient against such mutations suggests they could behave as (almost) neutral and eventually drift to not-so-low frequencies.
+The other magnitude of interest is the covariance of additive effects with the homozygous dominance effects, $C_{ad}$. The additive effects are what \citet[p. 112]{Falconer1989} calls average effects, say $a_j$ and $a_k$ of alleles $j$ and $k$. The breeding value of an autosomal genotype can be expressed as the sum of the average effects of the two alleles \citep[p.115]{Falconer1989}. And the difference between the breeding value and the genotypic value is the dominance deviation, say $d^j_k$ for genotype $jk$. The homozygous dominance effect of allele $j$ is $d^j_j$, the difference between genotypic and breeding values of genotype $jj$, due to dominance. Thus, the covariance between average effects and homozygous dominance effects, $C_ad$ is highest when low alleles (A$_0$) are recessive and high alleles (A$_1$), dominant. \citet{Cockerham1984} defines this covariance for one locus, $i$, as $d_{1i}=\sum_j p_{ji}a_{ji}d^j_{ji}$. This stems from the definition of covariance ($\mathrm{Cov}[a, d]=\mathrm{E}[ad] - \mathrm{E}[a]\mathrm{E}[d]$), and from the fact that the expected average effect among the alleles in one locus ($\mathrm{E}[a]$) is zero. If there are two alleles in the locus, $p_{ji}$ in that formula are $p$ and $q = 1-p$. If $q$ is the frequency of the low allele, A$_0$, then $a_{0i} = -p(a+d(q-p))$, and $a_{1i} = q(a+d(q-p))$. The homozygous dominant effects in this model are $d^0_{0i} = -2p^2d$, and $d^1_{1i}=-2q^2d$ \citep[p. 118]{Falconer1989}. Substituting these values in the formula above, we obtain the expression for $C_{ad}$ given by \citet{Kelly1999}: $C_{ad}=2pq(p-q)d[a+d(q-p)]$.
 
-\section{Genetic variance components}
-\citet{Charlesworth1996} cite \citet{Falconer1989} and \citet{Mukai1974} as sources of the standard formula for additive genetic variance. In chapter 7, \citet{Falconer1989} assigns genotypic values $-a$, $d$, and $a$ to genotypes A$_2$A$_2$, A$_1$A$_2$, and A$_1$A$_1$, respectively. If the frequency of allele A$_1$ is $p$ and that of A$_2$ is $q$, and assuming Hardy-Weinberg, the average genotypic value at one locus is $a(p-q)+2dpq$ \citep[p. 114]{Falconer1989}.
+When several loci are involved, the additive variance is the sum of $V_a$ across loci \citep[p. 129]{Falconer1989}, and the covariance between average effects and homozygous dominance effects, $C_{ad}$, is also the sum of the covariances across all loci \citep{Cockerham1984}. In principle, there are ways to estimate and $C_{ad}$ and $V_a$. These quantities are interesting because their ratio, $C_{ad}/V_a$, is sensitive to the allele frequencies. When the low alleles have intermediate frequencies, $C_{ad}/V_a$ drops to values close to or lower than zero. \citet{Kelly1999} proposes a new and efficient way to estimate directly the ratio $C_{ad}/V_a$. A positive value would indicate that low alleles are at low frequencies. %Here I should show results from simulations showing sampled values of the ratio under reasonable scenarios.
 
-\citet{Mukai1974} considers a locus affecting fitness, and therefore uses a different parameterization. The genotypic values (fitness) corresponding to genotypes A$_2$A$_2$, A$_1$A$_2$, and A$_1$A$_1$ (again in increasing order) are now $1-s$, $1-hs$, and 1, respectively. In this case, assuming Hardy-Weinberg equilibrium, the average genotypic value is $1-2pqhs-q^2s$. Note that in this case we could also assume that the population is at mutation-selection equilibrium. Then, according to classic theory, the frequency of A$_2$ should be something like $\mu/hs$.
 
-The total genetic variance due to one locus with two alleles can be easily derived for a population in Hardy-Weinberg equilibrium by finding the expected squared deviation from the mean of the genotypic values. Total genetic variance at one locus can be decomposed in additive, $V_A$, and dominance, $V_D$, components. Table~\ref{tau:variance} shows de expressions of genetic variance components found in both sources. \citet[p. 135]{Falconer1989} gives detais of how to derive those expressions.
 
-\begin{table}
-\begin{center}
-\caption{Genetic variance components at one autosomal locus, expressed according to either \citet{Falconer1989} or \citet{Mukai1974}.}\label{tau:variance}
-\vspace*{0.3cm}
-\begin{tabular}{lll}
-\toprule
-Component&Falconer&Mukai et al.\\
-\midrule
-Additive&$2pq[a+d(q-p)]^2$&$2pqs^2[(p-q)h+q]^2$\\
-Dominance&$(2pqd)^2$&$p^2q^2s^2(1-2h)^2$\\
-Total&$2pq[a + d(q-p)]^2 + [2pqd]^2$&$pqs^2[2(1-2pq)h^2 - 4q^{2}h + q(1+q)]$\\
-\bottomrule
-\end{tabular}
-\end{center}
-\end{table}
 
-So far, the locus is assumed to be autosomal. What would the genetic variance of an X-linked locus be?
+%Kelly probably did not have in mind a sex-specific character when he suggested such an experiment. And he did not attempt to guess on what chromosome the relevant variants were located. Thus, we need to make sure if the UX hypothesis can be tested with a similar experiment, and exactly how it should be performed. The right thing to do would be to derive the expectations of the relevant quantities (covariance of additive effects and homozygous dominance effects, $C_{ad}$, and additive variance, $V_a$) of a dimorphic character taking into account that at least some loci must be in the X chromosome. This may have been done, but I have not found it yet in the literature.
 
-\section{Genetic variance of an X-linked locus}
-I assume for simplicity that sex-ratio is balanced, and that the heterogametic (male) genotypes have the same genotypic values as the corresponding homozygotes (see Table~\ref{tau:xlinked}). The average genotypic value of an X-linked gene is $a(p-q)+pqd$, which is slightly different from the mean genotypic value of an autosomal locus ($a(p-q)+2pqd$). The average gene effects also change. If my calculations are correct, the average effect of allele A$_1$ is $\alpha{}_1 = q(\frac{3}{2}a + d(\frac{1}{2}-p))$, and that of allele A$_2$ is $\alpha{}_2 = -p(\frac{3}{2}a + d(q-\frac{1}{2}))$. The average effect of substituting an A$_2$ allele for an A$_1$ is $\alpha = \frac{3}{2}a + \frac{1}{2}d(q-p)$. Note that the following relationships hold for both autosomal and X-linked genes: $\alpha = \alpha{}_1 - \alpha{}_2$; $\alpha{}_1 = q\alpha$; and $\alpha{}_2 = -p\alpha$. Perhaps a third, null allele should be considered in the Y chromosome, although it cannot be substituted. In any case, it's average effect would be $-pqd$.
+%Before getting there, I want to note that \citet{Charlesworth1996} assume frequencies of mutant alleles are low, even though they may affect survival only late in life. This is also an assumption we need to justify the application of Kelly's method to test the UX hypothesis. It could be questioned, because a low selection coefficient against such mutations suggests they could behave as (almost) neutral and eventually drift to not-so-low frequencies.
 
-The breeding value of a genotype is twice the expected genotypic value of its progeny, expressed usually as deviation from the population average. Note that for male genotypes, the breeding values do not coincide with the sum of the average effects of their alleles. Thus, their expressions in terms of $\alpha$ are not simpe.
+%\section{Genetic variance components}
+%\citet{Charlesworth1996} cite \citet{Falconer1989} and \citet{Mukai1974} as sources of the standard formula for additive genetic variance. In chapter 7, \citet{Falconer1989} assigns genotypic values $-a$, $d$, and $a$ to genotypes A$_2$A$_2$, A$_1$A$_2$, and A$_1$A$_1$, respectively. If the frequency of allele A$_1$ is $p$ and that of A$_2$ is $q$, and assuming Hardy-Weinberg, the average genotypic value at one locus is $a(p-q)+2dpq$ \citep[p. 114]{Falconer1989}.
 
-\begin{table}
-\begin{center}
-\caption{Genotype values in one X-linked locus with two alleles. The mean genotype value is $a(p-q)+pqd$.}\label{tau:xlinked}
-\vspace*{0.3cm}
-{\footnotesize
-\begin{tabular}{p{2.4cm}ccccc}
-\toprule
-&A$_1$A$_1$&A$_1$A$_2$&A$_2$A$_2$&A$_1$0&A$_2$0\\
-\midrule
-Frequency&$\frac{1}{2}q^2$&$pq$&$\frac{1}{2}q^2$&$\frac{1}{2}p$&$\frac{1}{2}q$\\
-Gen. value&$a$&$d$&$-a$&$a$&$-a$\\
-Deviance&$q(2a-pd)$&$a(q-p)+d(1-pq)$&$-p(2a+qd)$&$q(2a-pd)$&$-p(2a+qd)$\\
-Breed. val.&$q(3a+d(q-p))$&$\frac{3}{2}a(q-p)+d(\frac{1}{2}-2pq)$&$-p(3a+d(q-p)$&$q(a+d(q-p))$&$-p(a-d(q-p))$\\
-Breed. val. ($\alpha$)&$2q\alpha$&$\alpha(q-p)$&$-2p\alpha$&$\frac{2}{3}q(\alpha + d(q-p))$&$-\frac{2}{3}p(\alpha -2d(q-p)$\\
-\bottomrule
-\end{tabular}
-}
-\end{center}
-\end{table}
+%\citet{Mukai1974} considers a locus affecting fitness, and therefore uses a different parameterization. The genotypic values (fitness) corresponding to genotypes A$_2$A$_2$, A$_1$A$_2$, and A$_1$A$_1$ (again in increasing order) are now $1-s$, $1-hs$, and 1, respectively. In this case, assuming Hardy-Weinberg equilibrium, the average genotypic value is $1-2pqhs-q^2s$. Note that in this case we could also assume that the population is at mutation-selection equilibrium. Then, according to classic theory, the frequency of A$_2$ should be something like $\mu/hs$.
 
-I did find some references about the genetic variance in sex-linked loci \cite{James1973,Cowley1986,Connallon2006}. Formulas depend on the model details and the parameterization of effects. But my intuition that two subpopulations need to be treated separately (males and females) is confirmed. There seems to be much classic theory to extrapolate to the case of X-linked loci. I have not found sex-linked loci mentioned in \citet{Falconer1989}. But I need to focus on the application of \citet{Kelly1999} to X-linked loci.
+%The total genetic variance due to one locus with two alleles can be easily derived for a population in Hardy-Weinberg equilibrium by finding the expected squared deviation from the mean of the genotypic values. Total genetic variance at one locus can be decomposed in additive, $V_A$, and dominance, $V_D$, components. Table~\ref{tau:variance} shows de expressions of genetic variance components found in both sources. \citet[p. 135]{Falconer1989} gives detais of how to derive those expressions.
+
+%\begin{table}
+%\begin{center}
+%\caption{Genetic variance components at one autosomal locus, expressed according to either \citet{Falconer1989} or \citet{Mukai1974}.}\label{tau:variance}
+%\vspace*{0.3cm}
+%\begin{tabular}{lll}
+%\toprule
+%Component&Falconer&Mukai et al.\\
+%\midrule
+%Additive&$2pq[a+d(q-p)]^2$&$2pqs^2[(p-q)h+q]^2$\\
+%Dominance&$(2pqd)^2$&$p^2q^2s^2(1-2h)^2$\\
+%Total&$2pq[a + d(q-p)]^2 + [2pqd]^2$&$pqs^2[2(1-2pq)h^2 - 4q^{2}h + q(1+q)]$\\
+%\bottomrule
+%\end{tabular}
+%\end{center}
+%\end{table}
+
+%So far, the locus is assumed to be autosomal. What would the genetic variance of an X-linked locus be?
+
+%\section{Genetic variance of an X-linked locus}
+%I assume for simplicity that sex-ratio is balanced, and that the heterogametic (male) genotypes have the same genotypic values as the corresponding homozygotes (see Table~\ref{tau:xlinked}). The average genotypic value of an X-linked gene is $a(p-q)+pqd$, which is slightly different from the mean genotypic value of an autosomal locus ($a(p-q)+2pqd$). The average gene effects also change. If my calculations are correct, the average effect of allele A$_1$ is $\alpha{}_1 = q(\frac{3}{2}a + d(\frac{1}{2}-p))$, and that of allele A$_2$ is $\alpha{}_2 = -p(\frac{3}{2}a + d(q-\frac{1}{2}))$. The average effect of substituting an A$_2$ allele for an A$_1$ is $\alpha = \frac{3}{2}a + \frac{1}{2}d(q-p)$. Note that the following relationships hold for both autosomal and X-linked genes: $\alpha = \alpha{}_1 - \alpha{}_2$; $\alpha{}_1 = q\alpha$; and $\alpha{}_2 = -p\alpha$. Perhaps a third, null allele should be considered in the Y chromosome, although it cannot be substituted. In any case, it's average effect would be $-pqd$.
+
+%The breeding value of a genotype is twice the expected genotypic value of its progeny, expressed usually as deviation from the population average. Note that for male genotypes, the breeding values do not coincide with the sum of the average effects of their alleles. Thus, their expressions in terms of $\alpha$ are not simpe.
+
+%\begin{table}
+%\begin{center}
+%\caption{Genotype values in one X-linked locus with two alleles. The mean genotype value is $a(p-q)+pqd$.}\label{tau:xlinked}
+%\vspace*{0.3cm}
+%{\footnotesize
+%\begin{tabular}{p{2.4cm}ccccc}
+%\toprule
+%&A$_1$A$_1$&A$_1$A$_2$&A$_2$A$_2$&A$_1$0&A$_2$0\\
+%\midrule
+%Frequency&$\frac{1}{2}q^2$&$pq$&$\frac{1}{2}q^2$&$\frac{1}{2}p$&$\frac{1}{2}q$\\
+%Gen. value&$a$&$d$&$-a$&$a$&$-a$\\
+%Deviance&$q(2a-pd)$&$a(q-p)+d(1-pq)$&$-p(2a+qd)$&$q(2a-pd)$&$-p(2a+qd)$\\
+%Breed. val.&$q(3a+d(q-p))$&$\frac{3}{2}a(q-p)+d(\frac{1}{2}-2pq)$&$-p(3a+d(q-p)$&$q(a+d(q-p))$&$-p(a-d(q-p))$\\
+%Breed. val. ($\alpha$)&$2q\alpha$&$\alpha(q-p)$&$-2p\alpha$&$\frac{2}{3}q(\alpha + d(q-p))$&$-\frac{2}{3}p(\alpha -2d(q-p)$\\
+%\bottomrule
+%\end{tabular}
+%}
+%\end{center}
+%\end{table}
+
+%I did find some references about the genetic variance in sex-linked loci \cite{James1973,Cowley1986,Connallon2006}. Formulas depend on the model details and the parameterization of effects. But my intuition that two subpopulations need to be treated separately (males and females) is confirmed. There seems to be much classic theory to extrapolate to the case of X-linked loci. I have not found sex-linked loci mentioned in \citet{Falconer1989}. But I need to focus on the application of \citet{Kelly1999} to X-linked loci.
 
 \section{The experiment}
-In Kelly's terms, $M$ is the mean phenotype in the population. The directional dominance, $B$, is the difference in mean phenotype between an outbred population and a completely inbred population with the same allele frequencies. $V_a$ is the additive genetic variance, and $V_p$, the total phenotypic variance. $C_{ad}$ is the covariance between the additive effects and the homozygous dominant effects. "The `homozygous dominant effect' is the dominance deviation associated with a particular allele when that allele is in homozygous form.'
+In Kelly's terms, $M$ is the mean phenotype in the population. The directional dominance, $B$, is the difference in mean phenotype between an outbred population and a completely inbred population with the same allele frequencies. $V_a$ is the additive genetic variance, and $V_p$, the total phenotypic variance. $C_{ad}$ is the covariance between the additive effects and the homozygous dominant effects. "The `homozygous dominant effect' is the dominance deviation associated with a particular allele when that allele is in homozygous form.' Note that \citet{Cockerham1984} uses the symbol $d_{1i}$ for what Kelly calls $C_{ad}$.
 
 Citing \citet{Kelly1999}, who refers to a character (mostly) affected by autosomal loci: "In the short term, the expected change in the mean phenotype ($M$) equals the product of the cumulative selection differential and the narrow sense heritability \citep{Falconer1989}. The latter is $V_a$ divided by $V_p$, the phenotypic variance. The expected change in the directional dominance ($B$) is the product of the cumulative selection differential and $C_{ad} / V_p$ [...]. Thus, the ratio of the cumulative change in $B$ to the cumulative change in $M$ provides an estimate of the ratio of $C_{ad}$ to $V_a$." And the estimate of $C_{ad}/V_a$ is known to be sensitive to the frequency of partially recessive alleles.
 

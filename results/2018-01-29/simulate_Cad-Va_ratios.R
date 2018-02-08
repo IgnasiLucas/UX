@@ -16,47 +16,88 @@
 # Because the trait is assumed to be related to fitness, I will
 # assume that low alleles are the deleterious ones. However, no further relationship
 # is assumed between the allelic frequency and the size of the effect, 'a'. This
-# way, I allow for the allele frequency to be affected by factors other than the
-# mutation-selection bias.
+# way, I represent the allele frequency may be affected by factors other than the
+# mutation-selection balance.
 #
 # The low alleles will also be partially recessive. To do so, 'd' will be sampled
-# from a uniform distribution between 0 and 'a'. 
+# from a uniform distribution between 0 and 'a'.
+#
+# In a fraction of the simulations there will be a certain portion of loci where the
+# low allele's frequency is sampled from a Beta distribution with intermediate mean.
+# In those simulations, the portion of loci with intermediate allele frequencies
+# will be determined by a uniform distribution.
 
+library(RColorBrewer)
+NumSim <- 2000
+FracSimWithIntermediateFreq <- 0.7
+MinPortionIntermediate <- 0.005
+MaxPortionIntermediate <- 0.50
+PopulationSize <- 200
+MinLoci <- 50
+MaxLoci <- 200
+FreqClassThreshold <- 0.005
 
-NumSim <- 100
-MinLoci <- 20
-MaxLoci <- 400
-PropHigh <- seq(from=0.0, to=0.25, by=0.005)
+# Parameters of the high-mean Beta distribution. The mean is a / (a + b), where
+# 'a' is the first shape parameter of the Beta distribution, and 'b' is the second.
 QShape1High <- 7
 QShape2High <- 10
+
+# Parameters of the low-mean Beta distribution of allele frequencies.
 QShape1Low <- 0.1
 QShape2Low <- 20
-plot(c(0.001, 1.0), c(-0.5, 2), type='n', log='x', xlab='Mean q', ylab='Cad/Va')
+
+Ratio <- numeric(length=NumSim)
+MeanQ <- numeric(length=NumSim)
+PropLociAboveThreshold <- numeric(length=NumSim)
+NumLociList <- numeric(length=NumSim)
+NumVarLociList <- numeric(length=NumSim)
+PortionIntermediateList <- numeric(length=NumSim)
+
 for (i in 1:NumSim) {
-   ratio <- numeric(length=length(PropHigh))
-   MedianQ <- numeric(length=length(PropHigh))
-   for (k in 1:length(PropHigh)) {
-      NumLoci <- ceiling(runif(1, min=MinLoci, max=MaxLoci))
-      Cad <- 0
-      Va <- 0
-      Qlist <- numeric(length=NumLoci)
-      for (j in 1:NumLoci) {
-         a <- rexp(1, rate=200/NumLoci)
-         toss <- runif(1, min=0, max=1)
-         if (toss <= PropHigh[k]) {
-            q <- rbeta(1, QShape1High, QShape2High)
-         } else {
-            q <- rbeta(1, QShape1Low, QShape2Low)
-         }
-         p <- 1 - q
-         Qlist[j] <- q
-         d <- runif(1, min=0, max=a)
-         Cad <- Cad + 2 * p * q * (p - q) * d * (a + d * (q - p))
-         Va <- Va + 2 * p * q * (a + d * (q - p)) ^ 2
-      }
-      ratio[k] <- Cad / Va
-      MedianQ[k] <- mean(Qlist)
+   NumLoci <- ceiling(runif(1, min=MinLoci, max=MaxLoci))
+   NumLociList[i] <- NumLoci
+   NumVarLoci <- NumLoci
+   PortionIntermediate <- 0
+   if (runif(1, min=0, max=1) <= FracSimWithIntermediateFreq) {
+      PortionIntermediate <- runif(1, min=MinPortionIntermediate, max=MaxPortionIntermediate)
    }
-   points(MedianQ, ratio, pch='.')
+   PortionIntermediateList[i] <- PortionIntermediate
+   Cad <- 0
+   Va <- 0
+   Qlist <- numeric(length=NumLoci)
+   for (j in 1:NumLoci) {
+      a <- rexp(1, rate=1/NumLoci)
+      if (runif(1, min=0, max=1) <= PortionIntermediate) {
+         q <- rbeta(1, QShape1High, QShape2High)
+      } else {
+         q <- rbeta(1, QShape1Low, QShape2Low)
+      }
+      if (PopulationSize > 0) {
+         SampledQ <- rbinom(1, 2 * PopulationSize, q) / (2 * PopulationSize)
+         q <- SampledQ
+      }
+      p <- 1 - q
+      if (q == 0) {
+         NumVarLoci <- NumVarLoci - 1
+      }
+      Qlist[j] <- q
+      d <- runif(1, min=0, max=a)
+      Cad <- Cad + 2 * p * q * (p - q) * d * (a + d * (q - p))
+      Va <- Va + 2 * p * q * (a + d * (q - p)) ^ 2
+   }
+   NumVarLociList[i] <- NumVarLoci
+   PropLociAboveThreshold[i] <- sum(Qlist >= FreqClassThreshold) / NumLoci
+   Ratio[i] <- Cad / Va
+   MeanQ[i] <- mean(Qlist[Qlist > 0])
 }
-abline(h=0, col='red')
+pal <- colorRampPalette(c('red', 'blue'))
+colourNumVarLoci <- pal(50)[as.numeric(cut(NumVarLociList, breaks=50))]
+colourPropQAboveThreshold <- pal(50)[as.numeric(cut(PropLociAboveThreshold, breaks=50))]
+colourPortionIntermediate <- pal(50)[as.numeric(cut(PortionIntermediateList, breaks=50))]
+png(filename='Kelly1999.png', width=1000, height=1000)
+par(mex=2)
+plot(c(0.005, 1.0), c(-0.5, 2), type='n', log='x', xlab='Mean q', ylab='Cad/Va', cex.axis=2, cex.lab=2)
+points(MeanQ, Ratio, pch='.', cex=5, col=colourPortionIntermediate)
+abline(h=0)
+dev.off()
+rm(a, q, p, i, j, d, Va, Cad, pal, Qlist, SampledQ, NumVarLoci)

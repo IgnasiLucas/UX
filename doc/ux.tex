@@ -7,7 +7,7 @@
 \usepackage{amssymb}
 \usepackage[colorlinks=true]{hyperref}
 \usepackage[left=2cm]{geometry}
-
+\usepackage{graphicx}
 
 \title{Testing the unguarded X hypothesis}
 \begin{document}
@@ -24,8 +24,12 @@ The method is based on a simple model. In every locus (assumed to be autosomic) 
 
 The other magnitude of interest is the covariance of additive effects with the homozygous dominance effects, $C_{ad}$. The additive effects are what \citet[p. 112]{Falconer1989} calls average effects, say $a_j$ and $a_k$ of alleles $j$ and $k$. The breeding value of an autosomal genotype can be expressed as the sum of the average effects of the two alleles \citep[p.115]{Falconer1989}. And the difference between the breeding value and the genotypic value is the dominance deviation, say $d^j_k$ for genotype $jk$. The homozygous dominance effect of allele $j$ is $d^j_j$, the difference between genotypic and breeding values of genotype $jj$, due to dominance. Thus, the covariance between average effects and homozygous dominance effects, $C_ad$ is highest when low alleles (A$_0$) are recessive and high alleles (A$_1$), dominant. \citet{Cockerham1984} defines this covariance for one locus, $i$, as $d_{1i}=\sum_j p_{ji}a_{ji}d^j_{ji}$. This stems from the definition of covariance ($\mathrm{Cov}[a, d]=\mathrm{E}[ad] - \mathrm{E}[a]\mathrm{E}[d]$), and from the fact that the expected average effect among the alleles in one locus ($\mathrm{E}[a]$) is zero. If there are two alleles in the locus, $p_{ji}$ in that formula are $p$ and $q = 1-p$. If $q$ is the frequency of the low allele, A$_0$, then $a_{0i} = -p(a+d(q-p))$, and $a_{1i} = q(a+d(q-p))$. The homozygous dominant effects in this model are $d^0_{0i} = -2p^2d$, and $d^1_{1i}=-2q^2d$ \citep[p. 118]{Falconer1989}. Substituting these values in the formula above, we obtain the expression for $C_{ad}$ given by \citet{Kelly1999}: $C_{ad}=2pq(p-q)d[a+d(q-p)]$.
 
-When several loci are involved, the additive variance is the sum of $V_a$ across loci \citep[p. 129]{Falconer1989}, and the covariance between average effects and homozygous dominance effects, $C_{ad}$, is also the sum of the covariances across all loci \citep{Cockerham1984}. In principle, there are ways to estimate and $C_{ad}$ and $V_a$. These quantities are interesting because their ratio, $C_{ad}/V_a$, is sensitive to the allele frequencies. When the low alleles have intermediate frequencies, $C_{ad}/V_a$ drops to values close to or lower than zero. \citet{Kelly1999} proposes a new and efficient way to estimate directly the ratio $C_{ad}/V_a$. A positive value would indicate that low alleles are at low frequencies. %Here I should show results from simulations showing sampled values of the ratio under reasonable scenarios.
+When several loci are involved, the additive variance is the sum of $V_a$ across loci \citep[p. 129]{Falconer1989}, and the covariance between average effects and homozygous dominance effects, $C_{ad}$, is also the sum of the covariances across all loci \citep{Cockerham1984}. In principle, there are ways to estimate and $C_{ad}$ and $V_a$. These quantities are interesting because their ratio, $C_{ad}/V_a$, is sensitive to the allele frequencies. When the low alleles have intermediate frequencies, $C_{ad}/V_a$ drops to values close to or lower than zero. \citet{Kelly1999} proposes a new and efficient way to estimate directly the ratio $C_{ad}/V_a$. Figure~\ref{fig:ratio} shows that a threshold can be chosen on $C_{ad}/V_a$ below which loci with intermediate allele frequencies are likely to contribute to the phenotype.
 
+\begin{figure}
+\centering{\includegraphics[width=10cm]{../results/2018-01-29/Kelly1999.png}}
+\caption{Two thousand simulated $C_{ad}/V_a$ ratios under variable number of loci contributing to the phenotype (between 50 and 200), and a variable proportion of them with intermediate allele frequencies. The colour indicates, from red to blue, the proportion of loci (up to 70\%) the low allele's frequency of which was taken from a Beta distribution with a 0.4 mean}\label{fig:ratio}
+\end{figure}
 
 
 

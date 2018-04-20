@@ -1,4 +1,4 @@
-\begin{thebibliography}{8}
+\begin{thebibliography}{9}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -31,11 +31,19 @@ J.~W. James.
   {Sex}-{Linked} {Genes}.
 \newblock \emph{Biometrics}, 29\penalty0 (3):\penalty0 584--588, 1973.
 
-\bibitem[Kelly(1999)]{Kelly1999}
+\bibitem[Kelly(1999{\natexlab{a}})]{Kelly1999}
 J.~K. Kelly.
 \newblock An experimental method for evaluating the contribution of deleterious
   mutations to quantitative trait variation.
-\newblock \emph{Genetics Research}, 73\penalty0 (3):\penalty0 263--273, 1999.
+\newblock \emph{Genetics Research}, 73\penalty0 (3):\penalty0 263--273,
+  1999{\natexlab{a}}.
+
+\bibitem[Kelly(1999{\natexlab{b}})]{Kelly1999b}
+J.~K. Kelly.
+\newblock Response to selection in partially self-fertilizing populations. i.
+  selection on a single trait.
+\newblock \emph{Evolution}, 53\penalty0 (2):\penalty0 336--349,
+  1999{\natexlab{b}}.
 
 \bibitem[Lund-Hansen(2017)]{Lund-Hansen2017}
 K.~K. Lund-Hansen.

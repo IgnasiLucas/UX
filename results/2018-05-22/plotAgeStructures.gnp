@@ -1,0 +1,49 @@
+set term png large size 300,2400
+set output 'z1.png'
+set multiplot layout 8,1
+set style data histograms
+set style histogram rowstacked
+set style fill solid
+set xrange [0:150]
+unset key
+set title 'a=0.001, b=-0.01'
+plot 'ages_0.001.txt' using 3 title 'males', \
+     '' using 2 title 'male smurfs', \
+     '' using (-$4) title 'females', \
+     '' using (-$5) title 'female smurfs'
+set title 'a=0.002, b=-0.02'
+plot 'ages_0.002.txt' using 3 title 'males', \
+     '' using 2 title 'male smurfs', \
+     '' using (-$4) title 'females', \
+     '' using (-$5) title 'female smurfs'
+set title 'a=0.005, b=-0.05'
+plot 'ages_0.005.txt' using 3 title 'males', \
+     '' using 2 title 'male smurfs', \
+     '' using (-$4) title 'females', \
+     '' using (-$5) title 'female smurfs'
+set title 'a=0.01, b=-0.1'
+plot 'ages_0.01.txt' using 3 title 'males', \
+     '' using 2 title 'male smurfs', \
+     '' using (-$4) title 'females', \
+     '' using (-$5) title 'female smurfs'
+set title 'a=0.02, b=-0.2'
+plot 'ages_0.02.txt' using 3 title 'males', \
+     '' using 2 title 'male smurfs', \
+     '' using (-$4) title 'females', \
+     '' using (-$5) title 'female smurfs'
+set title 'a=0.03, b=-0.3'
+plot 'ages_0.03.txt' using 3 title 'males', \
+     '' using 2 title 'male smurfs', \
+     '' using (-$4) title 'females', \
+     '' using (-$5) title 'female smurfs'
+set title 'a=0.04, b=-0.4'
+plot 'ages_0.04.txt' using 3 title 'males', \
+     '' using 2 title 'male smurfs', \
+     '' using (-$4) title 'females', \
+     '' using (-$5) title 'female smurfs'
+set title 'a=0.05, b=-0.5'
+plot 'ages_0.05.txt' using 3 title 'males', \
+     '' using 2 title 'male smurfs', \
+     '' using (-$4) title 'females', \
+     '' using (-$5) title 'female smurfs'
+unset multiplot

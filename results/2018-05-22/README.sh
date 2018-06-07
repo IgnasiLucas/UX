@@ -44,3 +44,36 @@
 # I will be in conditions to calculate the quantitative genetics parameters
 # that John Kelly attempts to estimate with his experiments, and simulate the
 # experiments themselves.
+#
+# The discontinuous two-phases model of aging says that during the first phase
+# the probability of transitioning into the second ("smurf") phase increases
+# linearly with age: y = ax + b, where x is the age (in days) and -b/a is the
+# age at which flies start to become smurfs. The second phase is described by
+# an exponential survival function: S(x) = exp(-kx), where k is the rate constant.
+# Thus, the probability of dying during a certain day x is 1 - exp(-k).
+
+N=5000 # Population size.
+k=0.4
+if [ ! -e ageStructures.png ]; then
+   for a in 0.05 0.04 0.03 0.02 0.01 0.005 0.002 0.001; do
+      if [ ! -e ages_$a.txt ]; then
+         b=$(echo "scale=4; -$a * 10" | bc -l)
+         # Python 3 is assumed.
+         python age_structure.py -a $a -N $N -b $b -G 300 -o ages_$a.txt 1> ages_$a.log
+      fi
+   done
+      gnuplot < plotAgeStructures.gnp
+   done
+fi
+
+# See Tricoire and Rera, 2015, 'A new, discontinuous 2 phases of aging model: lessons
+# from Drosophila melanogaster', PLoS ONE ( https://doi.org/10.1371/journal.pone.0141920).
+# The authors obtain the following estimates for the parameters:
+#
+# k = 0.1911 (IC_(95) [0.1694, 0.2129]
+# a = 0.0039
+# b = -0.019
+#
+# This implies 5-days old larvae to start becoming smurfs, which apparently depletes
+# the population fast, according to my simulations. There may be an error in the
+# implementation.

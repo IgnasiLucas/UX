@@ -5,50 +5,59 @@
 import simuPOP as sim
 import random
 import math
+import argparse
 
 ###############################################################
-#                          VARIABLES                          #
+#                 ARGUMENTS AND  VARIABLES                    #
 ###############################################################
 
-random.seed(115)
-smurf_death_rate = 0.4
+parser = argparse.ArgumentParser(description = 'Simulates a population and prints the age structure')
+parser.add_argument('-a', default=0.0039, type=float, help='additional fraction of smurfs per unit of time')
+parser.add_argument('-b', default=-0.019, type=float, help='intercept of the probability of becoming smurf as a function of age.')
+parser.add_argument('-k', default=0.1911, type=float, help='rate of mortality of smurfs.')
+parser.add_argument('-N', default=5000, type=int, help='Population size.')
+parser.add_argument('-G', default=200, type=int, help='Number of generations.')
+parser.add_argument('-o', '--output', default='z1.txt', type=argparse.FileType('w'))
+args = parser.parse_args()
 
 ###############################################################
 #                    FUNCTIONS AND CLASSES                    #
 ###############################################################
 
 def natural_death(smurf):
-   if smurf == 1.0 and random.random() < smurf_death_rate:
+   if smurf == 1.0 and random.random() < 1.0 - math.exp(-args.k):
       return True
    else:
       return False
 
 def qtrait(geno):
-   return (0.0166667, -0.166667)
+   return (args.a, args.b)
 
-class sexSpecificRecombinator(sim.PyOperator):
-    def __init__(self, intensity=0, rates=0, loci=sim.ALL_AVAIL, convMode=sim.NO_CONVERSION,
-            maleIntensity=0, maleRates=0, maleLoci=sim.ALL_AVAIL, maleConvMode=sim.NO_CONVERSION,
-            *args, **kwargs):
-        # This operator is used to recombine maternal chromosomes
-        self.Recombinator = sim.Recombinator(rates, intensity, loci, convMode)
-        # This operator is used to recombine paternal chromosomes
-        self.maleRecombinator = sim.Recombinator(maleRates, maleIntensity,
-            maleLoci, maleConvMode)
-        sim.PyOperator.__init__(self, func=self.transmitGenotype, *args, **kwargs)
-    def transmitGenotype(self, pop, off, dad, mom):
-        # Form the first homologous copy of offspring.
-        self.Recombinator.transmitGenotype(mom, off, 0)
-        # Form the second homologous copy of offspring.
-        self.maleRecombinator.transmitGenotype(dad, off, 1)
-        return True
-
+def outputStructure(pop):
+   numInd = {1: {0: {}, 1: {}}, 2: {0: {}, 1: {}}}
+   sim.stat(pop, popSize=True, maxOfInfo='age')
+   maxAge = int(pop.vars()['maxOfInfo']['age'])
+   numInd[1][0] = {x: 0 for x in range(maxAge + 1)}
+   numInd[1][1] = {x: 0 for x in range(maxAge + 1)}
+   numInd[2][0] = {x: 0 for x in range(maxAge + 1)}
+   numInd[2][1] = {x: 0 for x in range(maxAge + 1)}
+#   with open(args.output, 'w') as out:
+   args.output.write("# Generation: %d\n" % pop.dvars().gen)
+   args.output.write("# Total size: %d; maximum age: %d\n" % (pop.vars()['popSize'], maxAge))
+   args.output.write("# Age\tSmurfMales\tMales\tFemales\tSmurfFemales\n")
+   args.output.write("# Parameters of mortality model: a=%.4f, b=%.4f, k=%.4f, t_0=%.4f\n" % (args.a, args.b, args.k, -args.b/args.a))
+   for ind in pop.individuals():
+      numInd[ind.sex()][int(ind.smurf)][int(ind.age)] += 1
+   for age in range(maxAge + 1):
+      args.output.write("%d\t%d\t%d\t%d\t%d\n" % (age, numInd[1][1][age], numInd[1][0][age], numInd[2][0][age], numInd[2][1][age]))
+   args.output.close()
+   return True
 
 ###############################################################
 #                         POPULATION                          #
 ###############################################################
 
-pop = sim.Population(2000, loci = 1, ploidy = 2, infoFields = ['age', 'a', 'b', 'smurf', 'ind_id',  'father_id', 'mother_id', 'luck', 'fitness'])
+pop = sim.Population(args.N, loci = 1, ploidy = 2, infoFields = ['age', 'a', 'b', 'smurf', 'ind_id',  'father_id', 'mother_id', 'luck', 'fitness'])
 
 pop.setVirtualSplitter(
    sim.CombinedSplitter(
@@ -65,6 +74,7 @@ pop.setVirtualSplitter(
    )
 )
 
+# This is to be able to call random from InfoExec:
 exec('import random', pop.vars(), pop.vars())
 
 ###############################################################
@@ -77,27 +87,18 @@ simu.evolve(
    initOps = [
       sim.InitSex(),
       sim.InitGenotype(freq = [0.9,0.1]),
-      sim.InitInfo(lambda: random.randint(0,75), infoFields = 'age'),
-      sim.InitInfo([0.01667], infoFields = 'a'),
-      sim.InitInfo([-0.16667], infoFields = 'b'),
-#     sim.InitInfo(lambda : random.betavariate(10.05025, 2000.0), infoFields = 'a'),
-#     sim.InitInfo(lambda : random.betavariate(83.33333, 2000.0), infoFields = 'b'),
+      sim.InitInfo([0], infoFields = 'age'),
+      sim.InitInfo([args.a], infoFields = 'a'),
+      sim.InitInfo([args.b], infoFields = 'b'),
       sim.InitInfo(lambda: random.random(), infoFields = 'luck'),
-#     sim.InitInfo([0.0], infoFields = 'smurf'),
       sim.InfoExec("smurf = 1.0 if ind.luck < ind.age * ind.a + ind.b else 0.0", exposeInd = 'ind'),
       sim.IdTagger()
    ],
    preOps = [
       sim.InfoExec("age += 1"),
       sim.InfoExec("luck = random.random()"),
-#      sim.InfoExec("smurf = round(random.random())"),
       sim.InfoExec("smurf = 1.0 if ind.luck < (ind.age * ind.a + ind.b) else 0.0", exposeInd='ind'),
-      sim.DiscardIf(natural_death)#,
-#      sim.PyEval(r'"gen.%03d\t%d\t%d\t%d\n" % (gen, larvae, adults, smurfs)',
-#         stmts="larvae = pop.subPopSize((0,0))\n"
-#               "adults = pop.subPopSize((0,1))\n"
-#               "smurfs = pop.subPopSize((0,2))\n",
-#         exposePop='pop')
+      sim.DiscardIf(natural_death)
    ],
    matingScheme = sim.HeteroMating(
       [
@@ -108,24 +109,17 @@ simu.evolve(
                sim.PedigreeTagger(),
                sim.PyQuanTrait(loci = [0], func = qtrait, infoFields = ['a', 'b']),
                sim.InfoExec("smurf = 0.0"),
-#              sexSpecificRecombinator(intensity = 0.01, maleIntensity = 0)
                sim.MendelianGenoTransmitter()
             ],
-#            polySex = sim.MALE,
-#            polyNum = 2,
             weight = 1,
             subPops = [(0,1)],
-            numOffspring=(sim.UNIFORM_DISTRIBUTION, 1,5)
+            numOffspring=(sim.UNIFORM_DISTRIBUTION, 10,50)
          )
       ],
-      subPopSize = 2000
+      subPopSize = args.N
    ),
-   postOps = [
-      sim.Stat(popSize = True, subPops = [(0,0), (0,1), (0,2)]),
-      sim.Stat(maxOfInfo='age', subPops = [(0,0)], suffix='_larva'),
-      sim.Stat(maxOfInfo='age', subPops = [(0,1)], suffix='_adult'),
-      sim.Stat(maxOfInfo='age', subPops = [(0,2)], suffix='_smurf'),
-      sim.PyEval(r'"gen.%03d\t%s\t%d\t%d\t%d\t%d\n" % (gen, subPopSize, popSize, maxOfInfo_larva["age"], maxOfInfo_adult["age"], maxOfInfo_smurf["age"])')
-   ],
-   gen=200
+   gen=args.G
 )
+
+pop = simu.extract(0)
+outputStructure(pop)

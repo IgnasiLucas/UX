@@ -11,5 +11,17 @@ results are equivalent.
 
 2018-05-22
 ==========
-Today I start setting up the simulations with SimuPop that will determine if
-the experiment is feasible.
+Here I wrote a python script, 'age_structure.py', that implements the two-
+phases model of aging in Drosophila. I obtain some plots of the age structure
+corresponding to different values of one of the basic parameters of the model,
+controlling the rate at which adults become 'smurfs' (committed to die within
+the next few days). The script may include some bugs, since I cannot obtain
+a population with the values of the parameters estimated by Tricoire and
+Rera (2015; PLoS ONE, 10(11): e0141920).
+
+2018-06-07
+==========
+Starting from the basic python script, here I write one that implements a
+simple mutation-selection balance. The idea is to let the 'a' parameter be
+reduced by deleterious, recessive mutations across the genome, and follow
+the allele frequencies up.

@@ -1,0 +1,11 @@
+set term png large size 1200,1200
+set output 'default.png'
+set style data histograms
+set style histogram rowstacked
+set style fill solid
+set xrange [0:150]
+set boxwidth 0.9
+plot 'default.txt' using 3 title 'males', \
+     '' using 2 title 'male smurfs', \
+     '' using (-$4) title 'females', \
+     '' using (-$5) title 'female smurfs'

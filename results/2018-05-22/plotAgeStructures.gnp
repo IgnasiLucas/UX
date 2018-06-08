@@ -1,6 +1,6 @@
-set term png large size 300,2400
-set output 'z1.png'
-set multiplot layout 8,1
+set term png large size 300,2700
+set output 'ageStructure.png'
+set multiplot layout 9,1
 set style data histograms
 set style histogram rowstacked
 set style fill solid
@@ -46,4 +46,5 @@ plot 'ages_0.05.txt' using 3 title 'males', \
      '' using 2 title 'male smurfs', \
      '' using (-$4) title 'females', \
      '' using (-$5) title 'female smurfs'
+plot 'default.txt' using 3, '' using 2, '' using (-$4), '' using (-$5)
 unset multiplot

@@ -62,8 +62,14 @@ if [ ! -e ageStructures.png ]; then
          python age_structure.py -a $a -N $N -b $b -G 300 -o ages_$a.txt 1> ages_$a.log
       fi
    done
-      gnuplot < plotAgeStructures.gnp
-   done
+   if [ ! -e default.txt ]; then
+      python age_structure.py -N $N -G 300 -o default.txt 1> default.log
+   fi
+   gnuplot < plotAgeStructures.gnp
+fi
+
+if [ ! -e default.png ]; then
+   gnuplot < plotDefault.gnp
 fi
 
 # See Tricoire and Rera, 2015, 'A new, discontinuous 2 phases of aging model: lessons
@@ -74,6 +80,9 @@ fi
 # a = 0.0039
 # b = -0.019
 #
-# This implies 5-days old larvae to start becoming smurfs, which apparently depletes
-# the population fast, according to my simulations. There may be an error in the
-# implementation.
+# This implies 5-days old larvae to start becoming smurfs. This proved difficult to
+# model with simuPOP, because the age-structured population is obtained by 'cloning'
+# all individuals every generation, and then producing additional offspring through
+# mating. But in a cohort, if they start dying before reaching adulthood, they cannot
+# keep population size constant. I added a function to provide the right population
+# size each generation.

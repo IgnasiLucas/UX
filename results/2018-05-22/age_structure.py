@@ -29,6 +29,11 @@ def natural_death(smurf):
       return True
    else:
       return False
+def demo(gen, pop):
+   if gen < 10:
+      return pop.popSize()
+   else:
+      return args.N
 
 def qtrait(geno):
    return (args.a, args.b)
@@ -116,7 +121,7 @@ simu.evolve(
             numOffspring=(sim.UNIFORM_DISTRIBUTION, 10,50)
          )
       ],
-      subPopSize = args.N
+      subPopSize = demo
    ),
    gen=args.G
 )

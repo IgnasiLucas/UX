@@ -20,12 +20,20 @@
 
 for min_a in .003 .005 .010 .015 .020; do
    for max_a in .05 .10 .20 .40; do
-      for mu in .00001 .0001 .001 .01; do
-         if [ ! -e MSB_$min_a.$max_a.$mu.txt ]; then
+      for mu in .00001 .0001 .001 .005 .01; do
+         if [ ! -e MSB$min_a$max_a$mu.txt ]; then
             python mutationSelectionBalance.py \
-               -m $min_a -M $max_a -u $mu -N 2000 -G 10000 \
-               -o MSB_$min_a.$max_a.$mu.txt > MSB_$min_a.$max_a.$mu.log
+               -m $min_a -M $max_a -u $mu -N 2000 -G 500000 \
+               -o MSB$min_a$max_a$mu.txt > MSB$min_a$max_a$mu.log
          fi
       done
    done
 done
+
+if [ ! -e A_difference.png ]; then
+   gnuplot < plotA.gnp
+fi
+
+if [ ! -e age_difference.png ]; then
+   gnuplot < plotAges.gnp
+fi

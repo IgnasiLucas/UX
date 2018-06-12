@@ -93,7 +93,7 @@ def OutputStats(pop):
       outstring += "\t%.3f" % pop.dvars().alleleFreq[locus][1]
    outstring += "\t%3d" % pop.dvars().maxOfInfo_males['age']
    outstring += "\t%3d" % pop.dvars().maxOfInfo_females['age']
-   outstring += "\t%4f\n" % pop.dvars().meanOfInfo_males['a']
+   outstring += "\t%4f" % pop.dvars().meanOfInfo_males['a']
    outstring += "\t%4f\n" % pop.dvars().meanOfInfo_females['a']
    args.output.write(outstring)
    return True
@@ -180,10 +180,10 @@ simu.evolve(
    ),
    postOps = [
       sim.SNPMutator(u=args.mutation, subPops=[(0,5)]),
-      sim.Stat(alleleFreq=sim.ALL_AVAIL, step=10),
-      sim.Stat(maxOfInfo='age', meanOfInfo='a', subPops=[(0,3)], suffix='_males', step=10),
-      sim.Stat(maxOfInfo='age', meanOfInfo='a', subPops=[(0,4)], suffix='_females', step=10),
-      sim.PyOperator(func=OutputStats, step=10)
+      sim.Stat(alleleFreq=sim.ALL_AVAIL, step=100),
+      sim.Stat(maxOfInfo='age', meanOfInfo='a', subPops=[(0,3)], suffix='_males', step=100),
+      sim.Stat(maxOfInfo='age', meanOfInfo='a', subPops=[(0,4)], suffix='_females', step=100),
+      sim.PyOperator(func=OutputStats, step=100)
    ],
    gen=args.G
 )

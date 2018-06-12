@@ -1,0 +1,111 @@
+set term png large size 3200,4000
+set output 'age_difference.png'
+set multiplot layout 5,4
+set xrange [8000:10000]
+set xlabel 'Time (days)'
+set ylabel 'Female age - male age'
+set title '0.003 < a < 0.050'
+plot 0 title '', 'MSB.003.05.00001.txt' using 1:($31 - $30) with lines title 'u=0.00001', \
+     'MSB.003.05.0001.txt'  using 1:($31 - $30) with lines title 'u=0.0001', \
+     'MSB.003.05.001.txt'   using 1:($31 - $30) with lines title 'u=0.001', \
+     'MSB.003.05.01.txt'    using 1:($31 - $30) with lines title 'u=0.01'
+set title '0.003 < a < 0.100'
+plot 0 title '', 'MSB.003.10.00001.txt' using 1:($31 - $30) with lines title 'u=0.00001', \
+     'MSB.003.10.0001.txt'  using 1:($31 - $30) with lines title 'u=0.0001', \
+     'MSB.003.10.001.txt'   using 1:($31 - $30) with lines title 'u=0.001', \
+     'MSB.003.10.01.txt'    using 1:($31 - $30) with lines title 'u=0.01'
+set title '0.003 < a < 0.200'
+plot 0 title '', 'MSB.003.20.00001.txt' using 1:($31 - $30) with lines title 'u=0.00001', \
+     'MSB.003.20.0001.txt'  using 1:($31 - $30) with lines title 'u=0.0001', \
+     'MSB.003.20.001.txt'   using 1:($31 - $30) with lines title 'u=0.001', \
+     'MSB.003.20.01.txt'    using 1:($31 - $30) with lines title 'u=0.01'
+set title '0.003 < a < 0.400'
+plot 0 title '', 'MSB.003.40.00001.txt' using 1:($31 - $30) with lines title 'u=0.00001', \
+     'MSB.003.40.0001.txt'  using 1:($31 - $30) with lines title 'u=0.0001', \
+     'MSB.003.40.001.txt'   using 1:($31 - $30) with lines title 'u=0.001', \
+     'MSB.003.40.01.txt'    using 1:($31 - $30) with lines title 'u=0.01'
+
+set title '0.005 < a < 0.050'
+plot 0 title '', 'MSB.005.05.00001.txt' using 1:($31 - $30) with lines title 'u=0.00001', \
+     'MSB.005.05.0001.txt'  using 1:($31 - $30) with lines title 'u=0.0001', \
+     'MSB.005.05.001.txt'   using 1:($31 - $30) with lines title 'u=0.001', \
+     'MSB.005.05.01.txt'    using 1:($31 - $30) with lines title 'u=0.01'
+set title '0.005 < a < 0.100'
+plot 0 title '', 'MSB.005.10.00001.txt' using 1:($31 - $30) with lines title 'u=0.00001', \
+     'MSB.005.10.0001.txt'  using 1:($31 - $30) with lines title 'u=0.0001', \
+     'MSB.005.10.001.txt'   using 1:($31 - $30) with lines title 'u=0.001', \
+     'MSB.005.10.01.txt'    using 1:($31 - $30) with lines title 'u=0.01'
+set title '0.005 < a < 0.200'
+plot 0 title '', 'MSB.005.20.00001.txt' using 1:($31 - $30) with lines title 'u=0.00001', \
+     'MSB.005.20.0001.txt'  using 1:($31 - $30) with lines title 'u=0.0001', \
+     'MSB.005.20.001.txt'   using 1:($31 - $30) with lines title 'u=0.001', \
+     'MSB.005.20.01.txt'    using 1:($31 - $30) with lines title 'u=0.01'
+set title '0.005 < a < 0.400'
+plot 0 title '', 'MSB.005.40.00001.txt' using 1:($31 - $30) with lines title 'u=0.00001', \
+     'MSB.005.40.0001.txt'  using 1:($31 - $30) with lines title 'u=0.0001', \
+     'MSB.005.40.001.txt'   using 1:($31 - $30) with lines title 'u=0.001', \
+     'MSB.005.40.01.txt'    using 1:($31 - $30) with lines title 'u=0.01'
+
+set title '0.010 < a < 0.050'
+plot 0 title '', 'MSB.010.05.00001.txt' using 1:($31 - $30) with lines title 'u=0.00001', \
+     'MSB.010.05.0001.txt'  using 1:($31 - $30) with lines title 'u=0.0001', \
+     'MSB.010.05.001.txt'   using 1:($31 - $30) with lines title 'u=0.001', \
+     'MSB.010.05.01.txt'    using 1:($31 - $30) with lines title 'u=0.01'
+set title '0.010 < a < 0.100'
+plot 0 title '', 'MSB.010.10.00001.txt' using 1:($31 - $30) with lines title 'u=0.00001', \
+     'MSB.010.10.0001.txt'  using 1:($31 - $30) with lines title 'u=0.0001', \
+     'MSB.010.10.001.txt'   using 1:($31 - $30) with lines title 'u=0.001', \
+     'MSB.010.10.01.txt'    using 1:($31 - $30) with lines title 'u=0.01'
+set title '0.010 < a < 0.200'
+plot 0 title '', 'MSB.010.20.00001.txt' using 1:($31 - $30) with lines title 'u=0.00001', \
+     'MSB.010.20.0001.txt'  using 1:($31 - $30) with lines title 'u=0.0001', \
+     'MSB.010.20.001.txt'   using 1:($31 - $30) with lines title 'u=0.001', \
+     'MSB.010.20.01.txt'    using 1:($31 - $30) with lines title 'u=0.01'
+set title '0.010 < a < 0.400'
+plot 0 title '', 'MSB.010.40.00001.txt' using 1:($31 - $30) with lines title 'u=0.00001', \
+     'MSB.010.40.0001.txt'  using 1:($31 - $30) with lines title 'u=0.0001', \
+     'MSB.010.40.001.txt'   using 1:($31 - $30) with lines title 'u=0.001', \
+     'MSB.010.40.01.txt'    using 1:($31 - $30) with lines title 'u=0.01'
+
+set title '0.015 < a < 0.050'
+plot 0 title '', 'MSB.015.05.00001.txt' using 1:($31 - $30) with lines title 'u=0.00001', \
+     'MSB.015.05.0001.txt'  using 1:($31 - $30) with lines title 'u=0.0001', \
+     'MSB.015.05.001.txt'   using 1:($31 - $30) with lines title 'u=0.001', \
+     'MSB.015.05.01.txt'    using 1:($31 - $30) with lines title 'u=0.01'
+set title '0.015 < a < 0.100'
+plot 0 title '', 'MSB.015.10.00001.txt' using 1:($31 - $30) with lines title 'u=0.00001', \
+     'MSB.015.10.0001.txt'  using 1:($31 - $30) with lines title 'u=0.0001', \
+     'MSB.015.10.001.txt'   using 1:($31 - $30) with lines title 'u=0.001', \
+     'MSB.015.10.01.txt'    using 1:($31 - $30) with lines title 'u=0.01'
+set title '0.015 < a < 0.200'
+plot 0 title '', 'MSB.015.20.00001.txt' using 1:($31 - $30) with lines title 'u=0.00001', \
+     'MSB.015.20.0001.txt'  using 1:($31 - $30) with lines title 'u=0.0001', \
+     'MSB.015.20.001.txt'   using 1:($31 - $30) with lines title 'u=0.001', \
+     'MSB.015.20.01.txt'    using 1:($31 - $30) with lines title 'u=0.01'
+set title '0.015 < a < 0.400'
+plot 0 title '', 'MSB.015.40.00001.txt' using 1:($31 - $30) with lines title 'u=0.00001', \
+     'MSB.015.40.0001.txt'  using 1:($31 - $30) with lines title 'u=0.0001', \
+     'MSB.015.40.001.txt'   using 1:($31 - $30) with lines title 'u=0.001', \
+     'MSB.015.40.01.txt'    using 1:($31 - $30) with lines title 'u=0.01'
+
+set title '0.020 < a < 0.050'
+plot 0 title '', 'MSB.020.05.00001.txt' using 1:($31 - $30) with lines title 'u=0.00001', \
+     'MSB.020.05.0001.txt'  using 1:($31 - $30) with lines title 'u=0.0001', \
+     'MSB.020.05.001.txt'   using 1:($31 - $30) with lines title 'u=0.001', \
+     'MSB.020.05.01.txt'    using 1:($31 - $30) with lines title 'u=0.01'
+set title '0.020 < a < 0.100'
+plot 0 title '', 'MSB.020.10.00001.txt' using 1:($31 - $30) with lines title 'u=0.00001', \
+     'MSB.020.10.0001.txt'  using 1:($31 - $30) with lines title 'u=0.0001', \
+     'MSB.020.10.001.txt'   using 1:($31 - $30) with lines title 'u=0.001', \
+     'MSB.020.10.01.txt'    using 1:($31 - $30) with lines title 'u=0.01'
+set title '0.020 < a < 0.200'
+plot 0 title '', 'MSB.020.20.00001.txt' using 1:($31 - $30) with lines title 'u=0.00001', \
+     'MSB.020.20.0001.txt'  using 1:($31 - $30) with lines title 'u=0.0001', \
+     'MSB.020.20.001.txt'   using 1:($31 - $30) with lines title 'u=0.001', \
+     'MSB.020.20.01.txt'    using 1:($31 - $30) with lines title 'u=0.01'
+set title '0.020 < a < 0.400'
+plot 0 title '', 'MSB.020.40.00001.txt' using 1:($31 - $30) with lines title 'u=0.00001', \
+     'MSB.020.40.0001.txt'  using 1:($31 - $30) with lines title 'u=0.0001', \
+     'MSB.020.40.001.txt'   using 1:($31 - $30) with lines title 'u=0.001', \
+     'MSB.020.40.01.txt'    using 1:($31 - $30) with lines title 'u=0.01'
+

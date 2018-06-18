@@ -1,7 +1,7 @@
 set term png large size 3200,4000
 set output 'age_difference.png'
 set multiplot layout 5,4
-set xrange [8000:10000]
+set logscale x 10
 set xlabel 'Time (days)'
 set ylabel 'Female age - male age'
 set title '0.003 < a < 0.050'

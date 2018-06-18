@@ -23,5 +23,5 @@ Rera (2015; PLoS ONE, 10(11): e0141920).
 ==========
 Starting from the basic python script, here I write one that implements a
 simple mutation-selection balance. The idea is to let the 'a' parameter be
-reduced by deleterious, recessive mutations across the genome, and follow
+increased by deleterious, recessive mutations across the genome, and follow
 the allele frequencies up.

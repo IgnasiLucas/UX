@@ -1,0 +1,22 @@
+This are some comments received after the talk.
+
+1. For the comparative analysis, the effect of the dosage compensation system
+   should be taken in to account. In mammals, many recessive deleterious
+   mutations on the X chromosome will be exposed not only in males, but also
+   in the cells of the female body where the other X chromosome is repressed.
+   Thus, the unguarded X hypothesis would not apply as strongly to mammals as
+   to flies.
+
+2. Haplodiploids should also be mentioned in the comparative analysis. If males
+   in some species are haploids, and if the unguarded X hypothesis is true, then
+   those males must be quite sick, or die much earlier than females.
+
+3. Why do we focus only on lifespan? If the unguarded X hypothesis is true,
+   it could affect other traits. Juvenile mortality is a particularly interesting
+   one. In principle, any dimorphic trait affecting fitness is susceptible of
+   being explained by the unguarded X hypothesis.
+
+4. The breeder's equation, and also the prediction of the change in directional
+   dominance that John Kelly uses, look like equations of dynamic systems. Could
+   those dynamics be expressed by differential expressions? If so, it is possible
+   that Kelly's conclusion about how to estimate Cad/Va is false.

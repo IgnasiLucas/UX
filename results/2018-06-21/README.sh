@@ -7,7 +7,7 @@
 # on the X chromosome affecting both male lifespan and female reproduction
 # in a sexually antagonistic way. That is, the "1" allele gives females a
 # selective advantage during reproduction. There is a coefficient of dominance
-# and that the fitness values are the following:
+# and the fitness values are the following:
 #
 #                +--------------------+-------------+
 #                |        Females     |    Males    |
@@ -17,8 +17,8 @@
 #    | fitness   | 1-s  | 1-hs | 1.0  | 1-s  | 1-s  |
 #    +-----------+------+------+------+------+------+
 #
-# Where the selection coefficient "s" is set by the "-f" option, and the
-# coefficient of dominance, "h" is set by the "-d" option.
+# Where the selection coefficient "s" is set by the "-s" option, and the
+# coefficient of dominance, "h" is set by the "-h" option.
 #
 # At the same time, allele "1" is deleterious for males by increasing their
 # aging rate, "a", by a certain amount, which is set by the option "-e" in
@@ -26,5 +26,22 @@
 #
 # It is time to find an expression for the survival function under the smurf
 # model of aging. In the simulations, aging, becoming a smurf or not, and dying
-# or not all happen right before mating, in that order. To reach age "x"
-# means to be able to mate at age "x".
+# or not all happen right before mating, in that order. To reach age "x" should
+# mean to be able to mate at age "x" (if old enough to reproduce). Thus the
+# probability of reaching age 1 is equal to the probability of not becoming a
+# smurf or becoming a smurf and not dying at age 1. The probability of reaching
+# age 2 is equal to the sum of the probabilities of three alternative events:
+# becoming a smurf at age 1 and not dying neither at age 1 nor at age 2; not
+# becoming a smurf at age 1, but at age 2 and not dying at age 2; and not becoming
+# a smurf neither at age 1 nor at age 2.
+#
+# Let B(x) be the probability of becoming a smurf (blue) at age x, which is ax+b.
+# The survival function among smurfs is an exponential decay, exp(-dx), where d
+# is the constant death rate experienced by smurfs. In symbols, the probability
+# of surviving to age x, S(x) is:
+#
+#          i=x              i=x                           j=i-1
+# S(x) = PRODUCT (1-B(i)) + SUM [B(i) * exp((i-x-1)*d) * PRODUCT (1-B(j))]
+#          i=1              i=1                            j=1
+#
+#

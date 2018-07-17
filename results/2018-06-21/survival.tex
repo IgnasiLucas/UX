@@ -17,7 +17,7 @@ S(x) = \prod_{i=1}^x (1-B_i) + \sum_{i=1}^x B_i \cdot e^{(i-x-1)\cdot r} \cdot \
 \]
 
 \begin{equation}
-S(x) = \prod_{i=1}^{\min(x, t_1)} (1 - ai - b) + \sum_{i=1}^{\min(x,t_1)} (ai+b)\cdot e^{(i-x-1)r} \cdot \prod_{j=1}^{i-1}(1-aj-b)
+S(x) = \prod_{i>t_0}^{\min(x, t_1)} (1 - ai - b) + \sum_{i>t_0}^{\min(x,t_1)} (ai+b)\cdot e^{(i-x-1)r} \cdot \prod_{j>t_0}^{i-1}(1-aj-b)
 \end{equation}
 
 \end{document}

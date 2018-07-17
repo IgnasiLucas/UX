@@ -45,3 +45,26 @@
 #          i=1              i=1                            j=1
 #
 #
+# See the formula in the survival.pdf file for a nicer format. I need the
+# survival function to determine the fitness of each fenotype, in order to have
+# a theoretical expectation of the allele frequency at equilibrium. I take
+# fitness to be the lifetime expected reproduction, which in discrete ages is:
+#
+#       inf
+#   R = SUM S(x)F(x)
+#       x=1
+#
+# Where S(x) is the survival function, and F(x) the fecundity. In the model,
+# adults (x >= 10) reproduce at a constant rate, limited by the constant population
+# size. That is, there is no age-dependency in fecundity. Thus, F(x) can be
+# substituted by the reproductive fitness, or probability of being chosen as
+# a parent.
+#
+# The script survival.py outputs a list of survival probabilities for each
+# combination of 'a' and 'b' values.
+
+if [ ! -e survival.png ]; then
+   if [ ! -e survival.txt ]; then
+      python survival.py --min-a 0.001 --max-a 0.050 --min-b -0.010 --max-b -0.500 --min-d 0.1911 --max-d 0.1911
+   fi
+fi

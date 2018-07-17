@@ -17,10 +17,10 @@ parser.add_argument('-k', default=0.1911, type=float, help='rate of mortality of
 parser.add_argument('-N', default=5000, type=int, help='Population size. Default: 5000.')
 parser.add_argument('-G', default=500, type=int, help='Number of generations. Default: 500.')
 parser.add_argument('-e', '--meffect', type=float, default=0.037, help='Mutant effect on male rate of aging. Default: 0.037.')
-parser.add_argument('-f', '--feffect', type=float, default=0.02, help='Female selective coefficient against wild type allele. Default: 0.02.')
-parser.add_argument('-d', '--dominance', type=float, default=0.5, help='Coefficient of dominance of deleterious allele in females. Default: 0.5')
+parser.add_argument('-s', '--feffect', type=float, default=0.02, help='Female selective coefficient against wild type allele. Default: 0.02.')
+parser.add_argument('-h', '--dominance', type=float, default=0.5, help='Coefficient of dominance of deleterious allele in females. Default: 0.5')
 parser.add_argument('-o', '--output', default='z1.txt', type=argparse.FileType('w'), help='Ouput file name. Default: z1.txt.')
-parser.add_argument('-s', '--seed', default=115, type=int, help='Random number generator seed. Default: 115.')
+parser.add_argument('-r', '--seed', default=115, type=int, help='Random number generator seed. Default: 115.')
 args = parser.parse_args()
 
 min_a = args.m
@@ -83,7 +83,6 @@ def OutputStats(pop):
 #                         POPULATION                          #
 ###############################################################
 
-# I simulate 2 loci, one in chromosomes X and one in an autosome.
 pop = sim.Population(args.N, loci = [1], ploidy = 2,
    chromTypes = [sim.CHROMOSOME_X],
    infoFields = ['age', 'a', 'b', 'smurf', 'ind_id',  'father_id', 'mother_id', 'luck', 'fitness'])

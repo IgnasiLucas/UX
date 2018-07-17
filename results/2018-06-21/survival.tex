@@ -10,14 +10,14 @@ S(x) = \prod_{i=1}^x (1-B_i) + \sum_{i=1}^x B_i \cdot e^{(i-x-1)\cdot r} \cdot \
 
 \[ B_x = 
    \begin{cases}
-      0 & \quad \text{if } x < -\frac{a}{b} = t_0\\
-      ax + b & \quad \text{if } -\frac{a}{b} \leq x \leq \frac{1-a}{b}\\
-      1 & \quad \text{if } x > \frac{1-a}{b} = t_1
+      0 & \quad \text{if } x < -\frac{b}{a} = t_0\\
+      ax + b & \quad \text{if } -\frac{b}{a} \leq x \leq \frac{1-b}{a}\\
+      1 & \quad \text{if } x > \frac{1-b}{a} = t_1
    \end{cases}
 \]
 
 \begin{equation}
-S(x) = \prod_{i=1}^{\min(x, t_1)} (1 - ai - b) + \sum_{i=1}^{\min(x,t_1)} (ai+b)\cdot e^{(i-x-1)r} \cdot \prod_{j=1}^{i-1}(1-aj-b) + \sum_{i=t_1 + 1}^x e^{(i-x-1)r)} \cdot \prod_{j=1}^{t_1}(1-aj-b)
+S(x) = \prod_{i=1}^{\min(x, t_1)} (1 - ai - b) + \sum_{i=1}^{\min(x,t_1)} (ai+b)\cdot e^{(i-x-1)r} \cdot \prod_{j=1}^{i-1}(1-aj-b)
 \end{equation}
 
 \end{document}

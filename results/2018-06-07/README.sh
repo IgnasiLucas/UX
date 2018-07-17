@@ -7,25 +7,25 @@
 # on loci that affect the probability of becoming targeted for natural
 # death. Mutant alleles all increase the parameter 'a' of the two-phases
 # model of aging, and are therefore deleterious. They are recessive, and
-# expressed in males if present in the X chromosome. The model includes
-# 28 loci, with recombination. The gene effects are all equal and additive.
+# expressed in males if present in the X chromosome. The gene effects are
+# all equal and additive.
 #
 # The challenge is to adjust the parameter values to reproduce some real-life
 # features. Mainly, a low but positive equilibrium allele frequency, and a
 # longer lifespan for females (unguarded X hypothesis).
 #
-# The number of loci should be more than enough. The gene effects should be
-# small for the equilibrium frequencies to be positive, but large enough to
-# cause a difference in lifespan between males and females.
+# Some preliminar simulations suggested that the largest effect of the mutations
+# produced a larger, more realistic difference between males and females. Thus,
+# I let the 'a' parameter to vary between 0.003 and 0.400, which is the widest
+# range tested so far. I will focus on the effect of the number of genes, and its
+# distribution among chromosome types.
 
-for min_a in .003 .005 .010 .015 .020; do
-   for max_a in .05 .10 .20 .40; do
-      for mu in .00001 .0001 .001 .005 .01; do
-         if [ ! -e MSB$min_a$max_a$mu.txt ]; then
-            python mutationSelectionBalance.py \
-               -m $min_a -M $max_a -u $mu -N 2000 -G 500000 \
-               -o MSB$min_a$max_a$mu.txt > MSB$min_a$max_a$mu.log &
-         fi
+for XLoci in 20 100 200; do
+   for ALoci in 0 20 100 200 1000; do
+      for mu in .000001 .00001 .0001 .001; do
+         python mutationSelectionBalance.py \
+            -m 0.003 -M 0.400 -N 50000 -G 500000 --step 100 \
+            -X $XLoci -A $ALoci -u $mu -o MSB${XLoci}.${ALoci}${mu}.txt > MSB${XLoci}.${ALoci}${mu}.log &
       done
    done
 done
@@ -40,28 +40,6 @@ if [ ! -e age_difference.png ]; then
 fi
 
 if [ ! -e frequencies.png ]; then
-   if [ ! -e frequencies.txt ]; then
-      echo "#MIN_a" > frequencies.txt
-      echo "#MAX_a" >> frequencies.txt
-      echo "#MU"    >> frequencies.txt
-      cut -f 1 MSB.003.05.00001.txt >> frequencies.txt
-      for min_a in .003 .005 .010 .015 .020; do
-         for max_a in .05 .10 .20 .40; do
-            for mu in .00001 .0001 .001 .005 .01; do
-               gawk -v MIN_A=$min_a -v MAX_A=$max_a -v MU=$mu 'BEGIN{
-                  print MIN_A "\n" MAX_A "\n" MU
-               }{
-                  S=0
-                  for (i=2; i<=29; i++) S += $i
-                  printf("%.4f\n", S/28)
-               }' MSB$min_a$max_a$mu.txt > z1
-               paste frequencies.txt z1 > z2
-               mv z2 frequencies.txt
-               rm z1
-            done
-         done
-      done
-   fi
    gnuplot < plotFrequencies.gnp
 fi
 

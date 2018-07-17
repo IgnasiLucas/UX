@@ -6,6 +6,7 @@ import simuPOP as sim
 import random
 import math
 import argparse
+import numpy
 
 ###############################################################
 #                 ARGUMENTS AND  VARIABLES                    #
@@ -20,11 +21,15 @@ parser.add_argument('-G', default=200, type=int, help='Number of generations. De
 parser.add_argument('-o', '--output', default='z1.txt', type=argparse.FileType('w'), help='Ouput file name. Default: z1.txt.')
 parser.add_argument('-s', '--seed', default=115, type=int, help='Random number generator seed. Default: 115.')
 parser.add_argument('-u', '--mutation', default=0.00000001, type=float, help='Mutation rate. Default 1.0E-08.')
+parser.add_argument('-A', '--autosomal', default=21, type=int, help='Number of autosomal loci. Default 21.')
+parser.add_argument('-X', '--xlinked', default=7, type=int, help='Number of x-linked loci. Default 7.')
+parser.add_argument('-S', '--step', default=100, type=int, help='Periodicity of statistics output. Default: 100 (every 100 days).')
 args = parser.parse_args()
 
 min_a = args.m
 max_a = args.M
-X_loci = 7
+X_loci = args.xlinked
+A_loci = args.autosomal
 
 ###############################################################
 #                    FUNCTIONS AND CLASSES                    #
@@ -88,13 +93,15 @@ class sexSpecificRecombinator(sim.PyOperator):
         return True
 
 def OutputStats(pop):
-   outstring = str(pop.dvars().gen)
+   S = 0
    for locus in range(pop.totNumLoci()):
-      outstring += "\t%.3f" % pop.dvars().alleleFreq[locus][1]
-   outstring += "\t%3d" % pop.dvars().maxOfInfo_males['age']
-   outstring += "\t%3d" % pop.dvars().maxOfInfo_females['age']
-   outstring += "\t%4f" % pop.dvars().meanOfInfo_males['a']
-   outstring += "\t%4f\n" % pop.dvars().meanOfInfo_females['a']
+      S += pop.dvars().alleleFreq[locus][1]
+   outstring = str(pop.dvars().gen)
+   outstring += "\t{:.8f}".format(S/pop.totNumLoci())
+   outstring += "\t{:.4f}".format(pop.dvars().meanOfInfo_malesAge['age'])
+   outstring += "\t{:.4f}".format(pop.dvars().meanOfInfo_femalesAge['age'])
+   outstring += "\t{:.4f}".format(pop.dvars().meanOfInfo_males['a'])
+   outstring += "\t{:.4f}\n".format(pop.dvars().meanOfInfo_females['a'])
    args.output.write(outstring)
    return True
 
@@ -102,12 +109,16 @@ def OutputStats(pop):
 #                         POPULATION                          #
 ###############################################################
 
-# I simulate 28 loci, distributed along chromosomes X, 2 and 3
-# more or less proportionally to their genetic lengths. They are
-# all 10 cM apart from the next or previous one in the same chromosome.
-pop = sim.Population(args.N, loci = [X_loci,10,11], ploidy = 2,
-   chromTypes = [sim.CHROMOSOME_X, sim.AUTOSOME, sim.AUTOSOME],
+# I simulate a number of autosomal and X-linked loci. In Drosophila
+# the X chromosome contains about 20% of the genes in the genome.
+# Although I do not define loci positions, I assume genetic lengths
+# of 75 cM for the X chromosome and 207 cM for the two main autosomes
+# together. Then, I define the recombination rates as 0.75 / X_loci
+# and 2.07 / A_loci, respectively. 
+pop = sim.Population(args.N, loci = [X_loci, A_loci], ploidy = 2,
+   chromTypes = [sim.CHROMOSOME_X, sim.AUTOSOME],
    infoFields = ['age', 'a', 'b', 'smurf', 'ind_id',  'father_id', 'mother_id', 'luck'])
+
 pop.dvars().seed = args.seed
 
 # Below the population is split first by an age cutoff of 10 days
@@ -168,22 +179,24 @@ simu.evolve(
                sim.IdTagger(),
                sim.PedigreeTagger(),
                sim.InfoExec("smurf = 0.0"),
-               sexSpecificRecombinator(rates=0.01, maleRates=0.0),
+               sexSpecificRecombinator(rates=[ 0.75 / X_loci for x in range(X_loci) ] + [ 2.07 / A_loci for x in range(A_loci) ], maleRates=0.0),
                sim.PyQuanTrait(loci = sim.ALL_AVAIL, func = AdditiveRecessive, infoFields = ['a', 'b']) 
             ],
             weight = 1,
             subPops = [(0,1)],
-            numOffspring=(sim.UNIFORM_DISTRIBUTION, 10,50)
+            numOffspring=1
          )
       ],
       subPopSize = demo
    ),
    postOps = [
       sim.SNPMutator(u=args.mutation, subPops=[(0,5)]),
-      sim.Stat(alleleFreq=sim.ALL_AVAIL, step=100),
-      sim.Stat(maxOfInfo='age', meanOfInfo='a', subPops=[(0,3)], suffix='_males', step=100),
-      sim.Stat(maxOfInfo='age', meanOfInfo='a', subPops=[(0,4)], suffix='_females', step=100),
-      sim.PyOperator(func=OutputStats, step=100)
+      sim.Stat(alleleFreq=sim.ALL_AVAIL, step=args.step),
+      sim.Stat(meanOfInfo='age', subPops=[(0,3)], suffix='_malesAge', step=args.step),
+      sim.Stat(meanOfInfo='age', subPops=[(0,4)], suffix='_femalesAge', step=args.step),
+      sim.Stat(meanOfInfo='a', subPops=[(0,3)], suffix='_males', step=args.step),
+      sim.Stat(meanOfInfo='a', subPops=[(0,4)], suffix='_females', step=args.step),
+      sim.PyOperator(func=OutputStats, step=args.step)
    ],
    gen=args.G
 )

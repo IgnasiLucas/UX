@@ -1,14 +1,15 @@
 set term png large size 800,800
 set output 'constant_t.png'
 set title sprintf("t0=%.4f, %.4f<a<%.4f", t0, min_a, max_a)
-plot 'constant_t.txt' using 1:2 with lines, \
-     '' using 1:3 with lines, \
-     '' using 1:4 with lines, \
-     '' using 1:5 with lines, \
-     '' using 1:6 with lines, \
-     '' using 1:7 with lines, \
-     '' using 1:8 with lines, \
-     '' using 1:9 with lines, \
-     '' using 1:10 with lines, \
-     '' using 1:11 with lines
+plot 'default.txt' using 1:2 with lines lw 2 notitle, \
+     'constant_t.txt' using 1:2 with lines notitle, \
+     '' using 1:3 with lines notitle, \
+     '' using 1:4 with lines notitle, \
+     '' using 1:5 with lines notitle, \
+     '' using 1:6 with lines notitle, \
+     '' using 1:7 with lines notitle, \
+     '' using 1:8 with lines notitle, \
+     '' using 1:9 with lines notitle, \
+     '' using 1:10 with lines notitle, \
+     '' using 1:11 with lines notitle
 quit

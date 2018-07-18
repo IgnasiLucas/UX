@@ -63,12 +63,18 @@
 # The script survival.py outputs a list of survival probabilities for each
 # combination of 'a' and 'b' values.
 
-MIN_A=0.001
-MAX_A=0.050
-MEAN_A=0.0255
-MIN_B=-0.500
-MAX_B=-0.010
-MEAN_B=-0.255
+MIN_A=0.0025
+MAX_A=0.0100
+MEAN_A=0.0039
+MIN_B=-0.030
+MAX_B=-0.0001
+MEAN_B=-0.019
+
+
+if [ ! -e default.txt ]; then
+   python survival.py -a 0.0039 -b -0.019 -d 0.1911 -n 1 -o default.txt
+fi
+
 if [ ! -e constant_b.png ]; then
    if [ ! -e constant_b.txt ]; then
       python survival.py --min_a $MIN_A --max_a $MAX_A -b $MEAN_B -n 10 \
@@ -87,8 +93,9 @@ fi
 
 if [ ! -e constant_t.png ]; then
    if [ ! -e constant_t.txt ]; then
-      python survival.py --min_a $MIN_A --max_a $MAX_A -t 10 -n 10 \
+      python survival.py --min_a $MIN_A --max_a $MAX_A -t 4.87 -n 10 \
                          --death_rate 0.1911 -o constant_t.txt
    fi
-   gnuplot -e "min_a=$MIN_A; max_a=$MAX_A; t0=10" plot_constant_t.gnp
+   gnuplot -e "min_a=$MIN_A; max_a=$MAX_A; t0=4.87" plot_constant_t.gnp
 fi
+

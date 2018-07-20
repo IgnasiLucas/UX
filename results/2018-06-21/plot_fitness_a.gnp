@@ -1,0 +1,11 @@
+set term png large
+set output 'fitness_a.png'
+set xlabel 'a'
+set ylabel 'Fitness'
+set title 'Minimum a = 0.0039'
+
+plot 'fitness_a.txt' using 1:2 with lines title ''
+
+set output 'coefficients_a.png'
+set ylabel 'selection coefficient against a'
+plot 'fitness_a.txt' using 1:(1.0 - $2) with lines title ''

@@ -12,19 +12,19 @@ import argparse
 ###############################################################
 
 parser = argparse.ArgumentParser(description = 'Simulates a population and prints allele frequencies out.')
-parser.add_argument('-m', default=0.0030, type=float, help='Minimum value of the "a" parameter of the two phases model of aging. Default: 0.003.')
-parser.add_argument('-k', default=0.1911, type=float, help='rate of mortality of smurfs. Default: 0.1911')
-parser.add_argument('-N', default=5000, type=int, help='Population size. Default: 5000.')
+parser.add_argument('-m', default=0.0039, type=float, help='Minimum value of the "a" parameter of the two phases model of aging. Default: 0.003.')
+parser.add_argument('-k', default=0.1911, type=float, help='Rate of mortality of smurfs. Default: 0.1911')
+parser.add_argument('-b', default=-0.0190, type=float, help='Parameter "b" of the two phases model o aging. Default: -0.019.')
+parser.add_argument('-N', default=50000, type=int, help='Population size. Default: 50000.')
 parser.add_argument('-G', default=500, type=int, help='Number of generations. Default: 500.')
-parser.add_argument('-e', '--meffect', type=float, default=0.037, help='Mutant effect on male rate of aging. Default: 0.037.')
-parser.add_argument('-s', '--feffect', type=float, default=0.02, help='Female selective coefficient against wild type allele. Default: 0.02.')
-parser.add_argument('-h', '--dominance', type=float, default=0.5, help='Coefficient of dominance of deleterious allele in females. Default: 0.5')
+parser.add_argument('-e', '--meffect', type=float, default=0.0013, help='Mutant effect on male rate of aging. Default: 0.0013.')
+parser.add_argument('-s', '--feffect', type=float, default=0.137243, help='Female selective coefficient against wild type allele. Default: 0.137243.')
+parser.add_argument('-d', '--dominance', type=float, default=0.5, help='Coefficient of dominance of deleterious allele in females. Default: 0.5')
 parser.add_argument('-o', '--output', default='z1.txt', type=argparse.FileType('w'), help='Ouput file name. Default: z1.txt.')
 parser.add_argument('-r', '--seed', default=115, type=int, help='Random number generator seed. Default: 115.')
 args = parser.parse_args()
 
 min_a = args.m
-
 
 ###############################################################
 #                    FUNCTIONS AND CLASSES                    #
@@ -45,13 +45,13 @@ def demo(gen, pop):
 def fitness_func(geno, ind, pop):
    if ind.sex() == 2:
       if geno[0] + geno[1] == 0:
-         value = 1 - args.feffect
+         value = 1.0 - args.feffect
       if geno[0] + geno[1] == 1:
-         value = 1 - args.feffect * args.dominance
+         value = 1.0 - args.feffect * args.dominance
       if geno[0] + geno[1] == 2:
-         value = 1
+         value = 1.0
    else:
-      value = 1 - args.feffect
+      value = 1.0
    return value
 
 def MaleEffect(geno, ind):
@@ -60,7 +60,7 @@ def MaleEffect(geno, ind):
    else:
       # allele "1" makes male aging rate increase.
       a = min_a + args.meffect * geno[0]
-   b = -a * 10.0
+   b = args.b
    return (a, b)
 
 def OutputStats(pop):
@@ -131,7 +131,7 @@ simu.evolve(
       sim.InitInfo([1], infoFields = 'fitness'),
 #      sim.InfoExec("fitness = {0: 0.98, 1: 0.99, 2:1.0}[ind.allele(0,0) + ind.allele(0,1)] if ind.sex() == 2 else 0.98", exposeInd = 'ind'),
       sim.InfoExec("a = min_a + meffect if ind.sex() == 1 and ind.allele(0,0) == 1 else min_a", exposeInd = 'ind'),
-      sim.InitInfo([-10 * min_a], infoFields = 'b'),
+      sim.InitInfo([ args.b ], infoFields = 'b'),
       sim.InitInfo(lambda: random.random(), infoFields = 'luck'),
       sim.InfoExec("smurf = 1.0 if ind.luck < ind.age * ind.a + ind.b else 0.0", exposeInd = 'ind'),
       sim.IdTagger()

@@ -87,6 +87,6 @@ args.output.write(header4)
 for x in range(1, args.oldest + 1):
    line = "{}".format(x)
    for ab in sorted(Survival):
-      line += "\t{:.6f}".format(Survival[ab][x])
+      line += "\t{:.8f}".format(Survival[ab][x])
    line += "\n"
    args.output.write(line)

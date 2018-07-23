@@ -14,11 +14,11 @@
 #    +-----------+------+------+------+------+------+
 #    | genotype  |  00  |  01  |  11  |  0Y  |  1Y  |
 #    +-----------+------+------+------+------+------+
-#    | fitness   | 1-s  | 1-hs | 1.0  | 1-s  | 1-s  |
+#    | fitness   | 1-s  | 1-ds |   1  |   1  | 1-r  |
 #    +-----------+------+------+------+------+------+
 #
 # Where the selection coefficient "s" is set by the "-s" option, and the
-# coefficient of dominance, "h" is set by the "-h" option.
+# coefficient of dominance, "d" is set by the "-d" option.
 #
 # At the same time, allele "1" is deleterious for males by increasing their
 # aging rate, "a", by a certain amount, which is set by the option "-e" in
@@ -64,7 +64,7 @@
 # combination of 'a' and 'b' values.
 
 MIN_A=0.0025
-MAX_A=0.0100
+MAX_A=0.0250
 MEAN_A=0.0039
 MIN_B=-0.030
 MAX_B=-0.0001
@@ -72,13 +72,13 @@ MEAN_B=-0.019
 
 
 if [ ! -e default.txt ]; then
-   python survival.py -a 0.0039 -b -0.019 -d 0.1911 -n 1 -o default.txt
+   python survival.py -a 0.0039 -b -0.019 -d 0.1911 -n 1 -x 150 -o default.txt
 fi
 
 if [ ! -e constant_b.png ]; then
    if [ ! -e constant_b.txt ]; then
       python survival.py --min_a $MIN_A --max_a $MAX_A -b $MEAN_B -n 10 \
-                         --death_rate 0.1911 -o constant_b.txt
+                         -x 150 --death_rate 0.1911 -o constant_b.txt
    fi
    gnuplot -e "min_a=$MIN_A; max_a=$MAX_A; b=$MEAN_B" plot_constant_b.gnp
 fi
@@ -86,7 +86,7 @@ fi
 if [ ! -e constant_a.png ]; then
    if [ ! -e constant_a.txt ]; then
       python survival.py -a $MEAN_A --min_b $MIN_B --max_b $MAX_B -n 10 \
-                         --death_rate 0.1911 -o constant_a.txt
+                         -x 150 --death_rate 0.1911 -o constant_a.txt
    fi
    gnuplot -e "min_b=$MIN_B; max_b=$MAX_B; a=$MEAN_A" plot_constant_a.gnp
 fi
@@ -94,8 +94,79 @@ fi
 if [ ! -e constant_t.png ]; then
    if [ ! -e constant_t.txt ]; then
       python survival.py --min_a $MIN_A --max_a $MAX_A -t 4.87 -n 10 \
-                         --death_rate 0.1911 -o constant_t.txt
+                         -x 150 --death_rate 0.1911 -o constant_t.txt
    fi
    gnuplot -e "min_a=$MIN_A; max_a=$MAX_A; t0=4.87" plot_constant_t.gnp
 fi
 
+# Say that the 'a' parameter of the two-stages aging model is 0.0039 for
+# either females or males with the 0 allele. That is the empirical value
+# estimated by Tricoire and Rera (2015). Allele 1 increses 'a'. Below, I
+# represent the fitness and the selection coefficient against allele 1 as
+# a function of the increase it produces in 'a'. I assume reasonable values
+# of 'a' may go up to 0.025.
+
+N=50
+if [ ! -e fitness_a.png ]; then
+   if [ ! -e fitness_a.txt ]; then
+      if [ ! -e constant_b_$N.txt ]; then
+         python survival.py --min_a $MEAN_A --max_a $MAX_A -b $MEAN_B -n $N \
+                            -x 150 --death_rate 0.1911 -o constant_b_50.txt
+      fi
+      gawk -v SIZE=$N '(/^#a/){
+         for (i=2; i<=NF; i++) {
+            A[i] = $i
+            W[$i] = 0
+         }
+      }(/^[^#]/){
+         for (i=2; i<=NF; i++) {
+            W[A[i]] += $i
+         }
+      }END{
+         for (i=2; i<=SIZE + 1; i++) {
+            print A[i] "\t" W[A[i]] / W[A[2]]
+         }
+      }' constant_b_50.txt > fitness_a.txt
+   fi
+   gnuplot plot_fitness_a.gnp
+fi
+
+# I see that fitness drops fast with small increments of 'a'. Now, we can
+# choose a range for the effects of allele 1 on 'a' and a range for the fitness
+# effects on females of allele '0', 's' and 'd', in the table below:
+#
+#                +--------------------+-------------+
+#                |        Females     |    Males    |
+#    +-----------+------+------+------+------+------+
+#    | genotype  |  00  |  01  |  11  |  0Y  |  1Y  |
+#    +-----------+------+------+------+------+------+
+#    | fitness   | 1-s  | 1-ds |   1  |   1  | 1-r  |
+#    +-----------+------+------+------+------+------+
+#
+# According to Fry (2009), who cites Rice (1984) and Hedrick (2000), the
+# polimorphism will be stable if:
+#
+#        2·d         r      2·(1 - d)
+#     ---------  <  --- <  -----------
+#      1 + d·s       s       1 - d·s
+#
+# To make things simple, we can set 's' = 'r', and 'd' = 0.5, which does
+# fulfill the stability condition. According to file fitness_a.txt, the
+# following increments of 'a' ('e') produce such selection coefficients
+# ('r').
+#
+#   +---------+----------+
+#   |    e    |    r     |
+#   +---------+----------+
+#   | 0.0004  | 0.05336  |
+#   | 0.0009  | 0.098107 |
+#   | 0.0013  | 0.137243 |
+#   | 0.0017  | 0.1711   |
+#   | 0.0022  | 0.200737 |
+#   | 0.0026  | 0.227182 |
+#   | 0.003   | 0.251203 |
+#   | 0.0034  | 0.272798 |
+#   | 0.0039  | 0.292342 |
+#   . ...     . ...      .
+#
+#

@@ -27,11 +27,9 @@ args = parser.parse_args()
 ###############################################################
 
 def aging_model(model):
-   def two_phases(smurf, pop):
-   # The survival function of a population of smurfs would be an
-   # exponential decay: exp(-tk), which means that every day as a
-   # smurf it experiences a chance of death equal to 1 - exp(-k).
-      if smurf == 1.0 and random.random() < 1.0 - math.exp(-pop.dvars().k):
+   def two_phases(smurf, age, pop):
+      k = pop.dvars().k
+      if smurf == 1.0 and random.random() < math.exp(-k * (age - 1)) - math.exp(-k * age):
          return True
       else:
          return False

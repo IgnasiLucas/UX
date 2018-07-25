@@ -1,0 +1,19 @@
+Fukui, Xiu and Curtsinger, 1993, Experimental Gerontology, 28:585-599.
+
+
+m(x) = a x^b
+
+Table 4. Maximum-likelihood parameter estimates (standard errors) for
+the Weibull model.
+
+                     a           b
+line 1   male    0.000202    1.587565
+line 1   female  0.000079    1.875881
+line 2   male    0.002217    0.830097
+line 2   female  0.000988    1.214475
+line 3   male    0.068575    0.000000
+line 3   female  0.053082    0.032374
+line 4   male    0.000010    2.424577
+line 4   female  0.000061    1.921362
+
+

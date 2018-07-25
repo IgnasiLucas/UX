@@ -27,15 +27,18 @@ args = parser.parse_args()
 ###############################################################
 
 def aging_model(model):
-   def two_phases(smurf, age, pop):
+   def two_phases(smurf, pop):
       k = pop.dvars().k
-      if smurf == 1.0 and random.random() < math.exp(-k * (age - 1)) - math.exp(-k * age):
+      if smurf == 1.0 and random.random() < 1.0 - math.exp(k):
+         return True
+      else:
+         return False
+   def weibull(age, a, b):
+      if random.random() < 1.0 - math.exp(-(a/(b+1)) * (age**(b+1) - (age - 1)**(b+1))):
          return True
       else:
          return False
    def gompertz(pop):
-      return True
-   def weibull(pop):
       return True
    if model == 'two_phases':
       return two_phases
@@ -71,6 +74,7 @@ pop.setVirtualSplitter(
 # This is to be able to call random from InfoExec:
 exec('import random', pop.vars(), pop.vars())
 pop.dvars().k = args.k
+pop.dvars().model = args.model
 
 ###############################################################
 #                         SIMULATION                          #
@@ -80,19 +84,17 @@ simu = sim.Simulator(pop, rep=args.replicates)
 
 simu.evolve(
    initOps = [
-#      sim.InitSex(),
-#      sim.InitGenotype(freq = [0.9,0.1]),
       sim.InitInfo([0], infoFields = 'age'),
       sim.InitInfo([args.a], infoFields = 'a'),
       sim.InitInfo([args.b], infoFields = 'b'),
       sim.InitInfo(lambda: random.random(), infoFields = 'luck'),
-      sim.InfoExec("smurf = 1.0 if ind.luck < ind.age * ind.a + ind.b else 0.0", exposeInd = 'ind'),
+      sim.InfoExec("smurf = 1.0 if model == 'two_phases' and ind.luck < ind.age * ind.a + ind.b else 0.0", exposeInd = 'ind'),
       sim.PyExec("Surviving = {'larvae': [], 'adults': [], 'smurfs': []}")
    ],
    preOps = [
       sim.InfoExec("age += 1"),
       sim.InfoExec("luck = random.random()"),
-      sim.InfoExec("smurf = 1.0 if ind.luck <= (ind.age * ind.a + ind.b) else 0.0", exposeInd='ind'),
+      sim.InfoExec("smurf = 1.0 if model == 'two_phases' and ind.luck <= (ind.age * ind.a + ind.b) else 0.0", exposeInd='ind'),
       sim.DiscardIf(aging_model(args.model))
    ],
    matingScheme = sim.CloneMating(subPops = sim.ALL_AVAIL, subPopSize = demo),

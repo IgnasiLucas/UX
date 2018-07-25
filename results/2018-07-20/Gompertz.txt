@@ -1,0 +1,10 @@
+Wilson, 1994, Mech. Ageing Dev. 74:15-33. Table 4:
+
+m(t) = a·exp(b·t)
+
+                a            b
+females      0.00573      0.0802
+males        0.00679      0.1778
+
+Curtsinger et al. 1992, Science 258:461-464. Table 2:
+

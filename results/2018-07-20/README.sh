@@ -86,13 +86,31 @@
 # Tricoire and Rera (2015) report estimated parameters a=0.000485 and b=2.4746
 # for the Weibull model, without specifying the parameterization. It is likely
 # that they used the definition of the hazard function of the Weibull model
-# as this:
+# as this, like in Fukui et al. (1993):
 #
 #    h(t) = a·t^b
 #
-# In terms of k and p, as in S(t)=exp(-(kt)^p), the hazard function is:
+# Actually, the values reported by Tricoire and Rera fit perfectly in a linear
+# regression between log(a) and b values taken from Fukui et al. 1993, who do
+# specify the model as h(t)=a·t^b.
 #
-#    h(t) = p·k·(k·t)^(p-1)
+# In terms of a and b, the survival function is S(t) = exp{-(a/(b+1))·t^(b+1)},
+# and the conditional probability of death between t-1 and t becomes:
 #
-# I believe that the estimates by Tricoire and Rera are equivalent to
-# p = k+1 = 3.4746, and k = exp((log(a)-log(b+1))/(b+1)) = -2.5548
+#    1 - exp{ -(a/(b+1)) · [t^(b+1) - (t-1)^(b+1)] }
+#
+#
+# Gompertz
+# ========
+#
+# Curtsinger et al. 1992 (Science 258:461-463) report several estimates of
+# Gompertz parameters for Drosophila populations (Table 2). Their model is:
+# m = a·exp(bx), which is the hazard function. Wilson 1994 also uses the same
+# parameterization, and he specifies the survival function:
+#
+#   S(t) = exp{ (a/b) · (1 - exp(b·t)) }
+#
+# Wilson (1994; Mech. Ageing Dev. 74:15-33) also reports some estimates of
+# the a and b parameters for Drosophila (Table 4). I collect them in file
+# Gompertz.txt.
+#

@@ -1,84 +1,69 @@
-set term png large size 4000,2400
+set term png large size 3200,2400
 set output 'frequencies.png'
-set multiplot layout 3,5
+set multiplot layout 3,4
 set xlabel 'Time (days)'
 set ylabel 'Allele frequency'
 set logscale xy 10
 set title '20 X, 0 A'
-plot 'MSB.20.0.000001.txt' using 1:2 with lines notitle, \
-     'MSB.20.0.00001.txt' using 1:2 with lines notitle, \
-     'MSB.20.0.0001.txt' using 1:2 with lines notitle, \
-     'MSB.20.0.001.txt' using 1:2 with lines notitle
+plot 'MSB20.0.000001.txt' using 1:2 with lines notitle, \
+     'MSB20.0.00001.txt' using 1:2 with lines notitle, \
+     'MSB20.0.0001.txt' using 1:2 with lines notitle, \
+     'MSB20.0.001.txt' using 1:2 with lines notitle
 set title '20 X, 20 A'
-plot 'MSB.20.20.000001.txt' using 1:2 with lines notitle, \
-     'MSB.20.20.00001.txt' using 1:2 with lines notitle, \
-     'MSB.20.20.0001.txt' using 1:2 with lines notitle, \
-     'MSB.20.20.001.txt' using 1:2 with lines notitle
+plot 'MSB20.20.000001.txt' using 1:2 with lines notitle, \
+     'MSB20.20.00001.txt' using 1:2 with lines notitle, \
+     'MSB20.20.0001.txt' using 1:2 with lines notitle, \
+     'MSB20.20.001.txt' using 1:2 with lines notitle
 set title '20 X, 100 A'
-plot 'MSB.20.100.000001.txt' using 1:2 with lines notitle, \
-     'MSB.20.100.00001.txt' using 1:2 with lines notitle, \
-     'MSB.20.100.0001.txt' using 1:2 with lines notitle, \
-     'MSB.20.100.001.txt' using 1:2 with lines notitle
+plot 'MSB20.100.000001.txt' using 1:2 with lines notitle, \
+     'MSB20.100.00001.txt' using 1:2 with lines notitle, \
+     'MSB20.100.0001.txt' using 1:2 with lines notitle, \
+     'MSB20.100.001.txt' using 1:2 with lines notitle
 set title '20 X, 200 A'
-plot 'MSB.20.200.000001.txt' using 1:2 with lines notitle, \
-     'MSB.20.200.00001.txt' using 1:2 with lines notitle, \
-     'MSB.20.200.0001.txt' using 1:2 with lines notitle, \
-     'MSB.20.200.001.txt' using 1:2 with lines notitle
-set title '20 X, 1000 A'
-plot 'MSB.20.1000.000001.txt' using 1:2 with lines notitle, \
-     'MSB.20.1000.00001.txt' using 1:2 with lines notitle, \
-     'MSB.20.1000.0001.txt' using 1:2 with lines notitle, \
-     'MSB.20.1000.001.txt' using 1:2 with lines notitle
+plot 'MSB20.200.000001.txt' using 1:2 with lines notitle, \
+     'MSB20.200.00001.txt' using 1:2 with lines notitle, \
+     'MSB20.200.0001.txt' using 1:2 with lines notitle, \
+     'MSB20.200.001.txt' using 1:2 with lines notitle
 
 set title '100 X, 0 A'
-plot 'MSB.100.0.000001.txt' using 1:2 with lines notitle, \
-     'MSB.100.0.00001.txt' using 1:2 with lines notitle, \
-     'MSB.100.0.0001.txt' using 1:2 with lines notitle, \
-     'MSB.100.0.001.txt' using 1:2 with lines notitle   
+plot 'MSB100.0.000001.txt' using 1:2 with lines notitle, \
+     'MSB100.0.00001.txt' using 1:2 with lines notitle, \
+     'MSB100.0.0001.txt' using 1:2 with lines notitle, \
+     'MSB100.0.001.txt' using 1:2 with lines notitle   
 set title '100 X, 20 A'
-plot 'MSB.100.20.000001.txt' using 1:2 with lines notitle, \
-     'MSB.100.20.00001.txt' using 1:2 with lines notitle, \
-     'MSB.100.20.0001.txt' using 1:2 with lines notitle, \
-     'MSB.100.20.001.txt' using 1:2 with lines notitle 
+plot 'MSB100.20.000001.txt' using 1:2 with lines notitle, \
+     'MSB100.20.00001.txt' using 1:2 with lines notitle, \
+     'MSB100.20.0001.txt' using 1:2 with lines notitle, \
+     'MSB100.20.001.txt' using 1:2 with lines notitle 
 set title '100 X, 100 A'
-plot 'MSB.100.100.000001.txt' using 1:2 with lines notitle, \
-     'MSB.100.100.00001.txt' using 1:2 with lines notitle, \
-     'MSB.100.100.0001.txt' using 1:2 with lines notitle, \
-     'MSB.100.100.001.txt' using 1:2 with lines notitle 
+plot 'MSB100.100.000001.txt' using 1:2 with lines notitle, \
+     'MSB100.100.00001.txt' using 1:2 with lines notitle, \
+     'MSB100.100.0001.txt' using 1:2 with lines notitle, \
+     'MSB100.100.001.txt' using 1:2 with lines notitle 
 set title '100 X, 200 A'
-plot 'MSB.100.200.000001.txt' using 1:2 with lines notitle, \
-     'MSB.100.200.00001.txt' using 1:2 with lines notitle, \
-     'MSB.100.200.0001.txt' using 1:2 with lines notitle, \
-     'MSB.100.200.001.txt' using 1:2 with lines notitle 
-set title '100 X, 1000 A'
-plot 'MSB.100.1000.000001.txt' using 1:2 with lines notitle, \
-     'MSB.100.1000.00001.txt' using 1:2 with lines notitle, \
-     'MSB.100.1000.0001.txt' using 1:2 with lines notitle, \
-     'MSB.100.1000.001.txt' using 1:2 with lines notitle   
+plot 'MSB100.200.000001.txt' using 1:2 with lines notitle, \
+     'MSB100.200.00001.txt' using 1:2 with lines notitle, \
+     'MSB100.200.0001.txt' using 1:2 with lines notitle, \
+     'MSB100.200.001.txt' using 1:2 with lines notitle 
 
 set title '200 X, 0 A'
-plot 'MSB.200.0.000001.txt' using 1:2 with lines notitle, \
-     'MSB.200.0.00001.txt' using 1:2 with lines notitle, \
-     'MSB.200.0.0001.txt' using 1:2 with lines notitle, \
-     'MSB.200.0.001.txt' using 1:2 with lines notitle   
+plot 'MSB200.0.000001.txt' using 1:2 with lines notitle, \
+     'MSB200.0.00001.txt' using 1:2 with lines notitle, \
+     'MSB200.0.0001.txt' using 1:2 with lines notitle, \
+     'MSB200.0.001.txt' using 1:2 with lines notitle   
 set title '200 X, 20 A'
-plot 'MSB.200.20.000001.txt' using 1:2 with lines notitle, \
-     'MSB.200.20.00001.txt' using 1:2 with lines notitle, \
-     'MSB.200.20.0001.txt' using 1:2 with lines notitle, \
-     'MSB.200.20.001.txt' using 1:2 with lines notitle 
+plot 'MSB200.20.000001.txt' using 1:2 with lines notitle, \
+     'MSB200.20.00001.txt' using 1:2 with lines notitle, \
+     'MSB200.20.0001.txt' using 1:2 with lines notitle, \
+     'MSB200.20.001.txt' using 1:2 with lines notitle 
 set title '200 X, 100 A'
-plot 'MSB.200.100.000001.txt' using 1:2 with lines notitle, \
-     'MSB.200.100.00001.txt' using 1:2 with lines notitle, \
-     'MSB.200.100.0001.txt' using 1:2 with lines notitle, \
-     'MSB.200.100.001.txt' using 1:2 with lines notitle 
+plot 'MSB200.100.000001.txt' using 1:2 with lines notitle, \
+     'MSB200.100.00001.txt' using 1:2 with lines notitle, \
+     'MSB200.100.0001.txt' using 1:2 with lines notitle, \
+     'MSB200.100.001.txt' using 1:2 with lines notitle 
 set title '200 X, 200 A'
-plot 'MSB.200.200.000001.txt' using 1:2 with lines notitle, \
-     'MSB.200.200.00001.txt' using 1:2 with lines notitle, \
-     'MSB.200.200.0001.txt' using 1:2 with lines notitle, \
-     'MSB.200.200.001.txt' using 1:2 with lines notitle 
-set title '200 X, 1000 A'
-plot 'MSB.200.1000.000001.txt' using 1:2 with lines notitle, \
-     'MSB.200.1000.00001.txt' using 1:2 with lines notitle, \
-     'MSB.200.1000.0001.txt' using 1:2 with lines notitle, \
-     'MSB.200.1000.001.txt' using 1:2 with lines notitle   
+plot 'MSB200.200.000001.txt' using 1:2 with lines notitle, \
+     'MSB200.200.00001.txt' using 1:2 with lines notitle, \
+     'MSB200.200.0001.txt' using 1:2 with lines notitle, \
+     'MSB200.200.001.txt' using 1:2 with lines notitle 
 

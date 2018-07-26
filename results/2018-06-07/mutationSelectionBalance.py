@@ -15,6 +15,7 @@ import numpy
 parser = argparse.ArgumentParser(description = 'Simulates a population and prints allele frequencies out.')
 parser.add_argument('-m', default=0.0030, type=float, help='Minimum value of the "a" parameter of the two phases model of aging. Default: 0.003.')
 parser.add_argument('-M', default=0.0500, type=float, help='Maximum value of the "a" parameter of the two phases model of aging. Default: 0.050.')
+parser.add_argument('-b', default=-0.019, type=float, help='Constant value of the "b" parameter. Default: -0.019.')
 parser.add_argument('-k', default=0.1911, type=float, help='rate of mortality of smurfs. Default: 0.1911')
 parser.add_argument('-N', default=5000, type=int, help='Population size. Default: 5000.')
 parser.add_argument('-G', default=200, type=int, help='Number of generations. Default: 200.')
@@ -52,7 +53,7 @@ def AdditiveCodominant(geno, ind):
       a = min_a + sum(geno) * (max_a - min_a) / ind.totNumLoci()
    else:
       a = args.a
-   b = -10.0 * a
+   b = args.b
    return (a, b)
 
 def AdditiveRecessive(geno, ind):
@@ -72,7 +73,7 @@ def AdditiveRecessive(geno, ind):
       for locus in range(ind.totNumLoci()):
          if geno[locus * 2] + geno[locus * 2 + 1] == 2:
             a += gene_effect
-   b = -a * 10.0
+   b = args.b
    return (a, b)
 
 class sexSpecificRecombinator(sim.PyOperator):

@@ -71,7 +71,7 @@
 # An alternative implementation would be to assign a death time to every
 # newborn, according to the f(t). Note that when S(t) = exp(-kt), as in the
 # case of the smurfs in the two-phases model, the above equation results
-# in 1-exp(-k), just as I was using in previous simulations. 
+# in 1-exp(-k), just as I was using in previous simulations.
 #
 #
 # Weibull
@@ -114,3 +114,34 @@
 # the a and b parameters for Drosophila (Table 4). I collect them in file
 # Gompertz.txt.
 #
+# The probability of death between ages t-1 and t, conditional on having
+# survived to age t-1, under the Gompertz model is:
+#
+#   1 - exp{ -(a·exp(b·t) / b)·(1 - exp(-b)) }
+#
+# The values of a and b for the Gompertz model estimated by Tricoire and
+# Rera are a=0.0053, and b=0.0942.
+
+if [ ! -e two_phases.png ]; then
+   if [ ! -e simSmurf.txt ]; then
+      python SurvivalCurves.py -a 0.0039 -b -0.019 -k 0.1911 -m two_phases -N 1000 -G 60 -r 5 -o simSmurf.txt
+   fi
+   if [ ! -e theoSmurf.txt ]; then
+      python two_phases.py -a 0.0039 -b -0.019 -d 0.1911 -n 1 -x 60 -o theoSmurf.txt
+   fi
+   gnuplot -e "infile='simSmurf.txt'; infile2='theoSmurf.txt'; outfile='two_phases.png'; model='two_phases'" plotCurves.gnp
+fi
+
+if [ ! -e weibull.png ]; then
+   if [ ! -e simWeibull.txt ]; then
+      python SurvivalCurves.py -a 0.000485 -b 2.4746 -m weibull -N 1000 -G 60 -r 5 -o simWeibull.txt
+   fi
+   gnuplot -e "infile='simWeibull.txt'; outfile='weibull.png'; model='weibull'; a=0.000485; b=2.4746" plotCurves.gnp
+fi
+
+if [ ! -e gompertz.png ]; then
+   if [ ! -e simGompertz.txt ]; then
+      python SurvivalCurves.py -a 0.0053 -b 0.0942 -m gompertz -N 1000 -G 60 -r 5 -o simGompertz.txt
+   fi
+   gnuplot -e "infile='simGompertz.txt'; outfile='gompertz.png'; model='gompertz'; a=0.0053; b=0.0942" plotCurves.gnp
+fi

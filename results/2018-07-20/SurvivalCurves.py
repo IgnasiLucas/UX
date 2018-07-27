@@ -6,6 +6,7 @@ import simuPOP as sim
 import random
 import math
 import argparse
+import re
 
 ###############################################################
 #                 ARGUMENTS AND  VARIABLES                    #
@@ -13,14 +14,21 @@ import argparse
 
 parser = argparse.ArgumentParser(description = 'Simulates a cohort and prints the proportion alive every day.')
 parser.add_argument('-m', '--model', default='two_phases', type=str, help='Aging model: "two_phases", "gompertz", or "weibull". Default: "two_phases".')
-parser.add_argument('-a', default=0.0039, type=float, help='additional fraction of smurfs per unit of time')
-parser.add_argument('-b', default=-0.019, type=float, help='intercept of the probability of becoming smurf as a function of age.')
-parser.add_argument('-k', default=0.1911, type=float, help='rate of mortality of smurfs.')
+parser.add_argument('-a', default=0.0039, type=float, help='a parameter. Default: 0.0039.')
+parser.add_argument('-b', default=-0.019, type=float, help='b parameter. Default: -0.019')
+parser.add_argument('-k', default=0.1911, type=float, help='rate of mortality of smurfs, for two-phases model. Default: 0.1911')
 parser.add_argument('-N', default=5000, type=int, help='Population size.')
 parser.add_argument('-G', default=200, type=int, help='Number of days to simulate. Default: 200.')
 parser.add_argument('-o', '--output', default='z1.txt', type=argparse.FileType('w'))
 parser.add_argument('-r', '--replicates', default=1, type=int, help='Number of replicates. Default: 1.')
 args = parser.parse_args()
+
+if re.search("two|phases|smurf", args.model, re.I):
+   args.model = "two_phases"
+if re.search("gompert?z", args.model, re.I):
+   args.model = "gompertz"
+if re.search("weibull?", args.model, re.I):
+   args.model = "weibull"
 
 ###############################################################
 #                    FUNCTIONS AND CLASSES                    #
@@ -29,22 +37,25 @@ args = parser.parse_args()
 def aging_model(model):
    def two_phases(smurf, pop):
       k = pop.dvars().k
-      if smurf == 1.0 and random.random() < 1.0 - math.exp(k):
+      if smurf == 1 and random.random() < 1.0 - math.exp(-k):
          return True
       else:
          return False
    def weibull(age, a, b):
-      if random.random() < 1.0 - math.exp(-(a/(b+1)) * (age**(b+1) - (age - 1)**(b+1))):
+      if random.random() < 1.0 - math.exp(-(a/b) * (age**b - (age - 1)**b)):
          return True
       else:
          return False
-   def gompertz(pop):
-      return True
-   if model == 'two_phases':
+   def gompertz(age, a, b):
+      if random.random() < 1.0 - math.exp( -(a * math.exp(b*age) / b) * (1.0 - math.exp(-b))):
+         return True
+      else:
+         return False
+   if model == "two_phases":
       return two_phases
-   if model == 'gompertz':
+   if model == "gompertz":
       return gompertz
-   if model == 'weibull':
+   if model == "weibull":
       return weibull
 
 def demo(gen, pop):
@@ -88,13 +99,13 @@ simu.evolve(
       sim.InitInfo([args.a], infoFields = 'a'),
       sim.InitInfo([args.b], infoFields = 'b'),
       sim.InitInfo(lambda: random.random(), infoFields = 'luck'),
-      sim.InfoExec("smurf = 1.0 if model == 'two_phases' and ind.luck < ind.age * ind.a + ind.b else 0.0", exposeInd = 'ind'),
+      sim.InfoExec("smurf = 1 if ((ind.smurf == 1) or (model == 'two_phases' and ind.luck <= (ind.age * ind.a + ind.b))) else 0", exposeInd = 'ind'),
       sim.PyExec("Surviving = {'larvae': [], 'adults': [], 'smurfs': []}")
    ],
    preOps = [
       sim.InfoExec("age += 1"),
       sim.InfoExec("luck = random.random()"),
-      sim.InfoExec("smurf = 1.0 if model == 'two_phases' and ind.luck <= (ind.age * ind.a + ind.b) else 0.0", exposeInd='ind'),
+      sim.InfoExec("smurf = 1 if ((ind.smurf == 1) or (model == 'two_phases' and ind.luck <= (ind.age * ind.a + ind.b))) else 0", exposeInd='ind'),
       sim.DiscardIf(aging_model(args.model))
    ],
    matingScheme = sim.CloneMating(subPops = sim.ALL_AVAIL, subPopSize = demo),
@@ -109,13 +120,13 @@ simu.evolve(
    gen=args.G
 )
 
-print("#Gen\t" + "\t".join(['Larvae\tAdults\tSmurfs' for a in range(args.replicates)]))
+args.output.write("#Gen\t" + "\t".join(['Larvae\tAdults\tSmurfs' for a in range(args.replicates)]) + "\n")
 for day in range(args.G):
-   line = "{:3d}".format(day)
+   line = "{:3d}".format(day + 1)
    for rep in range(args.replicates):
       for kind in ['larvae', 'adults', 'smurfs']:
          try:
-            line += "\t{:5d}".format(simu.vars(rep)['Surviving'][kind][day])
+            line += "\t{:.4f}".format(simu.vars(rep)['Surviving'][kind][day] / args.N)
          except IndexError:
-            line += "\t0"
-   print(line)
+            line += "\t0.0000"
+   args.output.write(line + "\n")

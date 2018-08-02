@@ -3,7 +3,7 @@ set output 'default.png'
 set style data histograms
 set style histogram rowstacked
 set style fill solid
-set xrange [0:150]
+set xrange [0:100]
 set boxwidth 0.9
 plot 'default.txt' using 3 title 'males', \
      '' using 2 title 'male smurfs', \

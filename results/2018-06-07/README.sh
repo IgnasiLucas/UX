@@ -29,10 +29,10 @@
 for XLoci in 20 100 200; do
    for ALoci in 0 20 100 200; do
       for mu in .000001 .00001 .0001 .001; do
-         if [ ! -e MSB${XLoci}.${ALoci}${mu}.txt ]; then
+         if [ ! -e MSB.${XLoci}.${ALoci}${mu}.txt ]; then
             python mutationSelectionBalance.py \
-               -m 0.003 -M 0.010 -N 50000 -G 500000 --step 100 \
-               -X $XLoci -A $ALoci -u $mu -o MSB${XLoci}.${ALoci}${mu}.txt > MSB${XLoci}.${ALoci}${mu}.log &
+               -m 0.003 -M 0.010 -N 50000 -G 250000 --step 100 \
+               -X $XLoci -A $ALoci -u $mu -o MSB.${XLoci}.${ALoci}${mu}.txt > MSB.${XLoci}.${ALoci}${mu}.log &
          fi
       done
    done
@@ -81,4 +81,5 @@ fi
 #    20000 or 30000. Why?
 # 4. Equilibrium frequencies are higher when autosomal genes are included in the
 #    simulation. The more autosomal genes, the higher the equilibrium frequency.
+#    This may be due to the trade off between number of genes and gene effect.
 #

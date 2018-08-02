@@ -16,23 +16,23 @@ args=parser.parse_args()
 
 def survival(a, b, d, x):
    t0 = -b / a
-   t1 = (1.0 - b) / a
+   assert t0 >= 0
    S = 1.0
    if x <= t0:
       return S
    else:
       i = math.ceil(t0)
-      while i <= min(x, t1):
-         S *= 1.0 - a*i - b
+      while i <= x - 1:
+         S *= math.exp(-a * i + a * t0 - a / 2.0)
          i += 1
       i = math.ceil(t0)
-      while i <= min(x, t1):
+      while i <= x - 1:
          P = 1.0
          j = math.ceil(t0)
          while j <= i - 1:
-            P *= 1.0 - a * j - b
+            P *= math.exp(-a * j + a * t0 - a / 2.0)
             j += 1
-         S += (a * i + b) * numpy.exp((i-x-1)*d) * P
+         S += (1.0 - math.exp(-a * i + a * t0 - a / 2.0)) * math.exp((i-x)*d) * P
          i += 1
    return S
 

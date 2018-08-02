@@ -61,7 +61,8 @@ def MaleEffect(geno, ind):
       # allele "1" makes male aging rate increase.
       a = min_a + args.meffect * geno[0]
    b = args.b
-   return (a, b)
+   t0 = -b / a
+   return (a, b, t0)
 
 def OutputStats(pop):
    sim.stat(pop, alleleFreq=sim.ALL_AVAIL)
@@ -85,7 +86,7 @@ def OutputStats(pop):
 
 pop = sim.Population(args.N, loci = [1], ploidy = 2,
    chromTypes = [sim.CHROMOSOME_X],
-   infoFields = ['age', 'a', 'b', 'smurf', 'ind_id',  'father_id', 'mother_id', 'luck', 'fitness'])
+   infoFields = ['age', 'a', 'b', 'smurf', 'ind_id',  'father_id', 'mother_id', 'luck', 'fitness', 't0'])
 pop.dvars().seed = args.seed
 pop.dvars().min_a = min_a
 pop.dvars().meffect = args.meffect
@@ -114,8 +115,9 @@ pop.setVirtualSplitter(
    )
 )
 
-# This is to be able to call random from InfoExec:
+# This is to be able to call random and math from InfoExec:
 exec("import random\nrandom.seed(seed)", pop.vars(), pop.vars())
+exec("import math", pop.vars(), pop.vars())
 
 ###############################################################
 #                         SIMULATION                          #
@@ -129,18 +131,18 @@ simu.evolve(
       sim.InitGenotype(freq = [0.5, 0.5]),
       sim.InitInfo([0], infoFields = 'age'),
       sim.InitInfo([1], infoFields = 'fitness'),
-#      sim.InfoExec("fitness = {0: 0.98, 1: 0.99, 2:1.0}[ind.allele(0,0) + ind.allele(0,1)] if ind.sex() == 2 else 0.98", exposeInd = 'ind'),
       sim.InfoExec("a = min_a + meffect if ind.sex() == 1 and ind.allele(0,0) == 1 else min_a", exposeInd = 'ind'),
       sim.InitInfo([ args.b ], infoFields = 'b'),
       sim.InitInfo(lambda: random.random(), infoFields = 'luck'),
-      sim.InfoExec("smurf = 1.0 if ind.luck < ind.age * ind.a + ind.b else 0.0", exposeInd = 'ind'),
+      sim.InfoExec("t0 = -ind.b / ind.a", exposeInd = 'ind'),
+      sim.InfoExec("smurf = 1.0 if (ind.smurf == 1 or (ind.age > ind.t0 and ind.luck < 1.0 - math.exp(-ind.a * ind.age + ind.a * ind.t0 - ind.a / 2.0))) else 0.0", exposeInd = 'ind'),
       sim.IdTagger()
    ],
    preOps = [
-      sim.InfoExec("age += 1"),
       sim.InfoExec("luck = random.random()"),
-      sim.InfoExec("smurf = 1.0 if ind.luck < (ind.age * ind.a + ind.b) else 0.0", exposeInd='ind'),
-      sim.DiscardIf(natural_death)
+      sim.InfoExec("smurf = 1.0 if (ind.smurf == 1 or (ind.age > ind.t0 and ind.luck < 1.0 - math.exp(-ind.a * ind.age + ind.a * ind.t0 - ind.a / 2.0))) else 0.0", exposeInd='ind'),
+      sim.DiscardIf(natural_death),
+      sim.InfoExec("age += 1")
    ],
    matingScheme = sim.HeteroMating(
       [
@@ -152,11 +154,11 @@ simu.evolve(
                sim.InfoExec("smurf = 0.0"),
                sim.MendelianGenoTransmitter(),
                sim.PySelector(loci=[0], func=fitness_func),
-               sim.PyQuanTrait(loci = sim.ALL_AVAIL, func = MaleEffect, infoFields = ['a', 'b']) 
+               sim.PyQuanTrait(loci = sim.ALL_AVAIL, func = MaleEffect, infoFields = ['a', 'b', 't0']) 
             ],
             weight = 1,
             subPops = [(0,1)],
-            numOffspring=(sim.UNIFORM_DISTRIBUTION, 1,5)
+            numOffspring = 1
          )
       ],
       subPopSize = demo

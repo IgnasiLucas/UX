@@ -62,7 +62,7 @@ def outputStructure(pop):
 #                         POPULATION                          #
 ###############################################################
 
-pop = sim.Population(args.N, loci = 1, ploidy = 2, infoFields = ['age', 'a', 'b', 'smurf', 'ind_id',  'father_id', 'mother_id', 'luck', 'fitness'])
+pop = sim.Population(args.N, loci = 1, ploidy = 2, infoFields = ['age', 'a', 'b', 'smurf', 'ind_id',  'father_id', 'mother_id', 'luck', 'fitness', 't0'])
 
 pop.setVirtualSplitter(
    sim.CombinedSplitter(
@@ -81,6 +81,7 @@ pop.setVirtualSplitter(
 
 # This is to be able to call random from InfoExec:
 exec('import random', pop.vars(), pop.vars())
+exec('import math', pop.vars(), pop.vars())
 
 ###############################################################
 #                         SIMULATION                          #
@@ -96,14 +97,17 @@ simu.evolve(
       sim.InitInfo([args.a], infoFields = 'a'),
       sim.InitInfo([args.b], infoFields = 'b'),
       sim.InitInfo(lambda: random.random(), infoFields = 'luck'),
-      sim.InfoExec("smurf = 1.0 if ind.luck < ind.age * ind.a + ind.b else 0.0", exposeInd = 'ind'),
+      sim.InfoExec("t0 = -ind.b / ind.a", exposeInd = 'ind'),
+      sim.InfoExec("smurf = 1.0 if ((ind.smurf == 1) or (ind.age > ind.t0 and ind.luck < 1.0 - math.exp(-ind.a * ind.age + ind.a * ind.t0 - ind.a / 2.0))) else 0.0", exposeInd = 'ind'),
       sim.IdTagger()
    ],
+   # The order should be: becoming a smurf or not since previous day, dying or not, aging one day
+   # if lucky enough, and then mate at that age.
    preOps = [
-      sim.InfoExec("age += 1"),
       sim.InfoExec("luck = random.random()"),
-      sim.InfoExec("smurf = 1.0 if ind.luck < (ind.age * ind.a + ind.b) else 0.0", exposeInd='ind'),
-      sim.DiscardIf(natural_death)
+      sim.InfoExec("smurf = 1.0 if ((ind.smurf == 1) or (ind.age > ind.t0 and ind.luck < 1.0 - math.exp(-ind.a * ind.age + ind.a * ind.t0 - ind.a / 2.0))) else 0.0", exposeInd='ind'),
+      sim.DiscardIf(natural_death),
+      sim.InfoExec("age += 1")
    ],
    matingScheme = sim.HeteroMating(
       [

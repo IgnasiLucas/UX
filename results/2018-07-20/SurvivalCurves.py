@@ -42,12 +42,14 @@ def aging_model(model):
       else:
          return False
    def weibull(age, a, b):
-      if random.random() < 1.0 - math.exp(-(a/b) * (age**b - (age - 1)**b)):
+#      if random.random() < 1.0 - math.exp(-(a/b) * (age**b - (age - 1)**b)):
+      if random.random() < 1.0 - math.exp(-(a/b) * (age + 1) ** b + (a/b) * age ** b):
          return True
       else:
          return False
    def gompertz(age, a, b):
-      if random.random() < 1.0 - math.exp( -(a * math.exp(b*age) / b) * (1.0 - math.exp(-b))):
+#      if random.random() < 1.0 - math.exp( -(a * math.exp(b*age) / b) * (1.0 - math.exp(-b))):
+      if random.random() < 1.0 - math.exp( (a * math.exp(b * age) / b) * (1.0 - math.exp(b)) ):
          return True
       else:
          return False
@@ -65,7 +67,7 @@ def demo(gen, pop):
 #                         POPULATION                          #
 ###############################################################
 
-pop = sim.Population(args.N, loci = 0, ploidy = 2, infoFields = ['age', 'a', 'b', 'smurf', 'luck'])
+pop = sim.Population(args.N, loci = 0, ploidy = 2, infoFields = ['age', 'a', 'b', 'smurf', 'luck', 't0'])
 
 pop.setVirtualSplitter(
    sim.CombinedSplitter(
@@ -84,6 +86,7 @@ pop.setVirtualSplitter(
 
 # This is to be able to call random from InfoExec:
 exec('import random', pop.vars(), pop.vars())
+exec('import math', pop.vars(), pop.vars())
 pop.dvars().k = args.k
 pop.dvars().model = args.model
 
@@ -99,14 +102,15 @@ simu.evolve(
       sim.InitInfo([args.a], infoFields = 'a'),
       sim.InitInfo([args.b], infoFields = 'b'),
       sim.InitInfo(lambda: random.random(), infoFields = 'luck'),
-      sim.InfoExec("smurf = 1 if ((ind.smurf == 1) or (model == 'two_phases' and ind.luck <= (ind.age * ind.a + ind.b))) else 0", exposeInd = 'ind'),
+      sim.InfoExec("t0 = -ind.b / ind.a", exposeInd = 'ind'),
+      sim.InfoExec("smurf = 1 if (model == 'two_phases' and ind.age > ind.t0 and ind.luck <= 1.0 - math.exp(-ind.a * ind.age + ind.a * ind.t0 - ind.a / 2.0)) else 0", exposeInd = 'ind'),
       sim.PyExec("Surviving = {'larvae': [], 'adults': [], 'smurfs': []}")
    ],
    preOps = [
-      sim.InfoExec("age += 1"),
       sim.InfoExec("luck = random.random()"),
-      sim.InfoExec("smurf = 1 if ((ind.smurf == 1) or (model == 'two_phases' and ind.luck <= (ind.age * ind.a + ind.b))) else 0", exposeInd='ind'),
-      sim.DiscardIf(aging_model(args.model))
+      sim.InfoExec("smurf = 1 if ((ind.smurf == 1) or (model == 'two_phases' and ind.age > ind.t0 and ind.luck <= 1.0 - math.exp(-ind.a * ind.age + ind.a * ind.t0 - ind.a / 2.0))) else 0", exposeInd='ind'),
+      sim.DiscardIf(aging_model(args.model)),
+      sim.InfoExec("age += 1")
    ],
    matingScheme = sim.CloneMating(subPops = sim.ALL_AVAIL, subPopSize = demo),
    postOps = [

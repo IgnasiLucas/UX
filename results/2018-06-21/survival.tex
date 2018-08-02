@@ -5,19 +5,27 @@
 
 \begin{document}
 \begin{equation}
+S(x) = 
+   \begin{cases}
+      e^{-\frac{a(t-t_0)^2}{2}} + \int_{t_0}^t a(x - t_0)e^{-\frac{a(x-t_0)^2}{2}}\cdot e^{-\lambda (t-x)}\,\mathrm{d}x & \quad \text{if } t > t_0\\
+      1 & \quad \text{if } t \leq t_0
+   \end{cases}
+\end{equation}
+\begin{equation}
 S(x) = \prod_{i=1}^x (1-B_i) + \sum_{i=1}^x B_i \cdot e^{(i-x-1)\cdot r} \cdot \prod_{j=1}^{i-1} (1-B_j)
 \end{equation}
 
 \[ B_x = 
    \begin{cases}
-      0 & \quad \text{if } x < -\frac{b}{a} = t_0\\
-      ax + b & \quad \text{if } -\frac{b}{a} \leq x \leq \frac{1-b}{a}\\
-      1 & \quad \text{if } x > \frac{1-b}{a} = t_1
+      0 & \quad \text{if } x < t_0 = -\frac{b}{a}\\
+      1 - e^{-ax + at_0 + a/2} & \quad \text{if } x \geq t_0\\
+%      ax + b & \quad \text{if } -\frac{b}{a} \leq x \leq \frac{1-b}{a}\\
+%      1 & \quad \text{if } x > \frac{1-b}{a} = t_1
    \end{cases}
 \]
 
 \begin{equation}
-S(x) = \prod_{i>t_0}^{\min(x, t_1)} (1 - ai - b) + \sum_{i>t_0}^{\min(x,t_1)} (ai+b)\cdot e^{(i-x-1)r} \cdot \prod_{j>t_0}^{i-1}(1-aj-b)
+S(x) = \prod_{i>t_0}^x e^{-ai+at_0+a/2} + \sum_{i>t_0}^x (1-e^{-ai+at_0+a/2})\cdot e^{(i-x-1)r} \cdot \prod_{j>t_0}^{i-1}e^{-aj+at_0+a/2}
 \end{equation}
 
 \end{document}

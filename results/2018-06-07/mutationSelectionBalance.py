@@ -94,13 +94,25 @@ class sexSpecificRecombinator(sim.PyOperator):
         return True
 
 def OutputStats(pop):
-   S = 0
-   for locus in range(pop.totNumLoci()):
-      S += pop.dvars().alleleFreq[locus][1]
-   outstring = str(pop.dvars().gen)
-   outstring += "\t{:.8f}".format(S/pop.totNumLoci())
-   outstring += "\t{:.4f}".format(pop.dvars().meanOfInfo_malesAge['age'])
-   outstring += "\t{:.4f}".format(pop.dvars().meanOfInfo_femalesAge['age'])
+   X = 0
+   for locus in range(X_loci):
+      X += pop.dvars().alleleFreq[locus][1]
+   A = 0
+   for locus in range(X_loci, X_loci + A_loci):
+      A += pop.dvars().alleleFreq[locus][1]
+   if pop.dvars().gen == 0:
+      args.output.write("#Gen. \tMeanFreqX \tMeanFreqAu\tMaleAge\tFemAge \tMale_a\tFem_a \n")
+   outstring = "{:6d}".format(pop.dvars().gen)
+   if X_loci > 0:
+      outstring += "\t{:.8f}".format(X/X_loci)
+   else:
+      outstring += "\t          "
+   if A_loci > 0:
+      outstring += "\t{:.8f}".format(A/A_loci)
+   else:
+      outstring += "\t          "
+   outstring += "\t{:7.4f}".format(pop.dvars().meanOfInfo_malesAge['age'])
+   outstring += "\t{:7.4f}".format(pop.dvars().meanOfInfo_femalesAge['age'])
    outstring += "\t{:.4f}".format(pop.dvars().meanOfInfo_males['a'])
    outstring += "\t{:.4f}\n".format(pop.dvars().meanOfInfo_females['a'])
    args.output.write(outstring)
@@ -118,7 +130,7 @@ def OutputStats(pop):
 # and 2.07 / A_loci, respectively. 
 pop = sim.Population(args.N, loci = [X_loci, A_loci], ploidy = 2,
    chromTypes = [sim.CHROMOSOME_X, sim.AUTOSOME],
-   infoFields = ['age', 'a', 'b', 'smurf', 'ind_id',  'father_id', 'mother_id', 'luck'])
+   infoFields = ['age', 'a', 'b', 'smurf', 'ind_id',  'father_id', 'mother_id', 'luck', 't0'])
 
 pop.dvars().seed = args.seed
 
@@ -148,6 +160,7 @@ pop.setVirtualSplitter(
 
 # This is to be able to call random from InfoExec:
 exec("import random\nrandom.seed(seed)", pop.vars(), pop.vars())
+exec("import math", pop.vars(), pop.vars())
 
 ###############################################################
 #                         SIMULATION                          #
@@ -163,14 +176,15 @@ simu.evolve(
       sim.InitInfo([min_a], infoFields = 'a'),
       sim.InitInfo([-10 * min_a], infoFields = 'b'),
       sim.InitInfo(lambda: random.random(), infoFields = 'luck'),
-      sim.InfoExec("smurf = 1.0 if ind.luck < ind.age * ind.a + ind.b else 0.0", exposeInd = 'ind'),
+      sim.InfoExec("t0 = -ind.b / ind.a", exposeInd = 'ind'),
+      sim.InfoExec("smurf = 1.0 if ((ind.smurf == 1) or (ind.age > ind.t0 and ind.luck < 1.0 - math.exp(-ind.a * ind.age + ind.a * ind.t0 - ind.a / 2.0))) else 0.0", exposeInd = 'ind'),
       sim.IdTagger()
    ],
    preOps = [
-      sim.InfoExec("age += 1"),
       sim.InfoExec("luck = random.random()"),
-      sim.InfoExec("smurf = 1.0 if ind.luck < (ind.age * ind.a + ind.b) else 0.0", exposeInd='ind'),
-      sim.DiscardIf(natural_death)
+      sim.InfoExec("smurf = 1.0 if ((ind.smurf == 1) or (ind.age > ind.t0 and ind.luck < 1.0 - math.exp(-ind.a * ind.age + ind.a * ind.t0 - ind.a / 2.0))) else 0.0", exposeInd='ind'),
+      sim.DiscardIf(natural_death),
+      sim.InfoExec("age += 1")
    ],
    matingScheme = sim.HeteroMating(
       [

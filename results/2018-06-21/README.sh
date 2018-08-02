@@ -18,35 +18,33 @@
 #    +-----------+------+------+------+------+------+
 #
 # Where the selection coefficient "s" is set by the "-s" option, and the
-# coefficient of dominance, "d" is set by the "-d" option.
+# coefficient of dominance, "d" is set by the "-d" option of the SexChromSelectionBalance.py
+# script.
 #
 # At the same time, allele "1" is deleterious for males by increasing their
 # aging rate, "a", by a certain amount, which is set by the option "-e" in
 # the SexChromSelectionBalance.py script.
 #
 # It is time to find an expression for the survival function under the smurf
-# model of aging. In the simulations, aging, becoming a smurf or not, and dying
-# or not all happen right before mating, in that order. To reach age "x" should
-# mean to be able to mate at age "x" (if old enough to reproduce). Thus the
-# probability of reaching age 1 is equal to the probability of not becoming a
-# smurf or becoming a smurf and not dying at age 1. The probability of reaching
-# age 2 is equal to the sum of the probabilities of three alternative events:
-# becoming a smurf at age 1 and not dying neither at age 1 nor at age 2; not
-# becoming a smurf at age 1, but at age 2 and not dying at age 2; and not becoming
-# a smurf neither at age 1 nor at age 2.
+# model of aging. I finally decided to implement an ARS model: aging, reproducing
+# and surviving (or not) happen in that order. See 2018-05-22. This means that
+# the probability of reaching age 1 is the sum of the probabilities of two alternative
+# events: not having become a smurf between 0 and 1, and having become one but
+# surviving since then. Similarly, to reach age 2 one must either not become a
+# smurf at all by age 2 (with probability N(2)=exp(-a·(2-t0)^2/2) if 2 > t0, or
+# 1 otherwise), or to become a smurf before 2 and surviving since then (exp(-(2-i)·r),
+# where 'i' is the time when it became a smurf and 'r' is the death rate.
 #
-# Let B(x) be the probability of becoming a smurf (blue) at age x, which is ax+b.
-# The survival function among smurfs is an exponential decay, exp(-dx), where d
-# is the constant death rate experienced by smurfs. In symbols, the probability
-# of surviving to age x, S(x) is:
+# In continuous time, I believe that equation 1 in the survival.pdf document represents
+# the right survival function of the two-phases model. Unfortunately, I don't know
+# how to solve that integral. In discrete time, the survival function that describes
+# the simulations is that of equations 2 and 3 in the same document. Note that
+# the discrete-time expression underestimates the chance of surviving during the
+# cycle (day) that the individual became a smurf. But the same error is implemented
+# in the simulations.
 #
-#          i=x              i=x                           j=i-1
-# S(x) = PRODUCT (1-B(i)) + SUM [B(i) * exp((i-x-1)*d) * PRODUCT (1-B(j))]
-#          i=1              i=1                            j=1
-#
-#
-# See the formula in the survival.pdf file for a nicer format. I need the
-# survival function to determine the fitness of each fenotype, in order to have
+# The survival function should help determine the exact selecion coefficient
+# against an allele that increases the rate of becoming smurfs, 'a'. That will give
 # a theoretical expectation of the allele frequency at equilibrium. I take
 # fitness to be the lifetime expected reproduction, which in discrete ages is:
 #
@@ -158,15 +156,15 @@ fi
 #   +---------+----------+
 #   |    e    |    r     |
 #   +---------+----------+
-#   | 0.0004  | 0.05336  |
-#   | 0.0009  | 0.098107 |
-#   | 0.0013  | 0.137243 |
-#   | 0.0017  | 0.1711   |
-#   | 0.0022  | 0.200737 |
-#   | 0.0026  | 0.227182 |
-#   | 0.003   | 0.251203 |
-#   | 0.0034  | 0.272798 |
-#   | 0.0039  | 0.292342 |
+#   | 0.0004  | 0.051169 |
+#   | 0.0009  | 0.095492 |
+#   | 0.0013  | 0.133012 |
+#   | 0.0017  | 0.165454 |
+#   | 0.0022  | 0.193837 |
+#   | 0.0026  | 0.220821 |
+#   | 0.0030  | 0.243837 |
+#   | 0.0034  | 0.264521 |
+#   | 0.0039  | 0.283232 |
 #   . ...     . ...      .
 #
-#
+# 

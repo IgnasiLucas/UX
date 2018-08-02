@@ -31,15 +31,18 @@
 #
 # Having one function defined, the other ones can be found. Since models
 # are usualy defined in these terms, the question is how to implement a
-# specific survival model. Simulations are individual-based. Every cycle,
-# individuals get one day older, and then they either die or not, before
-# mating at that age. The probability with which they die at cycle t should
-# represent the probability of dying at any point between age t-1 and age t.
+# specific survival model.
+#
+# Simulations are individual-based. Every cycle, they either die or not
+# before getting one day older, and then they  reproduce. The probability
+# of death at each cycle should represent the probability of dying at any
+# point during current age, between t and t+1.
+#
 # In principle, this can be obtained from the survival function as
-# S(t-1) - S(t). However, note that this is the probability of dying at that
+# S(t) - S(t+1). However, note that this is the probability of dying at that
 # interval before knowing if it survived that far or not; at birth, so to
-# speak. That is, S(t-1)-S(t) represents the fraction of a cohort that will
-# die between ages t-1 and t. When running a simulation, at each step we are
+# speak. That is, S(t)-S(t+1) represents the fraction of a cohort that will
+# die between ages t and t+1. When running a simulation, at each step we are
 # only concerned with the individuals that survived so far.
 #
 # Ricklefs and Scheuerlein (2002, The Journals of Gerontology: Series A,
@@ -54,7 +57,7 @@
 #   the midpoint of the first age interval in which its random number was less
 #   than the probability of mortality during that interval."
 #
-# Apparently, they used S(t-1) - S(t) as the probability of death at each
+# Apparently, they used S(t) - S(t+1) as the probability of death at each
 # interval. However, after drawing as many random numbers as intervals, and
 # comparing them with the interval's probability  of death, it is clear that
 # any age of death is not picked with its alleged probability, because not only
@@ -64,14 +67,17 @@
 # The right probability of death between ages t-1 and t experienced by an
 # individual who has survived up to age t-1 is:
 #
-#                                    S(t-1) - S(t)
-#   P(t - 1 < T <= t | T > t - 1) = ---------------
-#                                       S(t-1)
+#                                S(t) - S(t+1)
+#   P(t < T <= t + 1 | T > t) = ---------------
+#                                    S(t)
 #
 # An alternative implementation would be to assign a death time to every
 # newborn, according to the f(t). Note that when S(t) = exp(-kt), as in the
 # case of the smurfs in the two-phases model, the above equation results
-# in 1-exp(-k), just as I was using in previous simulations.
+# in 1-exp(-k), just as I was using in previous simulations. Note also that
+# if the sequence of events in the simulation was aging -> death -> reproduction,
+# then we should use P(t-1 < T <= t | T > t-1), to represent the deaths
+# of the last cycle, of those who didn't make it to reproduction.
 #
 #
 # Weibull
@@ -95,10 +101,14 @@
 # specify the model as h(t)=a·t^b.
 #
 # In terms of a and b, the survival function is S(t) = exp{-(a/(b+1))·t^(b+1)},
-# and the conditional probability of death between t-1 and t becomes:
+# and the conditional probability of death between t and t+1 becomes:
 #
-#    1 - exp{ -(a/(b+1)) · [t^(b+1) - (t-1)^(b+1)] }
+#    1 - exp{ -(a/(b+1)) · [(t+1)^(b+1) - t^(b+1)] }
 #
+# However, I realize that Tricoire and Rera must have defined b in a different
+# way, so that:
+#
+#   1 - exp{ -(a/b) · [(t+1)^b - t^b] }
 #
 # Gompertz
 # ========
@@ -114,13 +124,46 @@
 # the a and b parameters for Drosophila (Table 4). I collect them in file
 # Gompertz.txt.
 #
-# The probability of death between ages t-1 and t, conditional on having
-# survived to age t-1, under the Gompertz model is:
+# The probability of death between ages t and t+1, conditional on having
+# survived to age t, under the Gompertz model is:
 #
-#   1 - exp{ -(a·exp(b·t) / b)·(1 - exp(-b)) }
+#   1 - exp{ (a·exp(b·t) / b)·(1 - exp(-b)) }
 #
 # The values of a and b for the Gompertz model estimated by Tricoire and
 # Rera are a=0.0053, and b=0.0942.
+#
+#
+# Two phases model
+# ================
+#
+# After having understood better the functions that describe survival analysis,
+# I realized that my original implementation of the two-phases model was not
+# accurate. I relied on the idea that the linear function ax+b described the
+# increase of the probability of becoming a smurf with age. It is clear that
+# a linear function not bounded between  0 and 1 cannot be a probability. That
+# is just an approximation to the probability of becoming a smurf conditional on
+# not having become one before. Actually, Tricoire and Rera's figure 1 give the
+# right formulas:
+#
+#    N = P_0 * exp(-a * t^2 / 2)
+#
+# This is the decline of normal (non-smurf) population. The probability of not
+# having become a smurf by age 't' is N(t) = exp(-a * t^2 / 2). However, this
+# counts time since the first moment smurfs can appear, which is t0 = -b/a.
+# It is more convenient to use the expression N(t) = exp(-a * (t - t0)^2 / 2).
+# Its complement, B(t) = 1 - N(t), is the probability of having already become
+# a smurf by time 't'. And the derivative of this, b(t), is the density function of the
+# events of smurf appearance. The smurf hazard function is b(t)/N(t) = a*t + b, the linear
+# increase of the rate of smurfing with age. The probability of becoming a smurf
+# between ages t-1 and t, conditional on not having become a smurf before t-1 is:
+#
+#    N(t) - N(t+1)
+#   --------------- = 1 - exp(-a*t + a*t0 - a/2)
+#         N(t)
+#
+# I have not been able to combine the equations that describe the process of
+# becoming smurfs with the decay of the smurf population (exponential survival
+# function). For now, I will use the discret approximation worked out in 2018-06-21.
 
 if [ ! -e two_phases.png ]; then
    if [ ! -e simSmurf.txt ]; then

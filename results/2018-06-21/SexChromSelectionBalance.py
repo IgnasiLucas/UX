@@ -18,12 +18,11 @@ parser.add_argument('-b', default=-0.0190, type=float, help='Parameter "b" of th
 parser.add_argument('-N', default=50000, type=int, help='Population size. Default: 50000.')
 parser.add_argument('-G', default=500, type=int, help='Number of generations. Default: 500.')
 parser.add_argument('-e', '--meffect', type=float, default=0.0013, help='Mutant effect on male rate of aging. Default: 0.0013.')
-parser.add_argument('-s', '--feffect', type=float, default=0.137243, help='Female selective coefficient against wild type allele. Default: 0.137243.')
+parser.add_argument('-s', '--feffect', type=float, default=0.133012, help='Female selective coefficient against wild type allele. Default: 0.133012.')
 parser.add_argument('-d', '--dominance', type=float, default=0.5, help='Coefficient of dominance of deleterious allele in females. Default: 0.5')
 parser.add_argument('-o', '--output', default='z1.txt', type=argparse.FileType('w'), help='Ouput file name. Default: z1.txt.')
 parser.add_argument('-r', '--seed', default=115, type=int, help='Random number generator seed. Default: 115.')
 args = parser.parse_args()
-
 min_a = args.m
 
 ###############################################################
@@ -42,16 +41,25 @@ def demo(gen, pop):
    else:
       return args.N
 
-def fitness_func(geno, ind, pop):
+def fitness_func(geno, ind, pop, age):
+   # First, I determine age-specific fecundity (between 0 and 1), acording
+   # to an arbitrary function. Then, I multiply female's fecundity by (1-s)
+   # or (1-hs). 
+   if age < 10:
+      value = 0.0
+   else:
+      value = 1.0 - ((age - 12) ** 2) / 100
+   if value < 0:
+      value = 0
    if ind.sex() == 2:
       if geno[0] + geno[1] == 0:
-         value = 1.0 - args.feffect
+         value *= 1.0 - args.feffect
       if geno[0] + geno[1] == 1:
-         value = 1.0 - args.feffect * args.dominance
+         value *= 1.0 - args.feffect * args.dominance
       if geno[0] + geno[1] == 2:
-         value = 1.0
+         value *= 1.0
    else:
-      value = 1.0
+      value *= 1.0
    return value
 
 def MaleEffect(geno, ind):
@@ -142,7 +150,8 @@ simu.evolve(
       sim.InfoExec("luck = random.random()"),
       sim.InfoExec("smurf = 1.0 if (ind.smurf == 1 or (ind.age > ind.t0 and ind.luck < 1.0 - math.exp(-ind.a * ind.age + ind.a * ind.t0 - ind.a / 2.0))) else 0.0", exposeInd='ind'),
       sim.DiscardIf(natural_death),
-      sim.InfoExec("age += 1")
+      sim.InfoExec("age += 1"),
+      sim.PySelector(loci=[0], func=fitness_func)
    ],
    matingScheme = sim.HeteroMating(
       [
@@ -153,7 +162,6 @@ simu.evolve(
                sim.PedigreeTagger(),
                sim.InfoExec("smurf = 0.0"),
                sim.MendelianGenoTransmitter(),
-               sim.PySelector(loci=[0], func=fitness_func),
                sim.PyQuanTrait(loci = sim.ALL_AVAIL, func = MaleEffect, infoFields = ['a', 'b', 't0']) 
             ],
             weight = 1,

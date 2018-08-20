@@ -4,8 +4,8 @@ set xlabel 'a'
 set ylabel 'Fitness'
 set title 'Minimum a = 0.0039'
 
-plot 'fitness_a.txt' using 1:2 with lines title ''
+plot 'fitness_a.txt' using 1:2 with lines title 'constant F', '' using 1:3 with lines title 'decreasing F'
 
 set output 'coefficients_a.png'
 set ylabel 'selection coefficient against a'
-plot 'fitness_a.txt' using 1:(1.0 - $2) with lines title ''
+plot 'fitness_a.txt' using 1:(1.0 - $2) with lines title 'constant F', '' using 1:(1.0 - $3) with lines title 'decreasing F'

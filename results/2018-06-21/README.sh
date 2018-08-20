@@ -52,11 +52,9 @@
 #   R = SUM S(x)F(x)
 #       x=1
 #
-# Where S(x) is the survival function, and F(x) the fecundity. In the model,
-# adults (x >= 10) reproduce at a constant rate, limited by the constant population
-# size. That is, there is no age-dependency in fecundity. Thus, F(x) can be
-# substituted by the reproductive fitness, or probability of being chosen as
-# a parent.
+# Where S(x) is the survival function, and F(x) the fecundity. Fecundity should
+# reach a maximum shortly after emergence (say, day 12 from egg), and then decline
+# with age. I could use a function like 1 - ((x - 12)^2) / 100.
 #
 # The script survival.py outputs a list of survival probabilities for each
 # combination of 'a' and 'b' values.
@@ -102,7 +100,9 @@ fi
 # estimated by Tricoire and Rera (2015). Allele 1 increses 'a'. Below, I
 # represent the fitness and the selection coefficient against allele 1 as
 # a function of the increase it produces in 'a'. I assume reasonable values
-# of 'a' may go up to 0.025.
+# of 'a' may go up to 0.025. First, I assume constant fecundity, and then
+# I apply a quadratic function of age to determine the number of offspring
+# at every age.
 
 N=50
 if [ ! -e fitness_a.png ]; then
@@ -114,15 +114,23 @@ if [ ! -e fitness_a.png ]; then
       gawk -v SIZE=$N '(/^#a/){
          for (i=2; i<=NF; i++) {
             A[i] = $i
-            W[$i] = 0
+            W1[$i] = 0
+            W2[$i] = 0
          }
       }(/^[^#]/){
+         if ($1 < 10) {
+            F = 0
+         } else {
+            F = 1 - (($1 - 12)**2) / 100
+         }
+         if (F < 0) F = 0
          for (i=2; i<=NF; i++) {
-            W[A[i]] += $i
+            W1[A[i]] += $i * 1
+            W2[A[i]] += $i * F
          }
       }END{
          for (i=2; i<=SIZE + 1; i++) {
-            print A[i] "\t" W[A[i]] / W[A[2]]
+            print A[i] "\t" W1[A[i]] / W1[A[2]] "\t" W2[A[i]] / W2[A[2]]
          }
       }' constant_b_50.txt > fitness_a.txt
    fi
@@ -150,21 +158,22 @@ fi
 #
 # To make things simple, we can set 's' = 'r', and 'd' = 0.5, which does
 # fulfill the stability condition. According to file fitness_a.txt, the
-# following increments of 'a' ('e') produce such selection coefficients
-# ('r').
+# following increments of 'a' ('e') produce such selection coefficients:
+# 'r1' for constant fecundity, and 'r2' for age-depending fecundity according
+# to: 1 - ((x-12)^2)/100.
 #
-#   +---------+----------+
-#   |    e    |    r     |
-#   +---------+----------+
-#   | 0.0004  | 0.051169 |
-#   | 0.0009  | 0.095492 |
-#   | 0.0013  | 0.133012 |
-#   | 0.0017  | 0.165454 |
-#   | 0.0022  | 0.193837 |
-#   | 0.0026  | 0.220821 |
-#   | 0.0030  | 0.243837 |
-#   | 0.0034  | 0.264521 |
-#   | 0.0039  | 0.283232 |
+#   +---------+----------+----------+
+#   |    e    |    r1    |    r2    |
+#   +---------+----------+----------+
+#   | 0.0004  | 0.051169 | 0.020016 |
+#   | 0.0009  | 0.095492 | 0.041183 |
+#   | 0.0013  | 0.133012 | 0.061168 |
+#   | 0.0017  | 0.165454 | 0.080400 |
+#   | 0.0022  | 0.193837 | 0.098916 |
+#   | 0.0026  | 0.220821 | 0.119469 |
+#   | 0.0030  | 0.243837 | 0.137667 |
+#   | 0.0034  | 0.264521 | 0.155195 |
+#   | 0.0039  | 0.283232 | 0.172082 |
 #   . ...     . ...      .
 #
 # 

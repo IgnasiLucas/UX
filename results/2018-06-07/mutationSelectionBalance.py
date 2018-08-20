@@ -25,6 +25,7 @@ parser.add_argument('-u', '--mutation', default=0.00000001, type=float, help='Mu
 parser.add_argument('-A', '--autosomal', default=21, type=int, help='Number of autosomal loci. Default 21.')
 parser.add_argument('-X', '--xlinked', default=7, type=int, help='Number of x-linked loci. Default 7.')
 parser.add_argument('-S', '--step', default=100, type=int, help='Periodicity of statistics output. Default: 100 (every 100 days).')
+parser.add_argument('-q', '--startfreq', default=0.0, type=float, help='Starting frequency of mutant alleles. Default: 0.0.')
 args = parser.parse_args()
 
 min_a = args.m
@@ -47,6 +48,15 @@ def demo(gen, pop):
       return pop.popSize()
    else:
       return args.N
+
+def fitness_func(age):
+   if age < 10:
+      value = 0.0
+   else:
+      value = 1.0 - ((age - 12) ** 2) / 100
+   if value < 0:
+      value = 0
+   return value
 
 def AdditiveCodominant(geno, ind):
    if ind.totNumLoci() > 0:
@@ -130,7 +140,7 @@ def OutputStats(pop):
 # and 2.07 / A_loci, respectively. 
 pop = sim.Population(args.N, loci = [X_loci, A_loci], ploidy = 2,
    chromTypes = [sim.CHROMOSOME_X, sim.AUTOSOME],
-   infoFields = ['age', 'a', 'b', 'smurf', 'ind_id',  'father_id', 'mother_id', 'luck', 't0'])
+   infoFields = ['age', 'a', 'b', 'smurf', 'ind_id',  'father_id', 'mother_id', 'luck', 't0', 'fitness'])
 
 pop.dvars().seed = args.seed
 
@@ -171,7 +181,7 @@ simu = sim.Simulator(pop, rep=1)
 simu.evolve(
    initOps = [
       sim.InitSex(),
-      sim.InitGenotype(freq = [1.0,0.0]),
+      sim.InitGenotype(freq = [1-args.startfreq, args.startfreq]),
       sim.InitInfo([0], infoFields = 'age'),
       sim.InitInfo([min_a], infoFields = 'a'),
       sim.InitInfo([-10 * min_a], infoFields = 'b'),
@@ -184,7 +194,8 @@ simu.evolve(
       sim.InfoExec("luck = random.random()"),
       sim.InfoExec("smurf = 1.0 if ((ind.smurf == 1) or (ind.age > ind.t0 and ind.luck < 1.0 - math.exp(-ind.a * ind.age + ind.a * ind.t0 - ind.a / 2.0))) else 0.0", exposeInd='ind'),
       sim.DiscardIf(natural_death),
-      sim.InfoExec("age += 1")
+      sim.InfoExec("age += 1"),
+      sim.PySelector(func=fitness_func)
    ],
    matingScheme = sim.HeteroMating(
       [

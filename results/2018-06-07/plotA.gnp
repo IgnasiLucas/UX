@@ -5,65 +5,65 @@ set logscale x 10
 set xlabel 'Time (days)'
 set ylabel 'female a - male a'
 set title '20 X, 0 A'
-plot 0 title '', 'MSB20.0.000001.txt' using 1:($6 - $5) with lines title 'u=0.000001', \
-     'MSB20.0.00001.txt'  using 1:($6 - $5) with lines title 'u=0.00001', \
-     'MSB20.0.0001.txt'   using 1:($6 - $5) with lines title 'u=0.0001', \
-     'MSB20.0.001.txt'    using 1:($6 - $5) with lines title 'u=0.001'
+plot 0 title '', 'MSB.20.0.000001.txt' using 1:($6 - $5) with lines title 'u=0.000001', \
+     'MSB.20.0.00001.txt'  using 1:($6 - $5) with lines title 'u=0.00001', \
+     'MSB.20.0.0001.txt'   using 1:($6 - $5) with lines title 'u=0.0001', \
+     'MSB.20.0.001.txt'    using 1:($6 - $5) with lines title 'u=0.001'
 set title '20 X, 20 A'
-plot 0 title '', 'MSB20.20.000001.txt' using 1:($6 - $5) with lines title 'u=0.000001', \
-     'MSB20.20.00001.txt'  using 1:($6 - $5) with lines title 'u=0.00001', \
-     'MSB20.20.0001.txt'   using 1:($6 - $5) with lines title 'u=0.0001', \
-     'MSB20.20.001.txt'    using 1:($6 - $5) with lines title 'u=0.001'
+plot 0 title '', 'MSB.20.20.000001.txt' using 1:($7 - $6) with lines title 'u=0.000001', \
+     'MSB.20.20.00001.txt'  using 1:($7 - $6) with lines title 'u=0.00001', \
+     'MSB.20.20.0001.txt'   using 1:($7 - $6) with lines title 'u=0.0001', \
+     'MSB.20.20.001.txt'    using 1:($7 - $6) with lines title 'u=0.001'
 set title '20 X, 100 A'
-plot 0 title '', 'MSB20.100.000001.txt' using 1:($6 - $5) with lines title 'u=0.000001', \
-     'MSB20.100.00001.txt'  using 1:($6 - $5) with lines title 'u=0.00001', \
-     'MSB20.100.0001.txt'   using 1:($6 - $5) with lines title 'u=0.0001', \
-     'MSB20.100.001.txt'    using 1:($6 - $5) with lines title 'u=0.001'
+plot 0 title '', 'MSB.20.100.000001.txt' using 1:($7 - $6) with lines title 'u=0.000001', \
+     'MSB.20.100.00001.txt'  using 1:($7 - $6) with lines title 'u=0.00001', \
+     'MSB.20.100.0001.txt'   using 1:($7 - $6) with lines title 'u=0.0001', \
+     'MSB.20.100.001.txt'    using 1:($7 - $6) with lines title 'u=0.001'
 set title '20 X, 200 A'
-plot 0 title '', 'MSB20.200.000001.txt' using 1:($6 - $5) with lines title 'u=0.000001', \
-     'MSB20.200.00001.txt'  using 1:($6 - $5) with lines title 'u=0.00001', \
-     'MSB20.200.0001.txt'   using 1:($6 - $5) with lines title 'u=0.0001', \
-     'MSB20.200.001.txt'    using 1:($6 - $5) with lines title 'u=0.001'
+plot 0 title '', 'MSB.20.200.000001.txt' using 1:($7 - $6) with lines title 'u=0.000001', \
+     'MSB.20.200.00001.txt'  using 1:($7 - $6) with lines title 'u=0.00001', \
+     'MSB.20.200.0001.txt'   using 1:($7 - $6) with lines title 'u=0.0001', \
+     'MSB.20.200.001.txt'    using 1:($7 - $6) with lines title 'u=0.001'
 
 set title '100 X, 0 A'
-plot 0 title '', 'MSB100.0.000001.txt' using 1:($6 - $5) with lines title 'u=0.000001', \
-     'MSB100.0.00001.txt'  using 1:($6 - $5) with lines title 'u=0.00001', \
-     'MSB100.0.0001.txt'   using 1:($6 - $5) with lines title 'u=0.0001', \
-     'MSB100.0.001.txt'    using 1:($6 - $5) with lines title 'u=0.001'
+plot 0 title '', 'MSB.100.0.000001.txt' using 1:($6 - $5) with lines title 'u=0.000001', \
+     'MSB.100.0.00001.txt'  using 1:($6 - $5) with lines title 'u=0.00001', \
+     'MSB.100.0.0001.txt'   using 1:($6 - $5) with lines title 'u=0.0001', \
+     'MSB.100.0.001.txt'    using 1:($6 - $5) with lines title 'u=0.001'
 set title '100 X, 20 A'
-plot 0 title '', 'MSB100.20.000001.txt' using 1:($6 - $5) with lines title 'u=0.000001', \
-     'MSB100.20.00001.txt'  using 1:($6 - $5) with lines title 'u=0.00001', \
-     'MSB100.20.0001.txt'   using 1:($6 - $5) with lines title 'u=0.0001', \
-     'MSB100.20.001.txt'    using 1:($6 - $5) with lines title 'u=0.001'
+plot 0 title '', 'MSB.100.20.000001.txt' using 1:($7 - $6) with lines title 'u=0.000001', \
+     'MSB.100.20.00001.txt'  using 1:($7 - $6) with lines title 'u=0.00001', \
+     'MSB.100.20.0001.txt'   using 1:($7 - $6) with lines title 'u=0.0001', \
+     'MSB.100.20.001.txt'    using 1:($7 - $6) with lines title 'u=0.001'
 set title '100 X, 100 A'
-plot 0 title '', 'MSB100.100.000001.txt' using 1:($6 - $5) with lines title 'u=0.000001', \
-     'MSB100.100.00001.txt'  using 1:($6 - $5) with lines title 'u=0.00001', \
-     'MSB100.100.0001.txt'   using 1:($6 - $5) with lines title 'u=0.0001', \
-     'MSB100.100.001.txt'    using 1:($6 - $5) with lines title 'u=0.001'
+plot 0 title '', 'MSB.100.100.000001.txt' using 1:($7 - $6) with lines title 'u=0.000001', \
+     'MSB.100.100.00001.txt'  using 1:($7 - $6) with lines title 'u=0.00001', \
+     'MSB.100.100.0001.txt'   using 1:($7 - $6) with lines title 'u=0.0001', \
+     'MSB.100.100.001.txt'    using 1:($7 - $6) with lines title 'u=0.001'
 set title '100 X, 200 A'
-plot 0 title '', 'MSB100.200.000001.txt' using 1:($6 - $5) with lines title 'u=0.000001', \
-     'MSB100.200.00001.txt'  using 1:($6 - $5) with lines title 'u=0.00001', \
-     'MSB100.200.0001.txt'   using 1:($6 - $5) with lines title 'u=0.0001', \
-     'MSB100.200.001.txt'    using 1:($6 - $5) with lines title 'u=0.001'
+plot 0 title '', 'MSB.100.200.000001.txt' using 1:($7 - $6) with lines title 'u=0.000001', \
+     'MSB.100.200.00001.txt'  using 1:($7 - $6) with lines title 'u=0.00001', \
+     'MSB.100.200.0001.txt'   using 1:($7 - $6) with lines title 'u=0.0001', \
+     'MSB.100.200.001.txt'    using 1:($7 - $6) with lines title 'u=0.001'
 
 set title '200 X, 0 A'
-plot 0 title '', 'MSB200.0.000001.txt' using 1:($6 - $5) with lines title 'u=0.000001', \
-     'MSB200.0.00001.txt'  using 1:($6 - $5) with lines title 'u=0.00001', \
-     'MSB200.0.0001.txt'   using 1:($6 - $5) with lines title 'u=0.0001', \
-     'MSB200.0.001.txt'    using 1:($6 - $5) with lines title 'u=0.001'
+plot 0 title '', 'MSB.200.0.000001.txt' using 1:($6 - $5) with lines title 'u=0.000001', \
+     'MSB.200.0.00001.txt'  using 1:($6 - $5) with lines title 'u=0.00001', \
+     'MSB.200.0.0001.txt'   using 1:($6 - $5) with lines title 'u=0.0001', \
+     'MSB.200.0.001.txt'    using 1:($6 - $5) with lines title 'u=0.001'
 set title '200 X, 20 A'
-plot 0 title '', 'MSB200.20.000001.txt' using 1:($6 - $5) with lines title 'u=0.000001', \
-     'MSB200.20.00001.txt'  using 1:($6 - $5) with lines title 'u=0.00001', \
-     'MSB200.20.0001.txt'   using 1:($6 - $5) with lines title 'u=0.0001', \
-     'MSB200.20.001.txt'    using 1:($6 - $5) with lines title 'u=0.001'
+plot 0 title '', 'MSB.200.20.000001.txt' using 1:($7 - $6) with lines title 'u=0.000001', \
+     'MSB.200.20.00001.txt'  using 1:($7 - $6) with lines title 'u=0.00001', \
+     'MSB.200.20.0001.txt'   using 1:($7 - $6) with lines title 'u=0.0001', \
+     'MSB.200.20.001.txt'    using 1:($7 - $6) with lines title 'u=0.001'
 set title '200 X, 100 A'
-plot 0 title '', 'MSB200.100.000001.txt' using 1:($6 - $5) with lines title 'u=0.000001', \
-     'MSB200.100.00001.txt'  using 1:($6 - $5) with lines title 'u=0.00001', \
-     'MSB200.100.0001.txt'   using 1:($6 - $5) with lines title 'u=0.0001', \
-     'MSB200.100.001.txt'    using 1:($6 - $5) with lines title 'u=0.001'
+plot 0 title '', 'MSB.200.100.000001.txt' using 1:($7 - $6) with lines title 'u=0.000001', \
+     'MSB.200.100.00001.txt'  using 1:($7 - $6) with lines title 'u=0.00001', \
+     'MSB.200.100.0001.txt'   using 1:($7 - $6) with lines title 'u=0.0001', \
+     'MSB.200.100.001.txt'    using 1:($7 - $6) with lines title 'u=0.001'
 set title '200 X, 200 A'
-plot 0 title '', 'MSB200.200.000001.txt' using 1:($6 - $5) with lines title 'u=0.000001', \
-     'MSB200.200.00001.txt'  using 1:($6 - $5) with lines title 'u=0.00001', \
-     'MSB200.200.0001.txt'   using 1:($6 - $5) with lines title 'u=0.0001', \
-     'MSB200.200.001.txt'    using 1:($6 - $5) with lines title 'u=0.001'
+plot 0 title '', 'MSB.200.200.000001.txt' using 1:($7 - $6) with lines title 'u=0.000001', \
+     'MSB.200.200.00001.txt'  using 1:($7 - $6) with lines title 'u=0.00001', \
+     'MSB.200.200.0001.txt'   using 1:($7 - $6) with lines title 'u=0.0001', \
+     'MSB.200.200.001.txt'    using 1:($7 - $6) with lines title 'u=0.001'
 

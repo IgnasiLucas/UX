@@ -14,6 +14,16 @@ parser.add_argument('-x', '--oldest', default=100, type=int, help='')
 parser.add_argument('-o', '--output', default='z1.txt', type=argparse.FileType('w'), help='')
 args=parser.parse_args()
 
+def fecundity(x):
+   if x < 10:
+      return 0
+   else:
+      F = 1 - ((x - 12)**2) / 100
+      if F > 0:
+         return F
+      else:
+         return 0
+
 def survival(a, b, d, x):
    t0 = -b / a
    assert t0 >= 0
@@ -58,32 +68,39 @@ else:
       b_values.append(-a * args.t0)
 
 Survival = {}
+Fitness  = {}
 
 for i in range(args.num_values):
+   Fitness[(a_values[i], b_values[i])] = 0
    for x in range(1, args.oldest + 1):
       try:
          Survival[(a_values[i],b_values[i])][x] = survival(a_values[i], b_values[i], args.death_rate, x)
       except KeyError:
          Survival[(a_values[i],b_values[i])] = {}
          Survival[(a_values[i],b_values[i])][x] = survival(a_values[i], b_values[i], args.death_rate, x)
+      Fitness[(a_values[i], b_values[i])] += Survival[(a_values[i],b_values[i])][x] * fecundity(x)
 
 header1 = "#a  "
 header2 = "#b  "
 header3 = "#t0 "
 header4 = "#t1 "
+header5 = "#W  "
 for ab in sorted(Survival):
    header1 += "\t{:8.4f}".format(ab[0])
    header2 += "\t{:8.4f}".format(ab[1])
    header3 += "\t{:8.2f}".format(-ab[1]/ab[0])
    header4 += "\t{:8.2f}".format((1.0 - ab[1]) / ab[0])
+   header5 += "\t{:8.4f}".format(Fitness[ab])
 header1 += "\n"
 header2 += "\n"
 header3 += "\n"
 header4 += "\n"
+header5 += "\n"
 args.output.write(header1)
 args.output.write(header2)
 args.output.write(header3)
 args.output.write(header4)
+args.output.write(header5)
 for x in range(1, args.oldest + 1):
    line = "{}".format(x)
    for ab in sorted(Survival):

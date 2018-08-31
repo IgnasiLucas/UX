@@ -76,10 +76,6 @@ fi
 # CONCLUSIONS
 # ===========
 #
-# I killed the simulations after 8 days and more than 200000 generations. The
-# average mutant frequencies seemed to be at equilibrium, although the log-log
-# plots do not make it apparent.
-#
 # 1. The average frequency of autosomal recessive mutations affecting survival is
 #    higher than that in the X chromosome, because of the expression of deleterious
 #    effects of recessive, X-linked mutations in hemizygous males.
@@ -89,8 +85,8 @@ fi
 # 3. With 200 genes in the X chromosome and a large enough number of autosomal
 #    genes, the age difference drops after having reached a peak around generation
 #    10000 or 20000. Why?
-# 4. To have more X-linked genes affecting survival is, to some extent, similar to
-#    having higher mutation rates.
+# 4. The more X-linked genes affecting survival, the higher their equilibrium frequency.
+#    This must be because their fitness effect becomes smaller, as a constraint of the model.
 # 5. To increase the number of autosomal genes affecting survival reduces age-differences
 #    between males and females, because the proportion of the total genetic variation
 #    able to produce sex differences is reduced.

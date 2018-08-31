@@ -36,6 +36,8 @@ def natural_death(smurf):
       return False
 
 def demo(gen, pop):
+   # This prevents running out of reproducers in a cohort of larvae where one
+   # or more died.
    if gen < 10:
       return pop.popSize()
    else:
@@ -44,7 +46,7 @@ def demo(gen, pop):
 def fitness_func(geno, ind, pop, age):
    # First, I determine age-specific fecundity (between 0 and 1), acording
    # to an arbitrary function. Then, I multiply female's fecundity by (1-s)
-   # or (1-hs). 
+   # or (1-hs). I am ignoring the fact that smurfs don't reproduce.
    if age < 10:
       value = 0.0
    else:
@@ -172,7 +174,7 @@ simu.evolve(
       subPopSize = demo
    ),
    postOps = [
-      sim.PyOperator(func=OutputStats, step=10)
+      sim.PyOperator(func=OutputStats, step=100)
    ],
    gen=args.G
 )

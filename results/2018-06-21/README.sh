@@ -87,7 +87,7 @@ if [ ! -e fitness_a.png ]; then
    if [ ! -e fitness_a.txt ]; then
       if [ ! -e constant_b_$N.txt ]; then
          python survival.py --min_a $MEAN_A --max_a $MAX_A -b $MEAN_B -n $N \
-                            -x 150 --death_rate 0.1911 -o constant_b_50.txt
+                            -x 150 --death_rate 0.1911 -o constant_b_$N.txt
       fi
       gawk -v SIZE=$N '(/^#a/){
          for (i=2; i<=NF; i++) {
@@ -154,3 +154,37 @@ fi
 #   | 0.0039  | 0.283232 | 0.172082 |
 #   . ...     . ...      .
 #
+# The values above are theoretical. I need to summarize the actual fitness
+# values from simulated populations and see if they approach those. I use the
+# PedigreeTagger operator from simuPOP to report the realized average fitness
+# (total number of offspring) of each genotype. The script is called 'FitnessCenter.py'.
+
+if [ ! -e EmpiricalFitness.txt ]; then
+   for f in 0.0 0.5 1.0; do
+      for rep in 0 1 2 3 4; do
+         if [ ! -e z_fitness_$f\_$rep.txt ]; then
+            python FitnessCenter.py -N 10000 -G 10000 -f $f -o pedigree$f\_$rep.txt | tail -n -8 > z_fitness_$f\_$rep.txt &
+         fi
+      done
+   done
+   wait
+   head -n 7 z_fitness_0.5_0.txt | tail -n 1 > EmpiricalFitness.txt
+   cat z_fitness*.txt | LC_ALL=C sort -k 7,7 -k 8n,8 -k 10nr,10 >> EmpiricalFitness.txt
+   rm z_fitness*.txt
+fi
+
+gawk '($4 ~ /M/){
+   F[$1] = 0
+   G[$1]=$7+$8
+   if (G[$1]==2) G[$1] = 1
+}($2 in F){
+   F[$2]++
+}END{
+   for (f in F) print f "\t" F[f] "\t" G[f]
+}' pedigree0.5_0.txt | \
+gawk '{
+   S[$3] += $2
+   T[$3]++
+}END{
+   for (g in S) print g "\t" S[g]/T[g]
+}' > z_averageMaleFitness.txt

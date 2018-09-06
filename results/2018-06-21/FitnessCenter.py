@@ -154,6 +154,7 @@ simu.evolve(
       sim.InitGenotype(freq = [1.0 - args.initfreq, args.initfreq]),
       sim.InitInfo([0], infoFields = 'age'),
       sim.InitInfo([1], infoFields = 'fitness'),
+      # At this point, even males are diploids! Only 1/1 and 1/0 (but not 0/1) males get 'a' increased.
       sim.InfoExec("a = min_a + meffect if ind.sex() == 1 and ind.allele(0,0) == 1 else min_a", exposeInd = 'ind'),
       sim.InitInfo([ args.b ], infoFields = 'b'),
       sim.InitInfo(lambda: random.random(), infoFields = 'luck'),

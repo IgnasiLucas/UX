@@ -36,8 +36,8 @@ The 'a' parameter of the two-phases model of aging is increased additively
 by a number of X-linked or autosomal mutations. All mutations have the same
 effect, which is smaller the larger the number of loci involved. I reproduce
 the unguarded-X effect. However, the age difference between males and females
-due to this process is at most of only 2 days. I recall in reality may be 5
-or more.
+due to this process is at most of only 2 days (Zahida says that's similar to
+the empirical difference) and only when mutation rate is quite high.
 
 2018-06-21
 ==========
@@ -65,4 +65,11 @@ yet.
 2018-08-31
 ==========
 Run the sexually antagonistic pleiotropy model to make sure that it produces a
-stable equilibrium.
+stable equilibrium. I had to adjust parameters by trial and error, instead of
+using the theoretical condition of stability known from the literature. Presumably,
+the reason is that the exact fitness values experienced by the genotypes are
+not the expected ones. In particular, although simuPOP allows for a fitness
+information field, the actual fitness realization depends on other details of
+the simulation: age-dependency of fecundity, sex-specific fitness values, etc.
+It may be worth to find out what is exactly going on with fitness in the
+simulations.

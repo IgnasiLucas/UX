@@ -162,19 +162,29 @@ fi
 if [ ! -e EmpiricalFitness.txt ]; then
    for f in 0.0 0.5 1.0; do
       for rep in 0 1 2 3 4; do
-         if [ ! -e z_fitness_$f\_$rep.txt ]; then
-            python FitnessCenter.py -N 10000 -G 10000 -f $f -o pedigree$f\_$rep.txt | tail -n +8 > z_fitness_$f\_$rep.txt &
+         if [ ! -e Freq$f\_$rep.ped ]; then
+            python FitnessCenter.py -N 10000 -G 10000 -f $f -o Freq$f\_$rep &
          fi
       done
    done
    wait
-   head -n 7 z_fitness_0.5_0.txt | tail -n 1 > EmpiricalFitness.txt
-   cat z_fitness*.txt | grep -v "nan" | LC_ALL=C sort -k 7,7 -k 8n,8 -k 10nr,10 >> EmpiricalFitness.txt
+   cat Freq*.fit | grep -v "nan" | LC_ALL=C sort -k 6g,6 -k 7,7 -k 8n,8 -k 10nr,10 | uniq > EmpiricalFitness.txt
 fi
+
+if [ ! -e AgeFecundity_Freq_0.5.png ]; then
+   # Actual age-specific fecundities (not fitness) should be equal between the
+   # two male genotypes, because their difference is only in survival. Females
+   # should show differences in fecundity. The absolute fecundities are unknown
+   # a priori, because they depend on density; but heterozygous females and 0/0
+   # females should have overall fecundities that are 1-hs and 1-s times that of
+   # the 1/1 females.
+   gawk '(FNR == 1){print "\n"}{print $0}' Freq0.5_*.age > zinfile.txt
+   gnuplot -e "outfile = AgeFecundity_Freq_0.5.png; MainTitle = 'Allele freq. 0.5'; h = 0.5; s = 0.061168" plot_age_fecundity.gnp
+   # rm zinfile.txt
+fi
+
 
 # CONCLUSIONS
 # ===========
 #
-# In a population with two kinds of males, some with an aging rate ('a' parameter of the
-# two-phases model) of 0.0039 and some with a=0.0052, the latter experience a selective
-# coefficient of -0.10827 (standard deviation of 0.0035).
+# 

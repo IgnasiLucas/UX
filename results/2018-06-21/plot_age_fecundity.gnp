@@ -1,0 +1,34 @@
+set term png large size 1000,1000
+set output 'z2.png'
+set multiplot layout 2,2 title MainTitle
+set xrange [7:25]
+set xlabel 'Age (days)'
+set ylabel 'Fecundity'
+plot infile using 1:($2/$7) index 0 with lines linetype 1 title 'Males 0', \
+         '' using 1:($2/$7) index 1 with lines linetype 1 notitle, \
+         '' using 1:($2/$7) index 2 with lines linetype 1 notitle, \
+         '' using 1:($2/$7) index 3 with lines linetype 1 notitle, \
+         '' using 1:($3/$8) index 0 with lines linetype 2 title 'Males 1', \
+         '' using 1:($3/$8) index 1 with lines linetype 2 notitle, \
+         '' using 1:($3/$8) index 2 with lines linetype 2 notitle, \
+         '' using 1:($3/$8) index 3 with lines linetype 2 notitle
+
+plot infile using 1:($4/$9)  index 0 with lines linetype 1 title 'Females 0', \
+         '' using 1:($4/$9)  index 1 with lines linetype 1 notitle, \
+         '' using 1:($4/$9)  index 2 with lines linetype 1 notitle, \
+         '' using 1:($4/$9)  index 3 with lines linetype 1 notitle, \
+         '' using 1:($5/$10) index 0 with lines linetype 2 title 'Females 1', \
+         '' using 1:($5/$10) index 1 with lines linetype 2 notitle, \
+         '' using 1:($5/$10) index 2 with lines linetype 2 notitle, \
+         '' using 1:($5/$10) index 3 with lines linetype 2 notitle, \
+         '' using 1:($6/$11) index 0 with lines linetype 3 title 'Females 2', \
+         '' using 1:($6/$11) index 1 with lines linetype 3 notitle, \
+         '' using 1:($6/$11) index 2 with lines linetype 3 notitle, \
+         '' using 1:($6/$11) index 3 with lines linetype 3 notitle
+
+set ylabel 'Relative fecundity'
+plot infile using 1:(($3/$8)/($2/$7)) linetype 2 title 'Males 1', 1 linetype 2 notitle
+plot infile using 1:(($4/$9)/($6/$11)) linetype 1 title 'Females 0', \
+         1 - s linetype 1 notile, \
+         '' using 1:(($5/$10)/($6/$11)) linetype 2 title 'Females 1', \
+         1 - h * s linetype 2 notitle

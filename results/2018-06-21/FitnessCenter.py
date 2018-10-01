@@ -7,6 +7,7 @@ import random
 import math
 import argparse
 import re
+import numpy
 
 ###############################################################
 #                 ARGUMENTS AND  VARIABLES                    #
@@ -23,7 +24,7 @@ parser.add_argument('-e', '--meffect', type=float, default=0.0013, help='Mutant 
 parser.add_argument('-s', '--feffect', type=float, default=0.061168, help='Female selective coefficient against wild type allele. Default: 0.061168.')
 parser.add_argument('-d', '--dominance', type=float, default=0.5, help='Coefficient of dominance of deleterious allele in females. Default: 0.5')
 parser.add_argument('-f', '--initfreq', type=float, default=0.5, help='Initial frequency of allele 1. Default: 0.5.')
-parser.add_argument('-o', '--output', default='pedigree.txt', help='Ouput file name. Default: pedigree.txt.')
+parser.add_argument('-o', '--output', default='z1', help='Ouput file prefix. Default: z1.')
 args = parser.parse_args()
 min_a = args.a
 if re.search("two|phases|smurf", args.model, re.I):
@@ -33,7 +34,7 @@ if re.search("gompert?z", args.model, re.I):
 if re.search("weibull?", args.model, re.I):
    args.model = "weibull"
 
-fh = open(args.output, 'w')
+fh = open(args.output + '.ped', 'w')
 
 ###############################################################
 #                    FUNCTIONS AND CLASSES                    #
@@ -74,7 +75,11 @@ def demo(gen, pop):
 def fitness_func(geno, ind, pop, age):
    # First, I determine age-specific fecundity (between 0 and 1), acording
    # to an arbitrary function. Then, I multiply female's fecundity by (1-s)
-   # or (1-hs). I am ignoring the fact that smurfs don't reproduce.
+   # or (1-hs). This should produce relative fitness values of 1-s and 1-hs
+   # if fitness is the expected total number of descendants in a lifetime.
+   # At least, among females, because they all share the same survival function.
+   # The actual fecundity will just be proportional to these results.
+   # Note that I am ignoring the fact that smurfs should not reproduce.
    if age < 10:
       value = 0.0
    else:
@@ -108,13 +113,14 @@ def MaleEffect(geno, ind):
 
 pop = sim.Population(args.N, loci = [1], ploidy = 2,
    chromTypes = [sim.CHROMOSOME_X],
-   infoFields = ['age', 'a', 'b', 'smurf', 'ind_id',  'father_id', 'mother_id', 'luck', 'fitness', 't0'])
+   infoFields = ['age', 'a', 'b', 'smurf', 'ind_id',  'father_id', 'mother_id', 'luck', 'fitness', 't0', 'birthday'])
 #pop.dvars().seed = args.seed
 pop.dvars().min_a = min_a
 pop.dvars().meffect = args.meffect
 pop.dvars().feffect = args.feffect
 pop.dvars().dominance = args.dominance
 pop.dvars().k = args.k
+pop.dvars().maxAge = 120
 
 # Below the population is split first by an age cutoff of 10 days
 # (larvae and adults), and then by the aging stage (normal, smurf).
@@ -147,13 +153,13 @@ exec("import math", pop.vars(), pop.vars())
 ###############################################################
 
 simu = sim.Simulator(pop, 1)
-
 simu.evolve(
    initOps = [
       sim.InitSex(),
       sim.InitGenotype(freq = [1.0 - args.initfreq, args.initfreq]),
       sim.InitInfo([0], infoFields = 'age'),
       sim.InitInfo([1], infoFields = 'fitness'),
+      sim.InitInfo([0], infoFields = 'birthday'),
       # At this point, even males are diploids! Only 1/1 and 1/0 (but not 0/1) males get 'a' increased.
       sim.InfoExec("a = min_a + meffect if ind.sex() == 1 and ind.allele(0,0) == 1 else min_a", exposeInd = 'ind'),
       sim.InitInfo([ args.b ], infoFields = 'b'),
@@ -161,13 +167,16 @@ simu.evolve(
       sim.InfoExec("t0 = -ind.b / ind.a", exposeInd = 'ind'),
       sim.InfoExec("smurf = 1.0 if (ind.smurf == 1 or (ind.age > ind.t0 and ind.luck < 1.0 - math.exp(-ind.a * ind.age + ind.a * ind.t0 - ind.a / 2.0))) else 0.0", exposeInd = 'ind'),
       sim.IdTagger(),
-      sim.PedigreeTagger(output = '>>{}'.format(args.output), outputFields = ['a'], outputLoci = [0])
+      sim.PedigreeTagger(output = '>>{}.ped'.format(args.output), outputFields = ['a', 'birthday'], outputLoci = [0]),
+      sim.PyExec("AccumAges = {1: {0: {x: 0 for x in range(maxAge)}, 1: {x: 0 for x in range(maxAge)}, 2: {x: 0 for x in range(maxAge)}}, 2: {0: {x: 0 for x in range (maxAge)}, 1: {x: 0 for x in range(maxAge)}, 2: {x: 0 for x in range(maxAge)}}}")
    ],
    preOps = [
       sim.InfoExec("luck = random.random()"),
       sim.InfoExec("smurf = 1.0 if (ind.smurf == 1 or (ind.age > ind.t0 and ind.luck < 1.0 - math.exp(-ind.a * ind.age + ind.a * ind.t0 - ind.a / 2.0))) else 0.0", exposeInd='ind'),
       sim.DiscardIf(aging_model(args.model)),
       sim.InfoExec("age += 1"),
+      # Here, ind.allele(0,1) is 0 for all males, except in first generation.
+      sim.InfoExec("AccumAges[ind.sex()][ind.allele(0,0) + ind.allele(0,1)][int(ind.age)] += 1", usePopVars=True, exposeInd='ind'),
       sim.PySelector(loci=[0], func=fitness_func)
    ],
    matingScheme = sim.HeteroMating(
@@ -177,9 +186,10 @@ simu.evolve(
             ops = [
                sim.IdTagger(),
                sim.InfoExec("smurf = 0.0"),
+               sim.InfoExec("birthday = gen"),
                sim.MendelianGenoTransmitter(),
                sim.PyQuanTrait(loci = sim.ALL_AVAIL, func = MaleEffect, infoFields = ['a', 'b', 't0']),
-               sim.PedigreeTagger(output = '>>{}'.format(args.output), outputFields = ['a'], outputLoci=[0])
+               sim.PedigreeTagger(output = '>>{}.ped'.format(args.output), outputFields = ['a', 'birthday'], outputLoci=[0])
             ],
             weight = 1,
             subPops = [(0,1)],
@@ -193,65 +203,82 @@ simu.evolve(
 
 fh.close()
 
-with open(args.output, 'r') as ped:
-   OffspringNumber = {}
-   Sex = {}
-   Genotype = {}
+pop = simu.extract(0)
+AccumAges = pop.dvars().AccumAges
+OffspringNumber = {}
+Sex = {}
+Genotype = {}
+Birthday = {}
+with open(args.output + '.ped', 'r') as ped:
    for line in ped:
       Fields = line.split()
-      OffspringNumber[int(Fields[0])] = 0
+      OffspringNumber[int(Fields[0])] = numpy.zeros(50, dtype=int)
       Sex[int(Fields[0])] = Fields[3]
-      Genotype[int(Fields[0])] = int(Fields[6]) + int(Fields[7])
+      Genotype[int(Fields[0])] = int(Fields[7]) + int(Fields[8])
+      Birthday[int(Fields[0])] = int(Fields[6])
       # The first generation, genotypes are initialized as if all chromosomes were
       # autosomes, and some males are assigned genotype '1 1'. I change that to have
       # consistent hemizygous genotypes in all males.
       if Fields[3] == 'M' and Genotype[int(Fields[0])] == 2:
          Genotype[int(Fields[0])] = 1
       try:
-         OffspringNumber[int(Fields[1])] += 1
+         # This counts the individual as offspring of its father at the father's age.
+         OffspringNumber[int(Fields[1])][int(Fields[6]) - Birthday[int(Fields[1])]] += 1
       except KeyError:
          assert Fields[1] == '0'
       try:
-         OffspringNumber[int(Fields[2])] += 1
+         OffspringNumber[int(Fields[2])][int(Fields[6]) - Birthday[int(Fields[2])]] += 1
       except KeyError:
          assert Fields[2] == '0'
-   TotalMaleFitness = {0: 0, 1: 0}
-   TotalFemaleFitness = {0: 0, 1: 0, 2: 0}
-   NumMales = {0: 0, 1: 0}
-   NumFemales = {0: 0, 1: 0, 2: 0}
-   AverageMaleFitness = {0: 0, 1: 0}
-   AverageFemaleFitness = {0: 0, 1: 0, 2: 0}
-   for ind in OffspringNumber.keys():
-      if Sex[ind] == 'M':
-         TotalMaleFitness[Genotype[ind]] += OffspringNumber[ind]
-         NumMales[Genotype[ind]] += 1
-      else:
-         TotalFemaleFitness[Genotype[ind]] += OffspringNumber[ind]
-         NumFemales[Genotype[ind]] += 1
-   assert TotalMaleFitness[0] + TotalMaleFitness[1] == TotalFemaleFitness[0] + TotalFemaleFitness[1] + TotalFemaleFitness[2]
-   for genotype in range(2):
-      try:
-         AverageMaleFitness[genotype] = TotalMaleFitness[genotype] / NumMales[genotype]
-      except ZeroDivisionError:
-         AverageMaleFitness[genotype] = 'nan'
-   MaxMaleFitness = max([x for x in AverageMaleFitness.values() if x != 'nan'])
-   # Because the keys (genotypes) are like an index (0, 1...) I can use an array instead of a dictionary.
-   # Here, I trust that dictionaries preserve the insertion order of both keys and values (new in python 3.7).
-   RelativeMaleFitness = [ x / MaxMaleFitness if x != 'nan' and MaxMaleFitness > 0 else 'nan' for x in AverageMaleFitness.values()]
-   for genotype in range(3):
-      try:
-         AverageFemaleFitness[genotype] = TotalFemaleFitness[genotype] / NumFemales[genotype]
-      except ZeroDivisionError:
-         AverageFemaleFitness[genotype] = 'nan'
-   MaxFemaleFitness = max([x for x in AverageFemaleFitness.values() if x != 'nan'])
-   RelativeFemaleFitness = [ x / MaxFemaleFitness if x != 'nan' and MaxFemaleFitness > 0 else 'nan' for x in AverageFemaleFitness.values()]
-   print("#Model\tBasic_a\tDelta_a\tFem_s\tDominance\tFreq.\tSex\tGenotype\tOffspring\tParents\tAverage_fitness\tRelative_fitness")
+
+# This will record the numbers of offspring from age-specific parents, across all generations.
+# To compare the age-specific fecundities between genotypes, we need to know the overall
+# (across generations) numbers of parents at each age. Note the use of a numpy array.
+TotalMaleFitness   = {0: numpy.zeros(50, dtype=int), 1: numpy.zeros(50, dtype=int)}
+TotalFemaleFitness = {0: numpy.zeros(50, dtype=int), 1: numpy.zeros(50, dtype=int), 2: numpy.zeros(50, dtype=int)}
+NumMales = {0: 0, 1: 0}
+NumFemales = {0: 0, 1: 0, 2: 0}
+AverageMaleFitness = {0: 0, 1: 0}
+AverageFemaleFitness = {0: 0, 1: 0, 2: 0}
+for ind in OffspringNumber.keys():
+   if Sex[ind] == 'M':
+      TotalMaleFitness[Genotype[ind]] += OffspringNumber[ind]
+      NumMales[Genotype[ind]] += 1
+   else:
+      TotalFemaleFitness[Genotype[ind]] += OffspringNumber[ind]
+      NumFemales[Genotype[ind]] += 1
+assert sum(TotalMaleFitness[0] + TotalMaleFitness[1]) == sum(TotalFemaleFitness[0] + TotalFemaleFitness[1] + TotalFemaleFitness[2])
+for genotype in range(2):
+   try:
+      AverageMaleFitness[genotype] = sum(TotalMaleFitness[genotype]) / NumMales[genotype]
+   except ZeroDivisionError:
+      AverageMaleFitness[genotype] = 'nan'
+MaxMaleFitness = max([x for x in AverageMaleFitness.values() if x != 'nan'])
+# Because the keys (genotypes) are like an index (0, 1...) I can use an array instead of a dictionary.
+# Here, I trust that dictionaries preserve the insertion order of both keys and values (new in python 3.7).
+RelativeMaleFitness = [ x / MaxMaleFitness if x != 'nan' and MaxMaleFitness > 0 else 'nan' for x in AverageMaleFitness.values()]
+for genotype in range(3):
+   try:
+      AverageFemaleFitness[genotype] = sum(TotalFemaleFitness[genotype]) / NumFemales[genotype]
+   except ZeroDivisionError:
+      AverageFemaleFitness[genotype] = 'nan'
+MaxFemaleFitness = max([x for x in AverageFemaleFitness.values() if x != 'nan'])
+RelativeFemaleFitness = [ x / MaxFemaleFitness if x != 'nan' and MaxFemaleFitness > 0 else 'nan' for x in AverageFemaleFitness.values()]
+
+with open(args.output + '.fit', 'w') as FitnessFile:
+   print("#Model    \tBasic_a\tDelta_a\tFem_s\tDomin.\tFreq.\tSex\tGenot.\tOffs.\tParents\tAve_fit.\tRel_fit.", file=FitnessFile)
    for genotype in range(2):
       print("{}\t{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}\t{:.2f}\tMales\t{:d}\t{:d}\t{:d}\t{}\t{}".format(args.model, args.a, args.meffect,
-         args.feffect, args.dominance, args.initfreq, genotype, TotalMaleFitness[genotype], NumMales[genotype],
-         AverageMaleFitness[genotype], RelativeMaleFitness[genotype]))
+         args.feffect, args.dominance, args.initfreq, genotype, sum(TotalMaleFitness[genotype]), NumMales[genotype],
+         AverageMaleFitness[genotype], RelativeMaleFitness[genotype]), file = FitnessFile)
    for genotype in range(3):
       print("{}\t{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}\t{:.2f}\tFemales\t{:d}\t{:d}\t{:d}\t{}\t{}".format(args.model, args.a, args.meffect,
-         args.feffect, args.dominance, args.initfreq, genotype, TotalFemaleFitness[genotype], NumFemales[genotype],
-         AverageFemaleFitness[genotype], RelativeFemaleFitness[genotype]))
-
+         args.feffect, args.dominance, args.initfreq, genotype, sum(TotalFemaleFitness[genotype]), NumFemales[genotype],
+         AverageFemaleFitness[genotype], RelativeFemaleFitness[genotype]), file = FitnessFile)
+   
+with open(args.output + '.age', 'w') as AgeFile:
+   print("#Age\tM0_Abs\tM1_Abs\tF0_Abs\tF1_Abs\tF2_Abs\t\tM0_Num\tM1_Num\tF0_Num\tF1_Num\tF2_Num", file = AgeFile)
+   for age in range(1,50):
+      print("{: 3}\t{: 6}\t{: 6}\t{: 6}\t{: 6}\t{: 6}\t\t{: 6}\t{: 6}\t{: 6}\t{: 6}\t{: 6}".format(age,
+         TotalMaleFitness[0][age], TotalMaleFitness[1][age], TotalFemaleFitness[0][age], TotalFemaleFitness[1][age], TotalFemaleFitness[2][age],
+         AccumAges[1][0][age], AccumAges[1][1][age], AccumAges[2][0][age], AccumAges[2][1][age], AccumAges[2][2][age]), file = AgeFile)

@@ -1,0 +1,38 @@
+set term png large size 1500,1000
+set output 'age_diff.png'
+set multiplot layout 2,3 title 'e=0.0013'
+set title 's = 0.108'
+set xlabel 'Days'
+set ylabel 'Female age - male age'
+plot 'smooth_agediff_108_1.txt' using 1:2 with lines linetype 1 notitle, \
+     'smooth_agediff_108_2.txt' using 1:2 with lines linetype 2 notitle, \
+     'smooth_agediff_108_3.txt' using 1:2 with lines linetype 3 notitle, \
+     'smooth_agediff_108_4.txt' using 1:2 with lines linetype 4 notitle
+set title 's = 0.109'
+plot 'smooth_agediff_109_1.txt' using 1:2 with lines linetype 1 notitle, \
+     'smooth_agediff_109_2.txt' using 1:2 with lines linetype 2 notitle, \
+     'smooth_agediff_109_3.txt' using 1:2 with lines linetype 3 notitle, \
+     'smooth_agediff_109_4.txt' using 1:2 with lines linetype 4 notitle
+set title 's = 0.110'
+plot 'smooth_agediff_110_1.txt' using 1:2 with lines linetype 1 notitle, \
+     'smooth_agediff_110_2.txt' using 1:2 with lines linetype 2 notitle, \
+     'smooth_agediff_110_3.txt' using 1:2 with lines linetype 3 notitle, \
+     'smooth_agediff_110_4.txt' using 1:2 with lines linetype 4 notitle
+set title 's = 0.112'
+plot 'smooth_agediff_112_1.txt' using 1:2 with lines linetype 1 notitle, \
+     'smooth_agediff_112_2.txt' using 1:2 with lines linetype 2 notitle, \
+     'smooth_agediff_112_3.txt' using 1:2 with lines linetype 3 notitle, \
+     'smooth_agediff_112_4.txt' using 1:2 with lines linetype 4 notitle
+set title 's = 0.114'
+plot 'smooth_agediff_114_1.txt' using 1:2 with lines linetype 1 notitle, \
+     'smooth_agediff_114_2.txt' using 1:2 with lines linetype 2 notitle, \
+     'smooth_agediff_114_3.txt' using 1:2 with lines linetype 3 notitle, \
+     'smooth_agediff_114_4.txt' using 1:2 with lines linetype 4 notitle
+set title 's = 0.116'
+plot 'smooth_agediff_116_1.txt' using 1:2 with lines linetype 1 notitle, \
+     'smooth_agediff_116_2.txt' using 1:2 with lines linetype 2 notitle, \
+     'smooth_agediff_116_3.txt' using 1:2 with lines linetype 3 notitle, \
+     'smooth_agediff_116_4.txt' using 1:2 with lines linetype 4 notitle
+
+
+

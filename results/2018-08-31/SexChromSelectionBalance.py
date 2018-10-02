@@ -12,13 +12,13 @@ import argparse
 ###############################################################
 
 parser = argparse.ArgumentParser(description = 'Simulates a population and prints allele frequencies out.')
-parser.add_argument('-m', default=0.0039, type=float, help='Minimum value of the "a" parameter of the two phases model of aging. Default: 0.003.')
+parser.add_argument('-m', default=0.0039, type=float, help='Minimum value of the "a" parameter of the two phases model of aging. Default: 0.0039.')
 parser.add_argument('-k', default=0.1911, type=float, help='Rate of mortality of smurfs. Default: 0.1911')
 parser.add_argument('-b', default=-0.0190, type=float, help='Parameter "b" of the two phases model o aging. Default: -0.019.')
 parser.add_argument('-N', default=50000, type=int, help='Population size. Default: 50000.')
 parser.add_argument('-G', default=500, type=int, help='Number of generations. Default: 500.')
 parser.add_argument('-e', '--meffect', type=float, default=0.0013, help='Mutant effect on male rate of aging. Default: 0.0013.')
-parser.add_argument('-s', '--feffect', type=float, default=0.133012, help='Female selective coefficient against wild type allele. Default: 0.133012.')
+parser.add_argument('-s', '--feffect', type=float, default=0.061168, help='Female selective coefficient against wild type allele. Default: 0.061168.')
 parser.add_argument('-d', '--dominance', type=float, default=0.5, help='Coefficient of dominance of deleterious allele in females. Default: 0.5')
 parser.add_argument('-o', '--output', default='z1.txt', type=argparse.FileType('w'), help='Ouput file name. Default: z1.txt.')
 parser.add_argument('-r', '--seed', default=115, type=int, help='Random number generator seed. Default: 115.')

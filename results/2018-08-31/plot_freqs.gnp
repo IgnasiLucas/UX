@@ -1,0 +1,38 @@
+set term png large size 1500,1000
+set output 'frequencies.png'
+set multiplot layout 2,3 title 'e=0.0013'
+set title 's = 0.108'
+set xlabel 'Days'
+set ylabel 'Allele frequency'
+plot 's_0.108_sim01.txt' using 1:2 with lines linetype 1 notitle, \
+     's_0.108_sim02.txt' using 1:2 with lines linetype 2 notitle, \
+     's_0.108_sim03.txt' using 1:2 with lines linetype 3 notitle, \
+     's_0.108_sim04.txt' using 1:2 with lines linetype 4 notitle
+set title 's = 0.109'
+plot 's_0.109_sim01.txt' using 1:2 with lines linetype 1 notitle, \
+     's_0.109_sim02.txt' using 1:2 with lines linetype 2 notitle, \
+     's_0.109_sim03.txt' using 1:2 with lines linetype 3 notitle, \
+     's_0.109_sim04.txt' using 1:2 with lines linetype 4 notitle
+set title 's = 0.110'
+plot 's_0.110_sim01.txt' using 1:2 with lines linetype 1 notitle, \
+     's_0.110_sim02.txt' using 1:2 with lines linetype 2 notitle, \
+     's_0.110_sim03.txt' using 1:2 with lines linetype 3 notitle, \
+     's_0.110_sim04.txt' using 1:2 with lines linetype 4 notitle
+set title 's = 0.112'
+plot 's_0.112_sim01.txt' using 1:2 with lines linetype 1 notitle, \
+     's_0.112_sim02.txt' using 1:2 with lines linetype 2 notitle, \
+     's_0.112_sim03.txt' using 1:2 with lines linetype 3 notitle, \
+     's_0.112_sim04.txt' using 1:2 with lines linetype 4 notitle
+set title 's = 0.114'
+plot 's_0.114_sim01.txt' using 1:2 with lines linetype 1 notitle, \
+     's_0.114_sim02.txt' using 1:2 with lines linetype 2 notitle, \
+     's_0.114_sim03.txt' using 1:2 with lines linetype 3 notitle, \
+     's_0.114_sim04.txt' using 1:2 with lines linetype 4 notitle
+set title 's = 0.116'
+plot 's_0.116_sim01.txt' using 1:2 with lines linetype 1 notitle, \
+     's_0.116_sim02.txt' using 1:2 with lines linetype 2 notitle, \
+     's_0.116_sim03.txt' using 1:2 with lines linetype 3 notitle, \
+     's_0.116_sim04.txt' using 1:2 with lines linetype 4 notitle
+
+
+

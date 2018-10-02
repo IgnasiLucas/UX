@@ -33,28 +33,62 @@
 #      1 + d·s       s       1 - d·s
 #
 # To make things simple, we can set 's' = 'r', and 'd' = 0.5, which does
-# fulfill the stability condition. According to file 2018-06-21/fitness_a.txt,
-# the following increments of 'a' ('e') produce such selection coefficients:
-# 'r1' for constant fecundity, and 'r2' for age-dependent fecundity according
-# to: 1 - ((x-12)^2)/100.
-#
-#   +---------+----------+----------+
-#   |    e    |    r1    |    r2    |
-#   +---------+----------+----------+
-#   | 0.0004  | 0.051169 | 0.020016 |
-#   | 0.0009  | 0.095492 | 0.041183 |
-#   | 0.0013  | 0.133012 | 0.061168 |
-#   | 0.0017  | 0.165454 | 0.080400 |
-#   | 0.0022  | 0.193837 | 0.098916 |
-#   | 0.0026  | 0.220821 | 0.119469 |
-#   | 0.0030  | 0.243837 | 0.137667 |
-#   | 0.0034  | 0.264521 | 0.155195 |
-#   | 0.0039  | 0.283232 | 0.172082 |
-#   . ...     . ...      .
+# fulfill the stability condition. According to the last results from 2018-06-21,
+# an increase of 0.0013 of the 'a' parameter of the two-phases model, from
+# 0.0039 to 0.0052 causes a reduction in relative fitness of 0.10827. Thus,
+# using those values, the selective coefficient against the 0 allele in females
+# should be 0.10827. This particular implementation may serve just to prove
+# that a stable equilibrium can be reached, and that the model is well implemented.
 
-for i in `seq 1 20`; do
-   if [ ! -e  `printf "sim%02i.txt" $i` ]; then
-      python SexChromSelectionBalance.py -N 10000 -G 30000 -o `printf "sim%02i.txt" $i` > `printf "sim%02i.log" $i` &
-   fi
+for s in 0.108 0.109 0.110 0.112 0.114 0.116; do
+   for i in 1 2 3 4; do
+      if [ ! -e `LC_ALL=C printf "s_%.3f_sim%02i.txt" $s $i` ]; then
+         python SexChromSelectionBalance.py -N 20000 -G 500000 \
+                                            -e 0.0013 -s $s \
+                                            -o `LC_ALL=C printf "s_%.3f_sim%02i.txt" $s $i` > `LC_ALL=C printf "s_%.3f_sim%02i.log" $s $i` &
+      fi
+   done
 done
 wait
+
+if [ ! -e frequencies.png ]; then
+   gnuplot plot_freqs.gnp
+fi
+
+if [ ! -e age_diff.png ]; then
+   for s in 108 109 110 112 114 116; do
+      for i in 1 2 3 4; do
+         if [ ! -e smooth_agediff_$s\_$i.txt ]; then
+            gawk '{
+                     DIFF[$1 % 1000] = $4 - $3
+                     if (length(DIFF) == 10) {
+                        S = 0
+                        for (diff in DIFF) {
+                           S += DIFF[diff]
+                        } print ($1 - 1000) + 500 "\t" S / 10
+                     }
+                  }' s_0.$s\_sim0$i.txt > smooth_agediff_$s\_$i.txt
+         fi
+      done
+   done
+   gnuplot plot_agediff.gnp
+   rm smooth_agediff*
+fi
+
+# CONCLUSIONS
+# ===========
+#
+# 1. Using the theoretical conditions of stability, the allele that benefits females
+#    and damages males is lost. This means that the damage to males must actually be
+#    larger than measured in 2018-06-21. A slightly higher selection coefficient against
+#    the 'wild-type' is required in females to reach stability.
+#
+# 2. The 'stability' is actually very variable. Even in a population of 20000, fluctuations
+#    of allele frequency are extraordinary.
+#
+# 3. The model is well implemented, in as much it does show a 'stable' equilibrium over
+#    500000 days with 0.112 < s < 0.116. Actually, s > 0.116 seem to be also compatible
+#    with the equilibrium.
+#
+# 4. Under polymorphism, females are on average 1 day older than males. Occasional peaks
+#    of allele frequency cause the difference to reach up to 2 days or to drop below 0.

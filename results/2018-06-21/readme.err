@@ -1,0 +1,40 @@
+FitnessCenter.py:253: RuntimeWarning: invalid value encountered in true_divide
+  AverageMaleFitness[genotype] = TotalMaleFitness[genotype].sum() / NumMales[genotype]
+FitnessCenter.py:262: RuntimeWarning: invalid value encountered in true_divide
+  AverageFemaleFitness[genotype] = TotalFemaleFitness[genotype].sum() / NumFemales[genotype]
+FitnessCenter.py:253: RuntimeWarning: invalid value encountered in true_divide
+  AverageMaleFitness[genotype] = TotalMaleFitness[genotype].sum() / NumMales[genotype]
+FitnessCenter.py:262: RuntimeWarning: invalid value encountered in true_divide
+  AverageFemaleFitness[genotype] = TotalFemaleFitness[genotype].sum() / NumFemales[genotype]
+FitnessCenter.py:253: RuntimeWarning: invalid value encountered in true_divide
+  AverageMaleFitness[genotype] = TotalMaleFitness[genotype].sum() / NumMales[genotype]
+FitnessCenter.py:262: RuntimeWarning: invalid value encountered in true_divide
+  AverageFemaleFitness[genotype] = TotalFemaleFitness[genotype].sum() / NumFemales[genotype]
+FitnessCenter.py:253: RuntimeWarning: invalid value encountered in true_divide
+  AverageMaleFitness[genotype] = TotalMaleFitness[genotype].sum() / NumMales[genotype]
+FitnessCenter.py:262: RuntimeWarning: invalid value encountered in true_divide
+  AverageFemaleFitness[genotype] = TotalFemaleFitness[genotype].sum() / NumFemales[genotype]
+FitnessCenter.py:253: RuntimeWarning: invalid value encountered in true_divide
+  AverageMaleFitness[genotype] = TotalMaleFitness[genotype].sum() / NumMales[genotype]
+FitnessCenter.py:262: RuntimeWarning: invalid value encountered in true_divide
+  AverageFemaleFitness[genotype] = TotalFemaleFitness[genotype].sum() / NumFemales[genotype]
+FitnessCenter.py:253: RuntimeWarning: invalid value encountered in true_divide
+  AverageMaleFitness[genotype] = TotalMaleFitness[genotype].sum() / NumMales[genotype]
+FitnessCenter.py:262: RuntimeWarning: invalid value encountered in true_divide
+  AverageFemaleFitness[genotype] = TotalFemaleFitness[genotype].sum() / NumFemales[genotype]
+FitnessCenter.py:253: RuntimeWarning: invalid value encountered in true_divide
+  AverageMaleFitness[genotype] = TotalMaleFitness[genotype].sum() / NumMales[genotype]
+FitnessCenter.py:262: RuntimeWarning: invalid value encountered in true_divide
+  AverageFemaleFitness[genotype] = TotalFemaleFitness[genotype].sum() / NumFemales[genotype]
+FitnessCenter.py:253: RuntimeWarning: invalid value encountered in true_divide
+  AverageMaleFitness[genotype] = TotalMaleFitness[genotype].sum() / NumMales[genotype]
+FitnessCenter.py:262: RuntimeWarning: invalid value encountered in true_divide
+  AverageFemaleFitness[genotype] = TotalFemaleFitness[genotype].sum() / NumFemales[genotype]
+FitnessCenter.py:253: RuntimeWarning: invalid value encountered in true_divide
+  AverageMaleFitness[genotype] = TotalMaleFitness[genotype].sum() / NumMales[genotype]
+FitnessCenter.py:262: RuntimeWarning: invalid value encountered in true_divide
+  AverageFemaleFitness[genotype] = TotalFemaleFitness[genotype].sum() / NumFemales[genotype]
+FitnessCenter.py:253: RuntimeWarning: invalid value encountered in true_divide
+  AverageMaleFitness[genotype] = TotalMaleFitness[genotype].sum() / NumMales[genotype]
+FitnessCenter.py:262: RuntimeWarning: invalid value encountered in true_divide
+  AverageFemaleFitness[genotype] = TotalFemaleFitness[genotype].sum() / NumFemales[genotype]

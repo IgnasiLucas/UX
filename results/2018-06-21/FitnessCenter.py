@@ -21,7 +21,7 @@ parser.add_argument('-k', default=0.1911, type=float, help='Rate of mortality of
 parser.add_argument('-N', default=50000, type=int, help='Population size. Default: 50000.')
 parser.add_argument('-G', default=500, type=int, help='Number of generations. Default: 500.')
 parser.add_argument('-e', '--meffect', type=float, default=0.0013, help='Mutant effect on male rate of aging. Default: 0.0013.')
-parser.add_argument('-s', '--feffect', type=float, default=0.061168, help='Female selective coefficient against wild type allele. Default: 0.061168.')
+parser.add_argument('-s', '--feffect', type=float, default=0.114, help='Female selective coefficient against wild type allele. Default: 0.114.')
 parser.add_argument('-d', '--dominance', type=float, default=0.5, help='Coefficient of dominance of deleterious allele in females. Default: 0.5')
 parser.add_argument('-f', '--initfreq', type=float, default=0.5, help='Initial frequency of allele 1. Default: 0.5.')
 parser.add_argument('-o', '--output', default='z1', help='Ouput file prefix. Default: z1.')
@@ -120,7 +120,7 @@ pop.dvars().meffect = args.meffect
 pop.dvars().feffect = args.feffect
 pop.dvars().dominance = args.dominance
 pop.dvars().k = args.k
-pop.dvars().maxAge = 120
+pop.dvars().maxAge = 200
 
 # Below the population is split first by an age cutoff of 10 days
 # (larvae and adults), and then by the aging stage (normal, smurf).
@@ -212,7 +212,8 @@ Birthday = {}
 with open(args.output + '.ped', 'r') as ped:
    for line in ped:
       Fields = line.split()
-      OffspringNumber[int(Fields[0])] = numpy.zeros(50, dtype=int)
+      # Initialize the number of children that focal individual will have at each age. Now, all zeros.
+      OffspringNumber[int(Fields[0])] = numpy.zeros(50, dtype=numpy.uint64)
       Sex[int(Fields[0])] = Fields[3]
       Genotype[int(Fields[0])] = int(Fields[7]) + int(Fields[8])
       Birthday[int(Fields[0])] = int(Fields[6])
@@ -222,11 +223,12 @@ with open(args.output + '.ped', 'r') as ped:
       if Fields[3] == 'M' and Genotype[int(Fields[0])] == 2:
          Genotype[int(Fields[0])] = 1
       try:
-         # This counts the individual as offspring of its father at the father's age.
+         # This counts the individual as offspring of its _father_ at the father's age.
          OffspringNumber[int(Fields[1])][int(Fields[6]) - Birthday[int(Fields[1])]] += 1
       except KeyError:
          assert Fields[1] == '0'
       try:
+         # And now of its mother.
          OffspringNumber[int(Fields[2])][int(Fields[6]) - Birthday[int(Fields[2])]] += 1
       except KeyError:
          assert Fields[2] == '0'
@@ -234,12 +236,13 @@ with open(args.output + '.ped', 'r') as ped:
 # This will record the numbers of offspring from age-specific parents, across all generations.
 # To compare the age-specific fecundities between genotypes, we need to know the overall
 # (across generations) numbers of parents at each age. Note the use of a numpy array.
-TotalMaleFitness   = {0: numpy.zeros(50, dtype=int), 1: numpy.zeros(50, dtype=int)}
-TotalFemaleFitness = {0: numpy.zeros(50, dtype=int), 1: numpy.zeros(50, dtype=int), 2: numpy.zeros(50, dtype=int)}
+TotalMaleFitness   = {0: numpy.zeros(50, dtype=numpy.uint64), 1: numpy.zeros(50, dtype=numpy.uint64)}
+TotalFemaleFitness = {0: numpy.zeros(50, dtype=numpy.uint64), 1: numpy.zeros(50, dtype=numpy.uint64), 2: numpy.zeros(50, dtype=numpy.uint64)}
 NumMales = {0: 0, 1: 0}
 NumFemales = {0: 0, 1: 0, 2: 0}
 AverageMaleFitness = {0: 0, 1: 0}
 AverageFemaleFitness = {0: 0, 1: 0, 2: 0}
+# This iterates over all individuals simulated, including those who didn't reach adulthood by the end of the simulation...
 for ind in OffspringNumber.keys():
    if Sex[ind] == 'M':
       TotalMaleFitness[Genotype[ind]] += OffspringNumber[ind]
@@ -250,7 +253,7 @@ for ind in OffspringNumber.keys():
 assert sum(TotalMaleFitness[0] + TotalMaleFitness[1]) == sum(TotalFemaleFitness[0] + TotalFemaleFitness[1] + TotalFemaleFitness[2])
 for genotype in range(2):
    try:
-      AverageMaleFitness[genotype] = sum(TotalMaleFitness[genotype]) / NumMales[genotype]
+      AverageMaleFitness[genotype] = TotalMaleFitness[genotype].sum() / NumMales[genotype]
    except ZeroDivisionError:
       AverageMaleFitness[genotype] = 'nan'
 MaxMaleFitness = max([x for x in AverageMaleFitness.values() if x != 'nan'])
@@ -259,7 +262,7 @@ MaxMaleFitness = max([x for x in AverageMaleFitness.values() if x != 'nan'])
 RelativeMaleFitness = [ x / MaxMaleFitness if x != 'nan' and MaxMaleFitness > 0 else 'nan' for x in AverageMaleFitness.values()]
 for genotype in range(3):
    try:
-      AverageFemaleFitness[genotype] = sum(TotalFemaleFitness[genotype]) / NumFemales[genotype]
+      AverageFemaleFitness[genotype] = TotalFemaleFitness[genotype].sum() / NumFemales[genotype]
    except ZeroDivisionError:
       AverageFemaleFitness[genotype] = 'nan'
 MaxFemaleFitness = max([x for x in AverageFemaleFitness.values() if x != 'nan'])
@@ -269,14 +272,16 @@ with open(args.output + '.fit', 'w') as FitnessFile:
    print("#Model    \tBasic_a\tDelta_a\tFem_s\tDomin.\tFreq.\tSex\tGenot.\tOffs.\tParents\tAve_fit.\tRel_fit.", file=FitnessFile)
    for genotype in range(2):
       print("{}\t{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}\t{:.2f}\tMales\t{:d}\t{:d}\t{:d}\t{}\t{}".format(args.model, args.a, args.meffect,
-         args.feffect, args.dominance, args.initfreq, genotype, sum(TotalMaleFitness[genotype]), NumMales[genotype],
+         args.feffect, args.dominance, args.initfreq, genotype, int(TotalMaleFitness[genotype].sum()), NumMales[genotype],
          AverageMaleFitness[genotype], RelativeMaleFitness[genotype]), file = FitnessFile)
    for genotype in range(3):
       print("{}\t{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}\t{:.2f}\tFemales\t{:d}\t{:d}\t{:d}\t{}\t{}".format(args.model, args.a, args.meffect,
-         args.feffect, args.dominance, args.initfreq, genotype, sum(TotalFemaleFitness[genotype]), NumFemales[genotype],
+         args.feffect, args.dominance, args.initfreq, genotype, int(TotalFemaleFitness[genotype].sum()), NumFemales[genotype],
          AverageFemaleFitness[genotype], RelativeFemaleFitness[genotype]), file = FitnessFile)
    
 with open(args.output + '.age', 'w') as AgeFile:
+   # Recall, AccumAges is dictionary created along simulation that records the accumulated number of individuals ever
+   # alive right before mating with a specific sex (1 or 2), genotype (0, 1 or 2) and age (up to MaxAge).
    print("#Age\tM0_Abs\tM1_Abs\tF0_Abs\tF1_Abs\tF2_Abs\t\tM0_Num\tM1_Num\tF0_Num\tF1_Num\tF2_Num", file = AgeFile)
    for age in range(1,50):
       print("{: 3}\t{: 6}\t{: 6}\t{: 6}\t{: 6}\t{: 6}\t\t{: 6}\t{: 6}\t{: 6}\t{: 6}\t{: 6}".format(age,

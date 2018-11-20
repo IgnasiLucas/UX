@@ -163,28 +163,32 @@ if [ ! -e EmpiricalFitness.txt ]; then
    for f in 0.0 0.5 1.0; do
       for rep in 0 1 2 3 4; do
          if [ ! -e Freq$f\_$rep.ped ]; then
-            python FitnessCenter.py -N 10000 -G 10000 -f $f -o Freq$f\_$rep &
+            python FitnessCenter.py -N 100000 -G 5000 -f $f -o Freq$f\_$rep &
          fi
       done
    done
    wait
-   cat Freq*.fit | grep -v "nan" | LC_ALL=C sort -k 6g,6 -k 7,7 -k 8n,8 -k 10nr,10 | uniq > EmpiricalFitness.txt
+   cat Freq*.fit | grep -vP "nan\tnan" | LC_ALL=C sort -k 6g,6 -k 7,7 -k 8n,8 -k 10nr,10 | uniq > EmpiricalFitness.txt
+   rm Freq*.ped
+   rm Freq*.fit
 fi
 
 if [ ! -e AgeFecundity_Freq_0.5.png ]; then
-   # Actual age-specific fecundities (not fitness) should be equal between the
-   # two male genotypes, because their difference is only in survival. Females
-   # should show differences in fecundity. The absolute fecundities are unknown
-   # a priori, because they depend on density; but heterozygous females and 0/0
-   # females should have overall fecundities that are 1-hs and 1-s times that of
-   # the 1/1 females.
+   # Differences in age-specific fecundities are not directly implemented for males,
+   # but may be the result of competition between 0-type and 1-type males, I suppose.
+   # For females, I did implement age-specific fecundities that are genotype specific,
+   # heterozygote females having 1-hs the fecundity of 1-type homozygous females, and
+   # 0-type homozygotes, 1-s the fecundity of 1-type homozygotes. Because survival function
+   # is common to all females, the relationships among female age-specific fecundities
+   # is expected to be the same as the relationships among life-long fecundities or fitness.
    gawk '(FNR == 1){print "\n"}{print $0}' Freq0.5_*.age > zinfile.txt
-   gnuplot -e "outfile = AgeFecundity_Freq_0.5.png; MainTitle = 'Allele freq. 0.5'; h = 0.5; s = 0.061168" plot_age_fecundity.gnp
-   # rm zinfile.txt
+   gnuplot -e "outfile = 'AgeFecundity_Freq_0.5.png'; MainTitle = 'Allele freq. 0.5'; h = 0.5; s = 0.114" plot_age_fecundity.gnp
+   rm zinfile.txt
 fi
 
 
 # CONCLUSIONS
 # ===========
 #
-# 
+# I am not sure why age-specific fecundities are different between the two types of males.
+# But for females I recover from the simulations exactly what I expected.

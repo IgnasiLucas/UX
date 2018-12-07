@@ -5,4 +5,4 @@
 .RData
 results/2018-06-07/MSB*.txt
 results/2018-06-07/frequencies.txt
-results/2018-06-21/pedigree*.txt
+results/2018-06-21/*.ped

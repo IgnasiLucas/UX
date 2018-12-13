@@ -2,6 +2,17 @@
 #                           MODULES                           #
 ###############################################################
 
+import simuOpt
+# I need to set module's options before loading the simuPOP module. And I need to load the
+# simuPOP module before defining the SexSpecificRecombinator class, which requires simuPOP.
+# Thus, I cannot set the module's options from arguments passed in the command line to the
+# main function, unfortunately.
+simuOpt.setOptions(numThreads = 20, optimized = False, debug = 'DBG_ALL', alleleType = 'short', quiet = True)
+# These are the available debugging codes:
+#    'DBG_ALL', 'DBG_GENERAL', 'DBG_UTILITY', 'DBG_POPULATION', 'DBG_OPERATOR', 'DBG_SIMULATOR',
+#    'DBG_INDIVIDUAL', 'DBG_MUTATOR', 'DBG_TRANSMITTER', 'DBG_INITIALIZER', 'DBG_STATOR', 'DBG_TAGGER',
+#    'DBG_SELECTOR', 'DBG_MATING', 'DBG_MIGRATOR', 'DBG_PROFILE', 'DBG_BATCHTESTING',
+#    'DBG_INTEROPERABILITY', 'DBG_COMPATIBILITY', 'DBG_DEVEL', 'DBG_WARNING'
 import simuPOP as sim
 import random
 import math
@@ -100,8 +111,13 @@ def TweakAdditiveRecessive(aging_a1, aging_a2, aging_b, X_loci):
       return (a, b)
    return AdditiveRecessive
 
-def MutationSelection(N=1000, generations=10000, X_loci=100, A_loci=0, AgingModel='two_phases', seed=2001, reps=1, InitMutFreq=0.001, aging_a1=0.003, aging_a2=0.05, aging_b=-0.019, aging_k=0.1911, MutRate=0.001, StatsStep=100, OutPopPrefix='z1', PrintFreqs=False):
+def MutationSelection(N=1000, generations=10000, X_loci=100, A_loci=0, AgingModel='two_phases', seed=2001, reps=1, InitMutFreq=0.001, aging_a1=0.003, aging_a2=0.05, aging_b=-0.019, aging_k=0.1911, MutRate=0.001, StatsStep=100, OutPopPrefix='z1', PrintFreqs=False, debug=False):
    '''Creates and evolves a population to reach mutation-selection balance.'''
+   if debug:
+      sim.turnOnDebug('DBG_ALL')
+   else:
+      sim.turnOffDebug('DBG_ALL')
+   sim.setRNG('mt19937', seed)
    pop = sim.Population(N, loci = [X_loci, A_loci], ploidy = 2,
       chromTypes = [sim.CHROMOSOME_X, sim.AUTOSOME],
       infoFields = ['age', 'a', 'b', 'smurf', 'ind_id',  'father_id', 'mother_id', 'luck', 't0', 'fitness'])
@@ -199,22 +215,23 @@ def MutationSelection(N=1000, generations=10000, X_loci=100, A_loci=0, AgingMode
 
 def main():
    parser = argparse.ArgumentParser(description = 'Simulates a population with a specific aging model, where mutations in X-linked and/or autosomal loci affect parameter a of the model. The population is evolved to reach mutation-selection balance.')
-   parser.add_argument('-a', '--aging_a1', default=0.0030, type=float, help='Minimum value of the "a" parameter of the aging model. Default: 0.003.')
-   parser.add_argument('-2', '--aging_a2', default=0.0500, type=float, help='Maximum value of the "a" parameter of the aging model. Default: 0.050.')
-   parser.add_argument('-b', '--aging_b',  default=-0.019, type=float, help='Constant value of the "b" parameter of the aging model. Default: -0.019.')
-   parser.add_argument('-k', '--aging_k',  default=0.1911, type=float, help='Rate of mortality of smurfs in two-phases model of aging. Default: 0.1911.')
-   parser.add_argument('-N', '--PopSize',  default=1000,   type=int,   help='Population size. Default: 1000.')
-   parser.add_argument('-G', '--generations', default=10000,  type=int,   help='Number of generations. Default: 10000.')
-   parser.add_argument('-o', '--OutPopPrefix', default='z1', type=str, help='Prefix of output file(s). Default: "z1".')
-   parser.add_argument('-s', '--seed',     default=2001,   type=int,   help='Random number generator seed. Default: 2001.')
-   parser.add_argument('-u', '--MutRate',  default=0.001,  type=float, help='Mutation rate. Default: 0.001.')
-   parser.add_argument('-A', '--A_loci',   default=0,      type=int,   help='Number of autosomal loci. Default: 0.')
-   parser.add_argument('-X', '--X_loci',   default=100,    type=int,   help='Number of X-linked loci. Default: 100.')
-   parser.add_argument('-S', '--StatsStep', default=100,   type=int,   help='Periodicity of statistics output. Default: 100 generations.')
+   parser.add_argument('-a', '--aging_a1',   default=0.0030, type=float, help='Minimum value of the "a" parameter of the aging model. Default: 0.003, which is appropriate for the two-phases model. Recommended value for Weibul is 0.000485. And for Gompertz, 0.0053.')
+   parser.add_argument('-2', '--aging_a2',   default=0.0500, type=float, help='Maximum value of the "a" parameter of the aging model. Default: 0.050, appropriate for the two-phases model.')
+   parser.add_argument('-b', '--aging_b',    default=-0.019, type=float, help='Constant value of the "b" parameter of the aging model. Default: -0.019, which is appropriate for the two-phases model. Recommended value for the Weibul model is 2.4746. And for Gomperz, 0.0942.')
+   parser.add_argument('-k', '--aging_k',    default=0.1911, type=float, help='Rate of mortality of smurfs in two-phases model of aging. Default: 0.1911.')
+   parser.add_argument('-N', '--PopSize',    default=1000,   type=int,   help='Population size. Default: 1000.')
+   parser.add_argument('-G', '--generations', default=10000, type=int,   help='Number of simulated generations, which actually represent days. Default: 10000.')
+   parser.add_argument('-o', '--OutPopPrefix', default='z1', type=str,   help='Prefix of output file(s). Default: "z1".')
+   parser.add_argument('-s', '--seed',       default=2001,   type=int,   help='Random number generator seed. Default: 2001.')
+   parser.add_argument('-u', '--MutRate',    default=0.001,  type=float, help='Mutation rate. Default: 0.001.')
+   parser.add_argument('-A', '--A_loci',     default=0,      type=int,   help='Number of autosomal loci. Default: 0.')
+   parser.add_argument('-X', '--X_loci',     default=100,    type=int,   help='Number of X-linked loci. Default: 100.')
+   parser.add_argument('-S', '--StatsStep',  default=100,    type=int,   help='Periodicity of statistics output. Default: 100 generations.')
    parser.add_argument('-q', '--InitMutFreq', default=0.001, type=float, help='Initial mutant frequency. Default: 0.001.')
    parser.add_argument('-m', '--AgingModel', default='two_phases', type=str, choices=['two_phases', 'weibull', 'gompertz'], help='Aging model. Choices: "two_phases", "weibull", "gompertz". Default: "two_phases".')
-   parser.add_argument('-r', '--reps',     default=1,      type=int,   help='Number of population replicates to simulate. Default: 1.')
-   parser.add_argument('-P', '--PrintFreqs', action='store_true', help='Print mutant allele frequencies every StatsStep generations. Default: False.')
+   parser.add_argument('-r', '--reps',       default=1,      type=int,   help='Number of population replicates to simulate. Default: 1.')
+   parser.add_argument('-P', '--PrintFreqs', action='store_true',        help='Print mutant allele frequencies every StatsStep generations. Default: False.')
+   parser.add_argument('-D', '--debug',      action='store_true',        help='Turn on debugging. Default: False.')
    args = parser.parse_args()
    MutationSelection(N = args.PopSize,
                      generations = args.generations,
@@ -231,7 +248,8 @@ def main():
                      MutRate = args.MutRate,
                      StatsStep = args.StatsStep,
                      OutPopPrefix = args.OutPopPrefix,
-                     PrintFreqs = args.PrintFreqs)
+                     PrintFreqs = args.PrintFreqs,
+                     debug = args.debug)
 
 if __name__ == '__main__':
    main()

@@ -3,6 +3,10 @@
 *.log
 *.out
 .RData
+doc/Kelly1999.pdf
+doc/Kelly1999b.pdf
+doc/Walsh2004.pdf
+doc/UX_presentation.pptx
 results/2018-06-07/MSB*.txt
 results/2018-06-07/frequencies.txt
 results/2018-06-21/pedigree*.txt

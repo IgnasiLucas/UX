@@ -7,11 +7,13 @@
 # and with mutations affecting male longevity in an equilibrium frequency,
 # I would like to start simulating the experiment proposed by Kelly (1999).
 #
-# The python script should evolve the population to equilibrium and then apply
-# the experiment, which consists on an inbreeding experiment, a short selection
-# experiment, and a second inbreeding experiment. It will accept options to
-# determine what kind of equilibrium to simulate, etc. For the moment, I will
-# test Kelly's original idea, with only autosomal loci affecting a component
-# of fitness. Once this works, I will test the experiment in the case of X-linked
-# variation affecting male longevity.
+# I need to split the process in several scripts, for the sake of modularity.
+# First, I can use previous scripts to bring a population to an equilibrium,
+# and then save it. The equilibrium will be either an antagonistic pleiotropy or
+# a mutation-selection equilibrium. Then, the saved population will be the inpiut
+# to the script that runs Kelly's experiment. Actually, the experiment can be split
+# in two scripts, one for the selection steps and one for the inbreeding. A last
+# script could be used to determine the statistics. All scripts should accept and/or
+# produce populations, that need to be saved and loaded.
 #
+# 

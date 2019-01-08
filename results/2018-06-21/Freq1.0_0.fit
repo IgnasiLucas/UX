@@ -1,0 +1,6 @@
+#Model    	Basic_a	Delta_a	Fem_s	Domin.	Freq.	Sex	Genot.	Offs.	Parents	Ave_fit.	Rel_fit.
+two_phases	0.0039	0.0013	0.1140	0.5000	1.00	Males	0	0	0	nan	nan
+two_phases	0.0039	0.0013	0.1140	0.5000	1.00	Males	1	17663700	8880257	1.9890978380468043	nan
+two_phases	0.0039	0.0013	0.1140	0.5000	1.00	Females	0	0	0	nan	nan
+two_phases	0.0039	0.0013	0.1140	0.5000	1.00	Females	1	0	0	nan	nan
+two_phases	0.0039	0.0013	0.1140	0.5000	1.00	Females	2	17663700	8883443	1.988384458593363	nan
